@@ -442,6 +442,8 @@ async function main() {
       variables: vars,
       formula_name: r.formula_name || null,
       formula_latex: r.formula_latex || null,
+      unknown_variable: vars.length > 0 ? vars[0].symbol : null,
+      supported_unknowns: vars.map((v) => v.symbol),
       merged_concept_ids: [],
       merged_concept_names: [],
     };
@@ -577,6 +579,8 @@ async function main() {
           status: 'draft',
           formula_name: c.concept_formula ? `${c.concept_name} Formula` : null,
           formula_latex: c.concept_formula || null,
+          unknown_variable: vars.length > 0 ? vars[0].symbol : null,
+          supported_unknowns: vars.map((v) => v.symbol),
           merged_concept_ids: mergedIds,
           merged_concept_names: mergedNames,
         });

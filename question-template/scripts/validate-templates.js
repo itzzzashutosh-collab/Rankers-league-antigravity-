@@ -54,7 +54,7 @@ async function main() {
   // ── 2. Load all templates ─────────────────────────────────────
   console.log('📥 Loading templates...');
   const { rows: templates } = await client.query(`
-    SELECT template_id, concept_id, exam_name, difficulty_level, stem_template, variables, status, original_template_id, template_name 
+    SELECT template_id, concept_id, exam_name, difficulty_level, stem_template, variables, status, original_template_id, template_name, unknown_variable 
     FROM public.latest_concept_templates;
   `);
   console.log(`  ✅ ${templates.length} templates loaded`);
@@ -92,6 +92,12 @@ async function main() {
     // Check template_name
     if (!t.template_name || t.template_name.trim().length === 0) {
       errors.push(`Template ${t.template_id} has empty template_name`);
+    }
+
+    // Check unknown_variable if variables exist
+    const hasVars = Array.isArray(t.variables) && t.variables.length > 0;
+    if (hasVars && (!t.unknown_variable || t.unknown_variable.trim().length === 0)) {
+      errors.push(`Template ${t.template_id} has variables but empty unknown_variable`);
     }
   }
 
