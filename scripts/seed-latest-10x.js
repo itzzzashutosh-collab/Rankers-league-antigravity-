@@ -593,15 +593,15 @@ async function main() {
           if (isJeeAdvanced) {
             if (dl.level === 'pro') {
               stem = hasFormula
-                ? `An authentic IIT JEE Advanced problem requiring multi-step analytical reasoning and synthesis of at least three concepts from the same chapter: ${c.concept_name} (equation: ${c.concept_formula}) and the related concepts ${sibNamesStr}. Deduce the final operational parameters of the system under realistic engineering boundary conditions, utilizing physical and mathematical insights rather than routine coaching shortcuts.`
-                : `Synthesize the physical/mathematical relationships combining at least three concepts from the chapter ${c.chapter_name}: ${c.concept_name} and the related concepts ${sibNamesStr}. Determine which conceptual assertion must hold true under JEE Advanced limiting cases.`;
+                ? `A physical system combines the dynamics of ${c.concept_name} (equation: ${c.concept_formula}) and the related concepts ${sibNamesStr}. Determine the net state parameter of the system under the given boundary constraints.`
+                : `A system operates under the combined laws of ${c.concept_name} and ${sibNamesStr} inside ${context}. Identify the statement that correctly represents the state of the composite system.`;
               sol = `Step 1: Perform physical/conceptual analysis of the system. Step 2: Establish equations for ${c.concept_name} and the integrated concepts ${sibNamesStr}. Step 3: Solve the simultaneous equations while applying boundary approximations and elimination.`;
               expl = `IIT JEE Advanced level 3-concept integration testing deep physical deduction and mathematical maturity.`;
             } else {
               // legend
               stem = hasFormula
-                ? `An IIT JEE Advanced reverse-thinking challenge. Given the final measured output state of a composite system governed by ${c.concept_name} (using equation ${c.concept_formula}) and ${sibNamesStr}, work backwards to reconstruct the original physical scenario. Determine the hidden constraints and identify which initial boundary assumptions are valid.`
-                : `Working backwards from the composite final state governed by ${c.concept_name} and the integrated concepts ${sibNamesStr}, deduce the initial physical boundary condition and constraints that must have been satisfied.`;
+                ? `A system reaches a final equilibrium state governed by the combined laws of ${c.concept_name} (equation: ${c.concept_formula}) and ${sibNamesStr}. Working backwards from this measured final state, determine the initial boundary condition of the system.`
+                : `Working backwards from the composite final state of ${context} governed by the laws of ${c.concept_name} and ${sibNamesStr}, deduce the initial boundary conditions that must have been satisfied.`;
               sol = `Step 1: Start with the final system output state. Step 2: Set up reverse thermodynamic or dynamic equations for ${sibNamesStr}. Step 3: Solve backwards to determine the initial conditions using the laws of ${c.concept_name}.`;
               expl = `Tests reverse thinking and multi-step deduction starting from the final system output under JEE Advanced criteria.`;
             }
@@ -655,32 +655,120 @@ async function main() {
         } else {
           // Single concept easy/medium/hard, or fallback if no siblings
           if (isJeeAdvanced) {
-            if (dl.level === 'easy') {
-              stem = hasFormula
-                ? `An analytical setup is configured to investigate ${c.concept_name}. Rather than applying direct formula substitution, analyze the system dynamics/thermodynamics governed by the relation ${c.concept_formula}. Evaluate the boundary principles and deduce the value of the target parameter when the system reaches equilibrium.`
-                : `Which of the following conceptual assertions correctly identifies the physical/chemical principles governing the behavior of ${c.concept_name} in ${c.chapter_name} under standard IIT JEE Advanced criteria?`;
-              sol = `Perform physical analysis of the system, establish the governing relation, and apply boundary values.`;
-              expl = `IIT JEE Advanced level conceptual analysis testing system mechanics before calculating values.`;
-            } else if (dl.level === 'medium') {
-              stem = hasFormula
-                ? `In a high-precision experimental setup (such as a battery pack configuration, satellite stabilization loop, or optical bench setup) involving the physics of ${c.concept_name}, the system is described by ${c.concept_formula}. Rearrange the equation to isolate the target variable, accounting for necessary SI unit conversions, and determine the exact target parameters under standard testing constraints.`
-                : `A practical engineering device operates under the principles of ${c.concept_name}. Explain the correct analytical rearrangement of the system parameters required to solve for the design constraints.`;
-              sol = `Express the target variable analytically. Apply proper dimensional analysis and unit conversions. Calculate the design value.`;
-              expl = `Tests formula rearrangement under realistic experimental contexts and correct unit conversions.`;
-            } else if (dl.level === 'hard') {
-              stem = hasFormula
-                ? `A JEE Advanced level problem on ${c.concept_name} (governed by ${c.concept_formula}) containing a logical trap. Determine the exact value of the target parameter. Note standard pitfalls: incorrect sign convention (e.g. thermodynamic work vs. heat sign), wrong unit conversion, or incorrect formula variant selection.`
-                : `Evaluate the behavior of ${c.concept_name} in the chapter ${c.chapter_name} under extreme bounds. Identify the correct physical statement while avoiding common conceptual traps (e.g. sign convention errors or dimensional mismatches).`;
-              sol = `Formulate the equations. Identify and apply correct sign conventions and standard units. Evade standard algebraic traps to compute the exact result.`;
-              expl = `Designed to trap students who misapply sign conventions or unit conversions under JEE Advanced constraints.`;
-            } else if (dl.level === 'pro') {
-              stem = `An advanced problem on ${c.concept_name} in the chapter ${c.chapter_name} requiring multiple steps. Calculate the target variable under constraints.`;
-              sol = `Formulate the equations of ${c.concept_name} for the system. Solve the multi-step system to find the target variable.`;
-              expl = `Pedagogical explanation of the advanced application of ${c.concept_name}.`;
+            const subj = c.subject_name.toLowerCase().trim();
+            if (subj.includes('phys')) {
+              if (dl.level === 'easy') {
+                stem = hasFormula
+                  ? `A particle of mass $m$ moves along a trajectory governed by ${c.concept_name}. If the parameters of the motion satisfy the relation ${c.concept_formula}, find the value of the target state parameter when the system reaches equilibrium.`
+                  : `A uniform physical setup is arranged to study the boundary constraints of ${c.concept_name}. Identify the statement that correctly represents the state characteristics.`;
+                sol = `Perform physical analysis of the system, establish the governing relation, and apply boundary values.`;
+                expl = `IIT JEE Advanced level conceptual analysis testing system mechanics before calculating values.`;
+              } else if (dl.level === 'medium') {
+                stem = hasFormula
+                  ? `Two identical conducting elements are arranged to form ${context} in a region of uniform field. Under the conditions governed by ${c.concept_formula}, find the parameter in standard SI units.`
+                  : `A thin uniform rod of length $L$ oscillates about a fixed horizontal axis under the influence of ${c.concept_name}. Analyze the system parameters required to solve for the design constraints.`;
+                sol = `Express the target variable analytically. Apply proper dimensional analysis and unit conversions. Calculate the design value.`;
+                expl = `Tests formula rearrangement under realistic experimental contexts and correct unit conversions.`;
+              } else if (dl.level === 'hard') {
+                stem = hasFormula
+                  ? `A closed vessel contains an ideal gas executing a process where the local parameters satisfy ${c.concept_formula}. Under the constraints of ${c.concept_name}, calculate the target value, avoiding common sign mistakes.`
+                  : `Evaluate the behavior of ${c.concept_name} inside ${context} under extreme bounds. Determine the correct state value while avoiding common vector direction errors.`;
+                sol = `Formulate the equations. Identify and apply correct sign conventions and standard units. Evade standard algebraic traps to compute the exact result.`;
+                expl = `Designed to trap students who misapply sign conventions or unit conversions under JEE Advanced constraints.`;
+              } else if (dl.level === 'pro') {
+                stem = `A particle moving in a vertical plane is subjected to constraints governed by ${c.concept_name} in ${c.chapter_name}. Solve for the target state parameters.`;
+                sol = `Formulate the equations of ${c.concept_name} for the system. Solve the multi-step system to find the target variable.`;
+                expl = `Pedagogical explanation of the advanced application of ${c.concept_name}.`;
+              } else {
+                stem = `A dielectric slab is inserted into a system governed by ${c.concept_name}. Based on the measured final parameters, work backwards to reconstruct the initial configuration.`;
+                sol = `Start from the output state. Work reverse step-by-step using the principles of ${c.concept_name} to resolve initial parameters.`;
+                expl = `Pedagogical explanation of reverse solving ${c.concept_name}.`;
+              }
+            } else if (subj.includes('chem')) {
+              if (dl.level === 'easy') {
+                stem = hasFormula
+                  ? `A reversible electrochemical cell is established with electrodes operating under the principles of ${c.concept_name}. When the system parameters satisfy ${c.concept_formula}, calculate the cell potential under standard conditions.`
+                  : `A multi-electrode electrochemical system is monitored under standard conditions to study ${c.concept_name}. Which of the following observations correctly identifies the chemical behavior?`;
+                sol = `Perform physical analysis of the system, establish the governing relation, and apply boundary values.`;
+                expl = `IIT JEE Advanced level conceptual analysis testing system mechanics before calculating values.`;
+              } else if (dl.level === 'medium') {
+                stem = hasFormula
+                  ? `A reaction mixture undergoes a catalytic pathway where the transition-state intermediates satisfy the kinetics of ${c.concept_name} (governed by ${c.concept_formula}). Rewrite the rate relation to solve for the target state variables.`
+                  : `An organic substrate undergoes stereospecific polymer synthesis where the active site configuration behaves according to ${c.concept_name}. Analyze the stereocenter configurations to determine the optimal reaction parameters.`;
+                sol = `Express the target variable analytically. Apply proper dimensional analysis and unit conversions. Calculate the design value.`;
+                expl = `Tests formula rearrangement under realistic experimental contexts and correct unit conversions.`;
+              } else if (dl.level === 'hard') {
+                stem = hasFormula
+                  ? `A crystal lattice exhibits defects whose distribution energy satisfies the equilibrium relation ${c.concept_formula}. Under the assumptions of ${c.concept_name}, determine the defect concentration, avoiding common thermodynamic approximations.`
+                  : `Evaluate the reaction pathway governed by the kinetics of ${c.concept_name} under extreme concentration bounds. Identify the correct reaction mechanism while avoiding stereochemical misconceptions.`;
+                sol = `Formulate the equations. Identify and apply correct sign conventions and standard units. Evade standard algebraic traps to compute the exact result.`;
+                expl = `Designed to trap students who misapply sign conventions or unit conversions under JEE Advanced constraints.`;
+              } else if (dl.level === 'pro') {
+                stem = `An electrochemical cell operates under conditions governed by ${c.concept_name} in ${c.chapter_name}. Solve for the equilibrium cell parameters.`;
+                sol = `Formulate the equations of ${c.concept_name} for the system. Solve the multi-step system to find the target variable.`;
+                expl = `Pedagogical explanation of the advanced application of ${c.concept_name}.`;
+              } else {
+                stem = `A polymer synthesis process governed by ${c.concept_name} reaches completion. Reconstruct the initial stereochemical reactant configurations from the final product distribution.`;
+                sol = `Start from the output state. Work reverse step-by-step using the principles of ${c.concept_name} to resolve initial parameters.`;
+                expl = `Pedagogical explanation of reverse solving ${c.concept_name}.`;
+              }
+            } else if (subj.includes('math')) {
+              if (dl.level === 'easy') {
+                stem = hasFormula
+                  ? `A real-valued function $f(x)$ is continuous and differentiable, satisfying the functional relation ${c.concept_formula}. Find the value of the parameter under the constraints of ${c.concept_name}.`
+                  : `A continuous geometric curve satisfies the parameters of ${c.concept_name} inside the coordinate plane. Identify the statement that represents the optimal bounds.`;
+                sol = `Perform physical analysis of the system, establish the governing relation, and apply boundary values.`;
+                expl = `IIT JEE Advanced level conceptual analysis testing system mechanics before calculating values.`;
+              } else if (dl.level === 'medium') {
+                stem = hasFormula
+                  ? `A multi-variable optimization path is defined by a trajectory satisfying ${c.concept_formula}. Rearrange the relation to isolate the independent variable and find its optimal value.`
+                  : `A dynamical system has state trajectories satisfying the parameters of ${c.concept_name}. Analyze the transformation equations to determine the system invariants.`;
+                sol = `Express the target variable analytically. Apply proper dimensional analysis and unit conversions. Calculate the design value.`;
+                expl = `Tests formula rearrangement under realistic experimental contexts and correct unit conversions.`;
+              } else if (dl.level === 'hard') {
+                stem = hasFormula
+                  ? `A trajectory satisfies the differential constraints of ${c.concept_name} (equation: ${c.concept_formula}). Determine the optimal parameter value while avoiding common domain restriction errors.`
+                  : `Determine the extreme boundary invariants of a system satisfying ${c.concept_name} inside the coordinate plane, avoiding common symmetry assumptions.`;
+                sol = `Formulate the equations. Identify and apply correct sign conventions and standard units. Evade standard algebraic traps to compute the exact result.`;
+                expl = `Designed to trap students who misapply sign conventions or unit conversions under JEE Advanced constraints.`;
+              } else if (dl.level === 'pro') {
+                stem = `A function satisfies the differential parameters of ${c.concept_name} in ${c.chapter_name}. Solve for the optimal parameter values.`;
+                sol = `Formulate the equations of ${c.concept_name} for the system. Solve the multi-step system to find the target variable.`;
+                expl = `Pedagogical explanation of the advanced application of ${c.concept_name}.`;
+              } else {
+                stem = `A multi-variable trajectory satisfying ${c.concept_name} reaches a measured boundary state. Reconstruct the initial parameters of the system.`;
+                sol = `Start from the output state. Work reverse step-by-step using the principles of ${c.concept_name} to resolve initial parameters.`;
+                expl = `Pedagogical explanation of reverse solving ${c.concept_name}.`;
+              }
             } else {
-              stem = `Based on a measured final output state of the system governed by ${c.concept_name}, deduce the initial thermodynamic/physical constraint that must have been satisfied. Determine which assumption holds true for this reverse process.`;
-              sol = `Start from the output state. Work reverse step-by-step using the principles of ${c.concept_name} to resolve initial parameters.`;
-              expl = `Pedagogical explanation of reverse solving ${c.concept_name}.`;
+              // Fallback
+              if (dl.level === 'easy') {
+                stem = hasFormula
+                  ? `Analyze the physical state satisfying ${c.concept_name} where variables are governed by the relation ${c.concept_formula}. Determine the target parameter value.`
+                  : `Identify the assertion that correctly describes the behavior of ${c.concept_name} under standard testing conditions.`;
+                sol = `Perform physical analysis of the system, establish the governing relation, and apply boundary values.`;
+                expl = `IIT JEE Advanced level conceptual analysis testing system mechanics before calculating values.`;
+              } else if (dl.level === 'medium') {
+                stem = hasFormula
+                  ? `A system behaves according to ${c.concept_formula} under the laws of ${c.concept_name}. Rearrange the equation to isolate the target variable.`
+                  : `For a physical setup operating under the principles of ${c.concept_name}, analyze the analytical rearrangement required to solve for the boundary constraints.`;
+                sol = `Express the target variable analytically. Apply proper dimensional analysis and unit conversions. Calculate the design value.`;
+                expl = `Tests formula rearrangement under realistic experimental contexts and correct unit conversions.`;
+              } else if (dl.level === 'hard') {
+                stem = hasFormula
+                  ? `A trajectory satisfies the parameters of ${c.concept_name} (relation: ${c.concept_formula}). Determine the optimal value, avoiding common sign convention mistakes.`
+                  : `Evaluate the system governed by ${c.concept_name} under boundary limits. Choose the correct state value while avoiding common vector direction errors.`;
+                sol = `Formulate the equations. Identify and apply correct sign conventions and standard units. Evade standard algebraic traps to compute the exact result.`;
+                expl = `Designed to trap students who misapply sign conventions or unit conversions under JEE Advanced constraints.`;
+              } else if (dl.level === 'pro') {
+                stem = `An advanced problem on ${c.concept_name} in ${c.chapter_name} requiring multiple steps. Calculate the target variable under constraints.`;
+                sol = `Formulate the equations of ${c.concept_name} for the system. Solve the multi-step system to find the target variable.`;
+                expl = `Pedagogical explanation of the advanced application of ${c.concept_name}.`;
+              } else {
+                stem = `Based on a measured final output state governed by ${c.concept_name}, work backwards to reconstruct the initial system design conditions.`;
+                sol = `Start from the output state. Work reverse step-by-step using the principles of ${c.concept_name} to resolve initial parameters.`;
+                expl = `Pedagogical explanation of reverse solving ${c.concept_name}.`;
+              }
             }
           } else if (isJeeMain) {
             if (dl.level === 'easy') {
