@@ -2,6 +2,7 @@
 /**
  * validate-templates.js
  * Phase 1 — Concept Template Bank Validator
+ * Direct Database Connection to prevent REST pagination timeouts.
  *
  * Checks:
  * 1. Every concept has at least 1 template
@@ -14,62 +15,52 @@
  * Run: node scripts/validate-templates.js
  */
 
-import { createClient } from '@supabase/supabase-js';
+import pg from 'pg';
 
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const DATABASE_URL = process.env.DATABASE_URL;
 
-if (!SUPABASE_URL || !SUPABASE_KEY) {
-  console.error('❌ Missing Supabase credentials');
+if (!DATABASE_URL) {
+  console.error('❌ Missing DATABASE_URL credentials in environment');
   process.exit(1);
 }
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+const client = new pg.Client({
+  connectionString: DATABASE_URL,
+  ssl: { rejectUnauthorized: false },
+});
+
 const DIFFICULTY_LEVELS = ['easy', 'medium', 'hard', 'pro', 'legend'];
 
 async function main() {
-  console.log('🔍 Rankers League — Template Validator');
+  console.log('🔍 Rankers League — Template Validator (Direct PG Link)');
   console.log('='.repeat(60));
 
   const errors = [];
   const warnings = [];
 
-  // ── 1. Load all concepts with pagination ──────────────────────
-  console.log('\n📥 Loading concepts (paginated)...');
-  let concepts = [];
-  let conceptStart = 0;
-  const PAGE_SIZE = 1000;
-  while (true) {
-    const { data, error } = await supabase
-      .from('latest_concepts')
-      .select('concept_id, exam_name, subject_name, chapter_name, concept_name')
-      .range(conceptStart, conceptStart + PAGE_SIZE - 1);
-    if (error) { console.error('❌ Cannot load concepts:', error.message); process.exit(1); }
-    if (!data || data.length === 0) break;
-    concepts = concepts.concat(data);
-    conceptStart += PAGE_SIZE;
-  }
+  console.log('🔗 Connecting to Supabase PostgreSQL...');
+  await client.connect();
+  console.log('✅ Connected!');
+
+  // ── 1. Load all concepts ──────────────────────────────────────
+  console.log('\n📥 Loading concepts...');
+  const { rows: concepts } = await client.query(`
+    SELECT concept_id, exam_name, subject_name, chapter_name, concept_name 
+    FROM public.latest_concepts;
+  `);
   const conceptMap = new Map(concepts.map((c) => [c.concept_id, c]));
   console.log(`  ✅ ${concepts.length} concepts loaded`);
  
-  // ── 2. Load all templates with pagination ─────────────────────
-  console.log('📥 Loading templates (paginated)...');
-  let templates = [];
-  let templateStart = 0;
-  while (true) {
-    const { data, error } = await supabase
-      .from('latest_concept_templates')
-      .select('template_id, concept_id, exam_name, difficulty_level, stem_template, variables, status')
-      .range(templateStart, templateStart + PAGE_SIZE - 1);
-    if (error) { console.error('❌ Cannot load templates:', error.message); process.exit(1); }
-    if (!data || data.length === 0) break;
-    templates = templates.concat(data);
-    templateStart += PAGE_SIZE;
-  }
+  // ── 2. Load all templates ─────────────────────────────────────
+  console.log('📥 Loading templates...');
+  const { rows: templates } = await client.query(`
+    SELECT template_id, concept_id, exam_name, difficulty_level, stem_template, variables, status 
+    FROM public.latest_concept_templates;
+  `);
   console.log(`  ✅ ${templates.length} templates loaded`);
 
   // ── 3. Build maps ─────────────────────────────────────────────
-  // concept_id → Set of difficulty levels
+  // concept_id → { easy: number, medium: number, hard: number, pro: number, legend: number }
   const coverageMap = new Map();
   const orphanTemplates = [];
 
@@ -81,9 +72,12 @@ async function main() {
     }
 
     if (!coverageMap.has(t.concept_id)) {
-      coverageMap.set(t.concept_id, new Set());
+      coverageMap.set(t.concept_id, { easy: 0, medium: 0, hard: 0, pro: 0, legend: 0 });
     }
-    coverageMap.get(t.concept_id).add(t.difficulty_level);
+    const counts = coverageMap.get(t.concept_id);
+    if (counts.hasOwnProperty(t.difficulty_level)) {
+      counts[t.difficulty_level]++;
+    }
 
     // Check empty stem
     if (!t.stem_template || t.stem_template.trim().length < 10) {
@@ -105,27 +99,45 @@ async function main() {
     }
     examStats[exam].total++;
 
-    const levels = coverageMap.get(conceptId);
-    if (!levels || levels.size === 0) {
+    const counts = coverageMap.get(conceptId);
+    if (!counts) {
       noCoverage++;
       errors.push(`Concept "${concept.concept_name}" (${conceptId}) has NO templates`);
-    } else if (levels.size < 5) {
-      partialCoverage++;
-      const missing = DIFFICULTY_LEVELS.filter((l) => !levels.has(l));
-      warnings.push(`Concept "${concept.concept_name}" missing difficulties: ${missing.join(', ')}`);
-      examStats[exam].covered++;
     } else {
-      fullCoverage++;
-      examStats[exam].covered++;
-      examStats[exam].full++;
+      let isFullyCovered = true;
+      const missingOrLow = [];
+      let totalTemplatesForConcept = 0;
+
+      for (const level of DIFFICULTY_LEVELS) {
+        const count = counts[level];
+        totalTemplatesForConcept += count;
+        if (count < 2) {
+          isFullyCovered = false;
+          missingOrLow.push(`${level} (count: ${count})`);
+        }
+      }
+
+      examStats[exam].templates += totalTemplatesForConcept;
+
+      if (totalTemplatesForConcept === 0) {
+        noCoverage++;
+        errors.push(`Concept "${concept.concept_name}" (${conceptId}) has NO templates`);
+      } else if (!isFullyCovered) {
+        partialCoverage++;
+        errors.push(`Concept "${concept.concept_name}" (${conceptId}) has low template coverage: ${missingOrLow.join(', ')}`);
+        examStats[exam].covered++;
+      } else {
+        fullCoverage++;
+        examStats[exam].covered++;
+        examStats[exam].full++;
+      }
     }
-    examStats[exam].templates += (coverageMap.get(conceptId)?.size || 0);
   }
 
   // ── 5. Print Exam Coverage Report ────────────────────────────
   console.log('\n📊 COVERAGE REPORT BY EXAM');
   console.log('-'.repeat(80));
-  console.log('Exam'.padEnd(25), 'Concepts'.padEnd(12), 'Covered'.padEnd(12), 'Full(5/5)'.padEnd(12), 'Coverage%');
+  console.log('Exam'.padEnd(25), 'Concepts'.padEnd(12), 'Covered'.padEnd(12), 'Full(2x5/5)'.padEnd(12), 'Coverage%');
   console.log('-'.repeat(80));
 
   const sortedExams = Object.entries(examStats).sort((a, b) => b[1].total - a[1].total);
@@ -173,9 +185,10 @@ async function main() {
     console.log('✅ Validation PASSED — No critical errors!');
   } else {
     console.log(`❌ Validation FAILED — ${errors.length} errors need fixing`);
-    console.log('   Run: node scripts/generate-template-stubs.js to fill gaps');
   }
   console.log('='.repeat(60));
+
+  await client.end();
 }
 
 main().catch((e) => {

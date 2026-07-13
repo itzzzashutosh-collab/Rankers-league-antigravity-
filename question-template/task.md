@@ -1,20 +1,15 @@
 # Tasks
 
-- [x] Create database schema for unified `latest_` tables hierarchy (`38_latest_tables.sql`)
-- [x] Run migrations to build the tables in Supabase
-- [x] Parse and seed exams, subjects, chapters, and topics from CSV sources
-- [x] Merge all 4 concept CSV files (`concepts_rows.csv`, `basic_concepts_rows.csv`, `standard_concepts_rows.csv`, `new_concept_rows.csv`) into `latest_concepts` table
-  - [x] Deduplicate by ID and unique hierarchy name keys
-  - [x] Verify total concepts = 8,131
-- [x] Seed existing templates and auto-generate stubs (ensuring exactly 5 templates per concept)
-  - [x] Total templates generated = 40,655
-  - [x] Verify total templates count matches `8131 * 5 = 40,655`
-- [x] Populate non-null options, answers, variables, and explanations for 100% of the templates
-  - [x] Verify templates with null options = 0
-- [x] Update Next.js backend API routes to query from `latest_` tables
-  - [x] `latest_exams`
-  - [x] `latest_concept_templates`
-  - [x] `latest_template_coverage`
-- [x] Create materialized view `latest_template_coverage`
-- [x] Sync all modified and newly created files to `/question-template` delivery folder
-- [x] Push all changes to Git remote repository
+- [x] Create `scripts/seed-latest-10x.js` pipeline
+  - [x] Implement concepts load, merge, and deduplication
+  - [x] Implement templates parse, filter, and content deduplication
+  - [x] Implement multi-concept chapter-based lookup
+  - [x] Generate 2 templates per level (total 10 templates) per concept
+    - [x] Integrate multi-concept merging logic for Pro & Legend levels
+  - [x] Implement parallel bulk uploads for hierarchy, concepts, and templates
+- [x] Update `package.json` to configure npm script `seed:latest`
+- [x] Run `npm run seed:latest` to seed the expanded template bank
+- [x] Update `scripts/validate-templates.js` for 10x checks (minimum 2 templates per difficulty level)
+- [x] Run validation script to verify 100% pass rate
+- [x] Sync/copy files to `/question-template` directory
+- [ ] Commit and push changes to GitHub
