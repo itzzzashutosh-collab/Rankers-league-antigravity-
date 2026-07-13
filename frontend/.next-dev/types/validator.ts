@@ -173,6 +173,33 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
+// Validate ../../app/concept-bank/[examId]/[subjectId]/[chapterId]/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/concept-bank/[examId]/[subjectId]/[chapterId]">> = Specific
+  const handler = {} as typeof import("../../app/concept-bank/[examId]/[subjectId]/[chapterId]/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../app/concept-bank/[examId]/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/concept-bank/[examId]">> = Specific
+  const handler = {} as typeof import("../../app/concept-bank/[examId]/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../app/concept-bank/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/concept-bank">> = Specific
+  const handler = {} as typeof import("../../app/concept-bank/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../app/contact/page.tsx
 {
   type __IsExpected<Specific extends AppPageConfig<"/contact">> = Specific
@@ -726,6 +753,51 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
 {
   type __IsExpected<Specific extends RouteHandlerConfig<"/api/auth/wallet/withdrawal">> = Specific
   const handler = {} as typeof import("../../app/api/auth/wallet/withdrawal/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../app/api/concept-bank/coverage/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/concept-bank/coverage">> = Specific
+  const handler = {} as typeof import("../../app/api/concept-bank/coverage/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../app/api/concept-bank/exams/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/concept-bank/exams">> = Specific
+  const handler = {} as typeof import("../../app/api/concept-bank/exams/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../app/api/concept-bank/templates/[id]/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/concept-bank/templates/[id]">> = Specific
+  const handler = {} as typeof import("../../app/api/concept-bank/templates/[id]/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../app/api/concept-bank/templates/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/concept-bank/templates">> = Specific
+  const handler = {} as typeof import("../../app/api/concept-bank/templates/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../app/api/concept-bank/validate/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/concept-bank/validate">> = Specific
+  const handler = {} as typeof import("../../app/api/concept-bank/validate/route.js")
   type __Check = __IsExpected<typeof handler>
   // @ts-ignore
   type __Unused = __Check
