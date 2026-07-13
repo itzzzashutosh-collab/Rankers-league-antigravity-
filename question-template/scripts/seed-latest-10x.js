@@ -78,6 +78,60 @@ function extractVarsFromFormula(formula) {
   }));
 }
 
+function getConcreteContext(subject, index) {
+  const phys = [
+    'an EV battery pack configuration', 
+    'a satellite stabilization system', 
+    'a quadcopter drone propulsion control', 
+    'a step-down transformer circuit', 
+    'a high-torque electric motor drive', 
+    'an optical fibre communication link', 
+    'a pneumatic projectile launcher', 
+    'a high-speed traction elevator control'
+  ];
+  const chem = [
+    'a continuous-stirred tank industrial reactor', 
+    'a hydrogen-oxygen fuel cell stack', 
+    'a wastewater treatment chlorination system', 
+    'a steel hull galvanic corrosion test', 
+    'an electroplating electrolyte solution', 
+    'a Haber process fertilizer synthesis unit', 
+    'a pharmaceutical batch crystallization chamber'
+  ];
+  const math = [
+    'a robotic arm trajectory model', 
+    'a geodetic surveying triangulation grid', 
+    'a structural truss optimization framework', 
+    'an architectural arch design curve', 
+    'a marine navigation route planner'
+  ];
+  
+  const subj = (subject || '').toLowerCase().trim();
+  if (subj.includes('phys')) {
+    return phys[index % phys.length];
+  } else if (subj.includes('chem')) {
+    return chem[index % chem.length];
+  } else if (subj.includes('math')) {
+    return math[index % math.length];
+  }
+  return 'a laboratory research experimental setup';
+}
+
+function getDiverseStemStart(index) {
+  const starters = [
+    'Analyze the behavior of',
+    'Calculate the operational parameters of',
+    'Determine the limiting conditions for',
+    'Evaluate the state characteristics of',
+    'Investigate the response in',
+    'Solve for the system parameters of',
+    'Find the equilibrium state of',
+    'Compute the target values governing'
+  ];
+  return starters[index % starters.length];
+}
+
+
 async function main() {
   console.log('🚀 Starting Expanded 10x Exam Hierarchy & Template Bank Builder (Self-Healing)...');
   console.log('='.repeat(75));
@@ -503,6 +557,8 @@ async function main() {
         const hasFormula = !!c.concept_formula;
         const vars = extractVarsFromFormula(c.concept_formula);
         const isJeeMain = c.exam_name.toLowerCase().trim() === 'jee main';
+        const context = getConcreteContext(c.subject_name, index);
+        const starter = getDiverseStemStart(index);
 
         let stem = '';
         let sol = '';
@@ -552,15 +608,15 @@ async function main() {
           } else if (isJeeMain) {
             if (dl.level === 'pro') {
               stem = hasFormula
-                ? `An official JEE Main level problem integrating exactly two concepts from the same chapter: ${c.concept_name} (using formula ${c.concept_formula}) and the related concept ${sibNamesStr} (e.g. Work-Energy + Circular Motion, or Electrostatics + Capacitance). Under standard NTA exam limits, calculate the net composite output parameter.`
-                : `Analyze the integrated relationship combining exactly two concepts from the chapter ${c.chapter_name}: ${c.concept_name} and ${sibNamesStr}. Choose the correct statement governing the system's combined state.`;
+                ? `${starter} ${context} integrating exactly two concepts from the same chapter: ${c.concept_name} (using formula ${c.concept_formula}) and the related concept ${sibNamesStr}. Under standard NTA exam limits, calculate the net composite output parameter.`
+                : `${starter} the integrated relationship combining exactly two concepts from the chapter ${c.chapter_name}: ${c.concept_name} and ${sibNamesStr}. Choose the correct statement governing the combined state.`;
               sol = `Step 1: Formulate the equation for the first concept (${c.concept_name}). Step 2: Write the governing relation for the second concept (${sibNamesStr}). Step 3: Simultaneously solve the system of equations.`;
               expl = `Combines exactly two concepts from the same chapter to test integrated multi-step reasoning.`;
             } else {
               // legend
               stem = hasFormula
-                ? `A complex JEE Main reverse-thinking scenario where the final state output parameter is measured. Working backwards using the combined principles of ${c.concept_name} (formula: ${c.concept_formula}) and ${sibNamesStr}, deduce the initial system design conditions and identify which physical assumptions must hold true.`
-                : `Working backwards from the composite final state governed by ${c.concept_name} and ${sibNamesStr}, deduce the initial physical boundary condition that must have been satisfied.`;
+                ? `A reverse-solving NTA scenario inside ${context}. Working backwards using the combined principles of ${c.concept_name} (formula: ${c.concept_formula}) and ${sibNamesStr}, deduce the initial system design conditions and identify which physical assumptions must hold true.`
+                : `Working backwards from the composite final state of ${context} governed by ${c.concept_name} and ${sibNamesStr}, deduce the initial physical boundary condition that must have been satisfied.`;
               sol = `Step 1: Begin with the final system output state. Step 2: Apply reverse thermodynamic/dynamic equations for ${sibNamesStr}. Step 3: Trace backwards to isolate initial conditions using the laws of ${c.concept_name}.`;
               expl = `Tests reverse thinking and multi-step deduction starting from the final system output.`;
             }
@@ -629,20 +685,20 @@ async function main() {
           } else if (isJeeMain) {
             if (dl.level === 'easy') {
               stem = hasFormula
-                ? `An experimental setup is prepared to study ${c.concept_name}. Rather than applying direct formula substitution, analyze the system dynamics/thermodynamics governed by the relation ${c.concept_formula}. Identify the physical boundary principles first, then compute the target parameters when the system reaches equilibrium.`
-                : `Identify the statement that correctly identifies the physical/chemical principles governing the behavior of ${c.concept_name} in ${c.chapter_name} under standard JEE Main testing conditions.`;
+                ? `${starter} ${context} designed to study ${c.concept_name}. Rather than applying direct formula substitution, analyze the system dynamics governed by the relation ${c.concept_formula}. Identify the physical boundary principles first, then compute the target parameters when the system reaches equilibrium.`
+                : `Identify the statement that correctly identifies the physical/chemical principles governing the behavior of ${c.concept_name} in ${c.chapter_name} under standard testing conditions for ${context}.`;
               sol = `Step 1: Identify the underlying physical concept. Step 2: Establish the boundary parameters. Step 3: Substitute standard laboratory values into the relation.`;
               expl = `This JEE Main standard template tests deep conceptual understanding of the physical setup before applying numerical variables.`;
             } else if (dl.level === 'medium') {
               stem = hasFormula
-                ? `In a high-precision engineering design (such as a battery pack configuration, satellite stabilization loop, or optical bench setup) involving the physics of ${c.concept_name}, the system is described by ${c.concept_formula}. Rearrange the formula to isolate the operational variable, accounting for necessary SI unit conversions, and determine the exact target parameters under standard testing constraints.`
-                : `A practical engineering device operates under the principles of ${c.concept_name}. Explain the correct analytical rearrangement of the system parameters required to solve for the design constraints.`;
+                ? `In ${context} involving the physics of ${c.concept_name}, the system behavior is governed by ${c.concept_formula}. Rearrange the formula to isolate the operational variable, accounting for necessary SI unit conversions, and determine the exact target parameters under standard testing constraints.`
+                : `For ${context} operating under the principles of ${c.concept_name}, explain the correct analytical rearrangement of the system parameters required to solve for the design constraints.`;
               sol = `Step 1: Express the target variable analytically. Step 2: Apply proper dimensional analysis and unit conversions. Step 3: Calculate the design value.`;
               expl = `Tests formula rearrangement under realistic engineering contexts and correct unit conversions.`;
             } else if (dl.level === 'hard') {
               stem = hasFormula
-                ? `A JEE Main challenge question on ${c.concept_name} (governed by ${c.concept_formula}) containing a logical trap. Determine the exact value of the target parameter. Note standard pitfalls: incorrect sign convention (e.g. thermodynamic work vs. heat sign), wrong unit conversion, or incorrect formula variant selection.`
-                : `Evaluate the behavior of ${c.concept_name} in the chapter ${c.chapter_name} under extreme bounds. Identify the correct physical statement while avoiding common conceptual traps (e.g., dimensional mismatch or incorrect boundary approximations).`;
+                ? `A challenge question on ${c.concept_name} (governed by ${c.concept_formula}) containing a logical trap inside ${context}. Determine the exact value of the target parameter. Note standard pitfalls: incorrect sign convention (e.g. thermodynamic work vs. heat sign), wrong unit conversion, or incorrect formula variant selection.`
+                : `Evaluate the behavior of ${c.concept_name} in the chapter ${c.chapter_name} under extreme bounds for ${context}. Identify the correct physical statement while avoiding common conceptual traps (e.g., dimensional mismatch or incorrect boundary approximations).`;
               sol = `Step 1: Formulate the equations. Step 2: Identify and apply correct sign conventions and standard units. Step 3: Evade standard algebraic traps to compute the exact result.`;
               expl = `Designed to trap students who misapply sign conventions or unit conversions.`;
             } else if (dl.level === 'pro') {
@@ -650,7 +706,7 @@ async function main() {
               sol = `Formulate the equations of ${c.concept_name} for the system. Solve the multi-step system to find the target variable.`;
               expl = `Pedagogical explanation of the advanced application of ${c.concept_name}.`;
             } else {
-              stem = `Based on a measured final output state of the system governed by ${c.concept_name}, deduce the initial thermodynamic/physical constraint that must have been satisfied. Determine which assumption holds true for this reverse process.`;
+              stem = `Based on a measured final output state of ${context} governed by ${c.concept_name}, deduce the initial thermodynamic/physical constraint that must have been satisfied. Determine which assumption holds true for this reverse process.`;
               sol = `Start from the output state. Work reverse step-by-step using the principles of ${c.concept_name} to resolve initial parameters.`;
               expl = `Pedagogical explanation of reverse solving ${c.concept_name}.`;
             }
