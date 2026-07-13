@@ -275,6 +275,16 @@ ALTER TABLE public.rl_formula_metadata ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.rl_concept_templates ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.rl_template_variations ENABLE ROW LEVEL SECURITY;
 
+-- 13. LATEST CONCEPT TEMPLATES TABLE (Drop-in clone)
+CREATE TABLE IF NOT EXISTS public.latest_concept_templates (
+    LIKE public.rl_concept_templates INCLUDING ALL
+);
+ALTER TABLE public.latest_concept_templates ENABLE ROW LEVEL SECURITY;
+
+CREATE TRIGGER trigger_update_latest_template_timestamp
+    BEFORE UPDATE ON public.latest_concept_templates
+    FOR EACH ROW EXECUTE FUNCTION public.update_template_updated_at();
+
 -- Public read access for exam hierarchy
 CREATE POLICY "Public read exams" ON public.rl_exams FOR SELECT USING (TRUE);
 CREATE POLICY "Public read subjects" ON public.rl_subjects FOR SELECT USING (TRUE);
@@ -283,6 +293,7 @@ CREATE POLICY "Public read topics" ON public.rl_topics FOR SELECT USING (TRUE);
 CREATE POLICY "Public read concepts" ON public.rl_concepts FOR SELECT USING (TRUE);
 CREATE POLICY "Public read formula metadata" ON public.rl_formula_metadata FOR SELECT USING (TRUE);
 CREATE POLICY "Public read templates" ON public.rl_concept_templates FOR SELECT USING (TRUE);
+CREATE POLICY "Public read latest templates" ON public.latest_concept_templates FOR SELECT USING (TRUE);
 CREATE POLICY "Public read variations" ON public.rl_template_variations FOR SELECT USING (TRUE);
 
 -- Authenticated (admin) write access
@@ -293,4 +304,5 @@ CREATE POLICY "Admins write topics" ON public.rl_topics FOR ALL TO authenticated
 CREATE POLICY "Admins write concepts" ON public.rl_concepts FOR ALL TO authenticated USING (TRUE);
 CREATE POLICY "Admins write formula metadata" ON public.rl_formula_metadata FOR ALL TO authenticated USING (TRUE);
 CREATE POLICY "Admins write templates" ON public.rl_concept_templates FOR ALL TO authenticated USING (TRUE);
+CREATE POLICY "Admins write latest templates" ON public.latest_concept_templates FOR ALL TO authenticated USING (TRUE);
 CREATE POLICY "Admins write variations" ON public.rl_template_variations FOR ALL TO authenticated USING (TRUE);
