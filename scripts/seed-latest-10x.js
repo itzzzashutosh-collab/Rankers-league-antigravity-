@@ -440,6 +440,8 @@ async function main() {
       explanation: r.explanation || 'Pedagogical explanation.',
       status: 'reviewed',
       variables: vars,
+      formula_name: r.formula_name || null,
+      formula_latex: r.formula_latex || null,
       merged_concept_ids: [],
       merged_concept_names: [],
     };
@@ -573,6 +575,8 @@ async function main() {
           correct_answer: 'Option A',
           explanation: expl,
           status: 'draft',
+          formula_name: c.concept_formula ? `${c.concept_name} Formula` : null,
+          formula_latex: c.concept_formula || null,
           merged_concept_ids: mergedIds,
           merged_concept_names: mergedNames,
         });
