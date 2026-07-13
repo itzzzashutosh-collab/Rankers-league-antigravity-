@@ -1,0 +1,6 @@
+workflow_name: "fact_evidence_verification"
+pipeline:
+  - step_id: "ver_1"
+    action: "validate_facts"
+  - step_id: "ver_2"
+    action: "validate_evidence"

@@ -1,0 +1,8 @@
+permissions:
+  department: "DEP_EXEC"
+  role: "ROLE_WRK"
+  actions:
+    - "ai_task_execution:insert"
+    - "ai_execution_steps:insert"
+    - "ai_execution_logs:insert"
+    - "ai_tool_usage:insert"

@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "objectives": {
+      "type": "array"
+    },
+    "revenue_yesterday": {
+      "type": "number"
+    },
+    "ai_cost_yesterday": {
+      "type": "number"
+    }
+  },
+  "required": [
+    "objectives",
+    "revenue_yesterday"
+  ]
+}

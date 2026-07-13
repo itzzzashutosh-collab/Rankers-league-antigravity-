@@ -1,0 +1,6 @@
+workflow_name: "daily_devops_loop"
+pipeline:
+  - step_id: "cto_1"
+    action: "audit_code_quality"
+  - step_id: "cto_2"
+    action: "run_deployment_checks"

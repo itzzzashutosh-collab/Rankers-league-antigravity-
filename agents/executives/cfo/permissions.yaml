@@ -1,0 +1,8 @@
+permissions:
+  department: "DEP_EXEC"
+  role: "ROLE_CFO"
+  actions:
+    - "cfo_revenue:insert"
+    - "cfo_expenses:insert"
+    - "cfo_budgets:update"
+    - "cfo_financial_alerts:insert"

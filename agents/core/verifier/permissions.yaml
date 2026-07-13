@@ -1,0 +1,7 @@
+permissions:
+  department: "DEP_EXEC"
+  role: "ROLE_SPEC"
+  actions:
+    - "ai_verifications:insert"
+    - "ai_evidence:insert"
+    - "ai_confidence_scores:insert"

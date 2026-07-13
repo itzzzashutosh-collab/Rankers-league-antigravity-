@@ -1,0 +1,18 @@
+name: "cto"
+version: "1.0.0"
+department: "DEP_EXEC"
+role: "ROLE_CTO"
+models:
+  primary: "gpt-4o"
+  fallback: "claude-3-5-sonnet"
+  review: "gpt-4o"
+  verification: "gemini-1.5-pro"
+settings:
+  temperature: 0.1
+  max_tokens: 4096
+  timeout_seconds: 60
+approval:
+  required_threshold_confidence: 0.90
+  manual_escalation_triggers:
+    - "infrastructure_failure"
+    - "build_compilation_errors"

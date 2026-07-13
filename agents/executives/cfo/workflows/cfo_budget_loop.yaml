@@ -1,0 +1,6 @@
+workflow_name: "daily_budget_loop"
+pipeline:
+  - step_id: "cfo_1"
+    action: "audit_ai_costs"
+  - step_id: "cfo_2"
+    action: "check_budget_limits"

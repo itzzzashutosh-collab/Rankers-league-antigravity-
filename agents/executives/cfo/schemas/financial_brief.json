@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "cash_position_inr": {
+      "type": "number"
+    },
+    "burn_rate_usd": {
+      "type": "number"
+    },
+    "runway_months": {
+      "type": "number"
+    }
+  },
+  "required": [
+    "cash_position_inr",
+    "burn_rate_usd"
+  ]
+}

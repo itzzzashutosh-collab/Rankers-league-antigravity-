@@ -1,0 +1,8 @@
+permissions:
+  department: "DEP_EXEC"
+  role: "ROLE_CMO"
+  actions:
+    - "cmo_campaigns:insert"
+    - "cmo_content_calendar:insert"
+    - "cmo_seo_metrics:insert"
+    - "cmo_experiments:insert"

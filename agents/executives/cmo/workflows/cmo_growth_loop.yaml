@@ -1,0 +1,6 @@
+workflow_name: "daily_growth_loop"
+pipeline:
+  - step_id: "cmo_1"
+    action: "audit_seo_keywords"
+  - step_id: "cmo_2"
+    action: "validate_campaign_budgets"

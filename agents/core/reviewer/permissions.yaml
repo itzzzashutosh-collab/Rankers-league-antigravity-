@@ -1,0 +1,7 @@
+permissions:
+  department: "DEP_EXEC"
+  role: "ROLE_SPEC"
+  actions:
+    - "ai_reviews:insert"
+    - "ai_review_findings:insert"
+    - "ai_quality_scores:insert"

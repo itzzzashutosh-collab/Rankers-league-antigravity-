@@ -1,0 +1,5 @@
+models:
+  primary: "gpt-4o"
+  fallback: "claude-3-5-sonnet"
+  reviewer: "gpt-4o"
+  verifier: "gemini-1.5-pro"

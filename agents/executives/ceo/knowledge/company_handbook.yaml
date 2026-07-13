@@ -1,0 +1,4 @@
+rules:
+  - dynamic-budgets-caps
+  - security-escalation-protocols
+  - payout-thresholds

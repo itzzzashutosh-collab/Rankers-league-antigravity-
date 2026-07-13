@@ -1,0 +1,13 @@
+{
+  "review_id": "rev-mock-01",
+  "scorecard": {
+    "completeness_score": 0.95,
+    "overall_score": 0.94
+  },
+  "findings": [
+    {
+      "type": "Minor",
+      "text": "Fix minor styling formatting"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+tools:
+  - id: "supabase_client"
+    allowed: true
+    timeout_ms: 10000
+  - id: "fs_utility"
+    allowed: true
+    timeout_ms: 5000

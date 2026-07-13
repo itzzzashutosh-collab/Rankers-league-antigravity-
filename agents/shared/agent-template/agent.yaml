@@ -1,0 +1,19 @@
+# AI Agent Configuration Blueprint
+name: "agent-name-placeholder"
+version: "1.0.0"
+department: "DEP_EXEC"
+role: "ROLE_WRK"
+models:
+  primary: "gpt-4o"
+  fallback: "claude-3-5-sonnet"
+  review: "gpt-4o"
+  verification: "gemini-1.5-pro"
+settings:
+  temperature: 0.2
+  max_tokens: 4096
+  timeout_seconds: 120
+approval:
+  required_threshold_confidence: 0.70
+  manual_escalation_triggers:
+    - "out_of_budget"
+    - "high_risk_payout"

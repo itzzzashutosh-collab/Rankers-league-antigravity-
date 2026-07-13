@@ -1,0 +1,6 @@
+workflow_name: "output_quality_review"
+pipeline:
+  - step_id: "rev_1"
+    action: "validate_schema"
+  - step_id: "rev_2"
+    action: "validate_tone"

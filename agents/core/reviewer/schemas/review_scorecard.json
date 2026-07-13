@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "completeness_score": {
+      "type": "number"
+    },
+    "formatting_score": {
+      "type": "number"
+    },
+    "overall_score": {
+      "type": "number"
+    },
+    "findings": {
+      "type": "array"
+    }
+  },
+  "required": [
+    "overall_score",
+    "findings"
+  ]
+}

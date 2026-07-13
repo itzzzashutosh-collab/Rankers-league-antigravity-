@@ -1,0 +1,14 @@
+tools:
+  - id: "supabase_client"
+    allowed: true
+    timeout_ms: 30000
+  - id: "discord_webhook"
+    allowed: true
+    timeout_ms: 10000
+  - id: "fs_utility"
+    allowed: true
+    timeout_ms: 5000
+  - id: "search_tool"
+    allowed: false
+  - id: "browser_tool"
+    allowed: false

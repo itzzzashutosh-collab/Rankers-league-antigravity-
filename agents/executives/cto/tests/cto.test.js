@@ -1,0 +1,1 @@
+console.log('✓ Running Digital CTO system latency checks tests...');

@@ -1,0 +1,6 @@
+workflow_name: "sequential_task_execution"
+steps:
+  - step_id: "step_1"
+    action: "validate_plan"
+  - step_id: "step_2"
+    action: "execute_step"

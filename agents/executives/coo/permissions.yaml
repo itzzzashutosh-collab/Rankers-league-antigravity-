@@ -1,0 +1,8 @@
+permissions:
+  department: "DEP_EXEC"
+  role: "ROLE_COO"
+  actions:
+    - "coo_projects:insert"
+    - "coo_tasks:insert"
+    - "coo_incidents:insert"
+    - "coo_incidents:update"

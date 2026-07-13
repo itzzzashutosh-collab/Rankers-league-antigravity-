@@ -1,0 +1,10 @@
+tools:
+  - id: "supabase_client"
+    allowed: true
+    timeout_ms: 10000
+  - id: "discord_webhook"
+    allowed: true
+    timeout_ms: 5000
+  - id: "reporting_engine"
+    allowed: true
+    timeout_ms: 15000

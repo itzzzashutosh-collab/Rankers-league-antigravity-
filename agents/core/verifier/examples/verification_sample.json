@@ -1,0 +1,8 @@
+{
+  "verification_id": "ver-mock-01",
+  "status": "Verified",
+  "overall_confidence": 0.98,
+  "evidence": [
+    "db:user_wallets:balance"
+  ]
+}

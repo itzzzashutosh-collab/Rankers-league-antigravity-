@@ -1,0 +1,28 @@
+{
+  "name": "rankers-league-monorepo",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "frontend",
+    "backend",
+    "shared",
+    "admin",
+    "agents"
+  ],
+  "scripts": {
+    "dev:frontend": "npm run dev --workspace=frontend",
+    "dev:backend": "npm run dev --workspace=backend",
+    "dev:admin": "npm run dev --workspace=admin",
+    "dev:agents": "npm run dev --workspace=agents",
+    "build:frontend": "npm run build --workspace=frontend",
+    "build:backend": "npm run build --workspace=backend",
+    "build:admin": "npm run build --workspace=admin",
+    "build:agents": "npm run build --workspace=agents",
+    "format": "prettier --write \"**/*.{ts,tsx,js,json,css,md}\"",
+    "lint": "npm run lint --workspace=frontend && npm run lint --workspace=backend"
+  },
+  "devDependencies": {
+    "pg": "^8.22.0",
+    "prettier": "^3.3.3"
+  }
+}

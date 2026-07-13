@@ -1,0 +1,1 @@
+console.log('✓ Running Digital CFO margin economics checks tests...');

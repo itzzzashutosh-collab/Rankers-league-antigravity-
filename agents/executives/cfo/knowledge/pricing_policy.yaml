@@ -1,0 +1,3 @@
+platform_fees:
+  - default_rate: 0.10
+  - vip_rate: 0.05

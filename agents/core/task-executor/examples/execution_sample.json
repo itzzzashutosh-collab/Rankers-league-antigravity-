@@ -1,0 +1,10 @@
+{
+  "sample_plan_id": "plan-mock-01",
+  "steps": [
+    {
+      "step_id": "step_1",
+      "label": "Retrieve variables",
+      "status": "Completed"
+    }
+  ]
+}

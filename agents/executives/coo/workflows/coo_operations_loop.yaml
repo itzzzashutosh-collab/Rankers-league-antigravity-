@@ -1,0 +1,6 @@
+workflow_name: "daily_operations_loop"
+pipeline:
+  - step_id: "coo_1"
+    action: "monitor_contests_sla"
+  - step_id: "coo_2"
+    action: "rebalance_workloads"

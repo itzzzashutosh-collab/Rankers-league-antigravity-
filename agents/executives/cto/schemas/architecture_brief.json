@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "system_status": {
+      "type": "string"
+    },
+    "average_api_latency_ms": {
+      "type": "number"
+    },
+    "active_bugs_count": {
+      "type": "number"
+    }
+  },
+  "required": [
+    "system_status",
+    "average_api_latency_ms"
+  ]
+}

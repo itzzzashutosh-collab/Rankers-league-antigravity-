@@ -1,0 +1,4 @@
+rules:
+  - wallet-balance-ledger
+  - candidate-prize-tiers
+  - RLS-validation

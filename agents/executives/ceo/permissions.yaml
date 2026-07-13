@@ -1,0 +1,8 @@
+permissions:
+  department: "DEP_EXEC"
+  role: "ROLE_CEO"
+  actions:
+    - "ceo_decisions:insert"
+    - "ceo_reports:insert"
+    - "ceo_priorities:update"
+    - "ceo_approval_queue:update"

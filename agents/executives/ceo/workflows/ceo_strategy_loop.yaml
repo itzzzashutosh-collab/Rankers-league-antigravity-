@@ -1,0 +1,6 @@
+workflow_name: "daily_governance_loop"
+pipeline:
+  - step_id: "ceo_1"
+    action: "analyze_health"
+  - step_id: "ceo_2"
+    action: "allocate_budgets"

@@ -1,0 +1,3 @@
+memory_read_modes:
+  - campaign-history
+  - winning-experiments

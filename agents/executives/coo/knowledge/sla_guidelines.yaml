@@ -1,0 +1,3 @@
+sla_rules:
+  - results-publishing-minutes: 15
+  - support-reply-minutes: 30

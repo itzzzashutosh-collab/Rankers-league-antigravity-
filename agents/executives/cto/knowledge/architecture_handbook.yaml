@@ -1,0 +1,4 @@
+rules:
+  - database-indexes-verification
+  - core-web-vitals-benchmarks
+  - rollback-triggers

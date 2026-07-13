@@ -1,0 +1,8 @@
+permissions:
+  department: "DEP_EXEC"
+  role: "ROLE_CTO"
+  actions:
+    - "cto_deployments:insert"
+    - "cto_incidents:insert"
+    - "cto_bug_tracker:update"
+    - "cto_performance:insert"

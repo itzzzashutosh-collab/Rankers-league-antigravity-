@@ -1,0 +1,3 @@
+memory_read_modes:
+  - architecture-decisions
+  - incident-history
