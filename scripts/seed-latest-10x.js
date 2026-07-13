@@ -502,6 +502,7 @@ async function main() {
 
         const hasFormula = !!c.concept_formula;
         const vars = extractVarsFromFormula(c.concept_formula);
+        const isJeeMain = c.exam_name.toLowerCase().trim() === 'jee main';
 
         let stem = '';
         let sol = '';
@@ -531,7 +532,22 @@ async function main() {
 
           const sibNamesStr = mergedNames.join(' and ');
 
-          if (isTechnical) {
+          if (isJeeMain) {
+            if (dl.level === 'pro') {
+              stem = hasFormula
+                ? `An official JEE Main level problem integrating exactly two concepts from the same chapter: ${c.concept_name} (using formula ${c.concept_formula}) and the related concept ${sibNamesStr} (e.g. Work-Energy + Circular Motion, or Electrostatics + Capacitance). Under standard NTA exam limits, calculate the net composite output parameter.`
+                : `Analyze the integrated relationship combining exactly two concepts from the chapter ${c.chapter_name}: ${c.concept_name} and ${sibNamesStr}. Choose the correct statement governing the system's combined state.`;
+              sol = `Step 1: Formulate the equation for the first concept (${c.concept_name}). Step 2: Write the governing relation for the second concept (${sibNamesStr}). Step 3: Simultaneously solve the system of equations.`;
+              expl = `Combines exactly two concepts from the same chapter to test integrated multi-step reasoning.`;
+            } else {
+              // legend
+              stem = hasFormula
+                ? `A complex JEE Main reverse-thinking scenario where the final state output parameter is measured. Working backwards using the combined principles of ${c.concept_name} (formula: ${c.concept_formula}) and ${sibNamesStr}, deduce the initial system design conditions and identify which physical assumptions must hold true.`
+                : `Working backwards from the composite final state governed by ${c.concept_name} and ${sibNamesStr}, deduce the initial physical boundary condition that must have been satisfied.`;
+              sol = `Step 1: Begin with the final system output state. Step 2: Apply reverse thermodynamic/dynamic equations for ${sibNamesStr}. Step 3: Trace backwards to isolate initial conditions using the laws of ${c.concept_name}.`;
+              expl = `Tests reverse thinking and multi-step deduction starting from the final system output.`;
+            }
+          } else if (isTechnical) {
             if (dl.level === 'pro') {
               stem = hasFormula
                 ? `An analytical examination question integrating the physical/mathematical frameworks of ${c.concept_name} (using formula ${c.concept_formula}) and the related concepts ${sibNamesStr} from the chapter ${c.chapter_name}. Calculate the net composite output of the system under realistic engineering conditions.`
@@ -565,7 +581,35 @@ async function main() {
           }
         } else {
           // Single concept easy/medium/hard, or fallback if no siblings
-          if (isTechnical) {
+          if (isJeeMain) {
+            if (dl.level === 'easy') {
+              stem = hasFormula
+                ? `An experimental setup is prepared to study ${c.concept_name}. Rather than applying direct formula substitution, analyze the system dynamics/thermodynamics governed by the relation ${c.concept_formula}. Identify the physical boundary principles first, then compute the target parameters when the system reaches equilibrium.`
+                : `Identify the statement that correctly identifies the physical/chemical principles governing the behavior of ${c.concept_name} in ${c.chapter_name} under standard JEE Main testing conditions.`;
+              sol = `Step 1: Identify the underlying physical concept. Step 2: Establish the boundary parameters. Step 3: Substitute standard laboratory values into the relation.`;
+              expl = `This JEE Main standard template tests deep conceptual understanding of the physical setup before applying numerical variables.`;
+            } else if (dl.level === 'medium') {
+              stem = hasFormula
+                ? `In a high-precision engineering design (such as a battery pack configuration, satellite stabilization loop, or optical bench setup) involving the physics of ${c.concept_name}, the system is described by ${c.concept_formula}. Rearrange the formula to isolate the operational variable, accounting for necessary SI unit conversions, and determine the exact target parameters under standard testing constraints.`
+                : `A practical engineering device operates under the principles of ${c.concept_name}. Explain the correct analytical rearrangement of the system parameters required to solve for the design constraints.`;
+              sol = `Step 1: Express the target variable analytically. Step 2: Apply proper dimensional analysis and unit conversions. Step 3: Calculate the design value.`;
+              expl = `Tests formula rearrangement under realistic engineering contexts and correct unit conversions.`;
+            } else if (dl.level === 'hard') {
+              stem = hasFormula
+                ? `A JEE Main challenge question on ${c.concept_name} (governed by ${c.concept_formula}) containing a logical trap. Determine the exact value of the target parameter. Note standard pitfalls: incorrect sign convention (e.g. thermodynamic work vs. heat sign), wrong unit conversion, or incorrect formula variant selection.`
+                : `Evaluate the behavior of ${c.concept_name} in the chapter ${c.chapter_name} under extreme bounds. Identify the correct physical statement while avoiding common conceptual traps (e.g., dimensional mismatch or incorrect boundary approximations).`;
+              sol = `Step 1: Formulate the equations. Step 2: Identify and apply correct sign conventions and standard units. Step 3: Evade standard algebraic traps to compute the exact result.`;
+              expl = `Designed to trap students who misapply sign conventions or unit conversions.`;
+            } else if (dl.level === 'pro') {
+              stem = `An advanced problem on ${c.concept_name} in the chapter ${c.chapter_name} requiring multiple steps. Calculate the target variable under constraints.`;
+              sol = `Formulate the equations of ${c.concept_name} for the system. Solve the multi-step system to find the target variable.`;
+              expl = `Pedagogical explanation of the advanced application of ${c.concept_name}.`;
+            } else {
+              stem = `Based on a measured final output state of the system governed by ${c.concept_name}, deduce the initial thermodynamic/physical constraint that must have been satisfied. Determine which assumption holds true for this reverse process.`;
+              sol = `Start from the output state. Work reverse step-by-step using the principles of ${c.concept_name} to resolve initial parameters.`;
+              expl = `Pedagogical explanation of reverse solving ${c.concept_name}.`;
+            }
+          } else if (isTechnical) {
             if (dl.level === 'easy') {
               stem = hasFormula
                 ? `In a scientific study investigating the principles of ${c.concept_name}, an experimental system is established under standard atmospheric controls. Using the fundamental relationship ${c.concept_formula}, evaluate the system properties and calculate the value of the target parameter when the system reaches equilibrium.`
