@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get('search');
 
     let query = supabase
-      .from('rl_exams')
+      .from('latest_exams')
       .select('exam_id, exam_name, full_form, description, nationality, exam_mode, exam_category, official_website')
       .order('exam_name');
 

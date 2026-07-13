@@ -1,39 +1,20 @@
-# Phase 1 — Concept Template Bank Tasks
+# Tasks
 
-## Step 1 — Analysis & Setup
-- [x] Read all 9 CSV files and understand schema
-- [x] Identify coverage gap (6,867 concepts with 0 templates)
-- [x] Understand existing backend/DB structure
-
-## Step 2 — Database Migrations
-- [x] `001_concept_template_bank.sql` — master template table
-- [x] `002_formula_metadata.sql` — formula metadata table
-- [x] `003_template_variations.sql` — variations table
-- [x] Run migrations against Supabase
-
-## Step 3 — Seeding Scripts
-- [x] `seed-concept-template-bank.js` — import existing 6,195 templates
-- [x] `generate-template-stubs.js` — create stubs for 6,867 uncovered concepts
-- [x] `validate-templates.js` — quality check all templates
-- [x] Run seeds and verify row counts
-
-## Step 4 — Admin Panel UI
-- [x] Template Bank Dashboard page
-- [x] Per-exam template view
-- [x] Concept Template Editor (with LaTeX preview)
-- [x] Coverage heatmap component
-
-## Step 5 — API Routes
-- [x] GET /api/concept-templates (filtered list)
-- [x] GET/PUT/DELETE /api/concept-templates/[id]
-- [x] GET /api/concept-templates/coverage
-- [x] POST /api/concept-templates/validate
-
-## Step 6 — Frontend Browse View
-- [x] /concept-bank page (exam grid)
-- [x] /concept-bank/[examId] page
-- [x] /concept-bank/[conceptId] page with KaTeX
-
-## Step 7 — Git Commit & Push
-- [x] Commit all changes
-- [x] Push to GitHub
+- [x] Create database schema for unified `latest_` tables hierarchy (`38_latest_tables.sql`)
+- [x] Run migrations to build the tables in Supabase
+- [x] Parse and seed exams, subjects, chapters, and topics from CSV sources
+- [x] Merge all 4 concept CSV files (`concepts_rows.csv`, `basic_concepts_rows.csv`, `standard_concepts_rows.csv`, `new_concept_rows.csv`) into `latest_concepts` table
+  - [x] Deduplicate by ID and unique hierarchy name keys
+  - [x] Verify total concepts = 8,131
+- [x] Seed existing templates and auto-generate stubs (ensuring exactly 5 templates per concept)
+  - [x] Total templates generated = 40,655
+  - [x] Verify total templates count matches `8131 * 5 = 40,655`
+- [x] Populate non-null options, answers, variables, and explanations for 100% of the templates
+  - [x] Verify templates with null options = 0
+- [x] Update Next.js backend API routes to query from `latest_` tables
+  - [x] `latest_exams`
+  - [x] `latest_concept_templates`
+  - [x] `latest_template_coverage`
+- [x] Create materialized view `latest_template_coverage`
+- [x] Sync all modified and newly created files to `/question-template` delivery folder
+- [x] Push all changes to Git remote repository

@@ -13,7 +13,7 @@ const supabase = createClient(
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const { data, error } = await supabase
-      .from('rl_concept_templates')
+      .from('latest_concept_templates')
       .select('*')
       .eq('template_id', params.id)
       .single();
@@ -35,7 +35,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
   try {
     const body = await request.json();
     const { data, error } = await supabase
-      .from('rl_concept_templates')
+      .from('latest_concept_templates')
       .update(body)
       .eq('template_id', params.id)
       .select()
@@ -56,7 +56,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const { error } = await supabase
-      .from('rl_concept_templates')
+      .from('latest_concept_templates')
       .delete()
       .eq('template_id', params.id);
 

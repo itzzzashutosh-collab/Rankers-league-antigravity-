@@ -25,15 +25,14 @@ export async function GET(request: NextRequest) {
     const offset = parseInt(searchParams.get('offset') || '0');
 
     let query = supabase
-      .from('rl_concept_templates')
+      .from('latest_concept_templates')
       .select(`
         template_id, concept_id, exam_name, subject_name, chapter_name,
         topic_name, concept_name, template_name, template_type,
         difficulty_level, difficulty_number, stem_template,
         formula_latex, variables, option_a, option_b, option_c, option_d,
-        correct_answer, explanation, status, common_mistakes,
-        logical_traps, skills_tested, cognitive_level, created_at
-      `)
+        correct_answer, explanation, status, created_at
+      `, { count: 'exact' })
       .order('difficulty_number', { ascending: true })
       .range(offset, offset + limit - 1);
 

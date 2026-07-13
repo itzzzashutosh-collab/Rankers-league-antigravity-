@@ -24,7 +24,8 @@
     "generate:stubs": "node --env-file=backend/.env scripts/generate-template-stubs.js",
     "validate:templates": "node --env-file=backend/.env scripts/validate-templates.js",
     "migrate:templates": "node --env-file=.env scripts/migrate-concept-template-bank.js",
-    "enrich:templates": "node --env-file=backend/.env scripts/enrich-templates.js"
+    "enrich:templates": "node --env-file=backend/.env scripts/enrich-templates.js",
+    "seed:latest": "node --env-file=backend/.env scripts/seed-latest-merged.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.4",

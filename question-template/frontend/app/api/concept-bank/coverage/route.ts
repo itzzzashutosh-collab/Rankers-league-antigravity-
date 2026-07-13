@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
     const exam = searchParams.get('exam');
 
     let query = supabase
-      .from('rl_template_coverage')
+      .from('latest_template_coverage')
       .select('*')
       .order('exam_name')
       .order('coverage_percent', { ascending: false });
