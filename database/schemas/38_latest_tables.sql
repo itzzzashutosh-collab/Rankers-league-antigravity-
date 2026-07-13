@@ -3,7 +3,7 @@
 
 -- 1. EXAMS
 CREATE TABLE IF NOT EXISTS public.latest_exams (
-    exam_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    exam_id UUID PRIMARY KEY,
     exam_name TEXT NOT NULL UNIQUE,
     full_form TEXT,
     description TEXT,
@@ -17,8 +17,9 @@ CREATE TABLE IF NOT EXISTS public.latest_exams (
 
 -- 2. SUBJECTS
 CREATE TABLE IF NOT EXISTS public.latest_subjects (
-    subject_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    exam_name TEXT NOT NULL REFERENCES public.latest_exams(exam_name) ON DELETE CASCADE,
+    subject_id UUID PRIMARY KEY,
+    exam_id UUID NOT NULL REFERENCES public.latest_exams(exam_id) ON DELETE CASCADE,
+    exam_name TEXT NOT NULL,
     subject_name TEXT NOT NULL,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW(),
@@ -27,19 +28,21 @@ CREATE TABLE IF NOT EXISTS public.latest_subjects (
 
 -- 3. CHAPTERS
 CREATE TABLE IF NOT EXISTS public.latest_chapters (
-    chapter_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    chapter_id UUID PRIMARY KEY,
+    exam_id UUID NOT NULL,
+    subject_id UUID NOT NULL REFERENCES public.latest_subjects(subject_id) ON DELETE CASCADE,
     exam_name TEXT NOT NULL,
     subject_name TEXT NOT NULL,
     chapter_name TEXT NOT NULL,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW(),
-    FOREIGN KEY (exam_name, subject_name) REFERENCES public.latest_subjects(exam_name, subject_name) ON DELETE CASCADE,
     UNIQUE (exam_name, subject_name, chapter_name)
 );
 
 -- 4. TOPICS
 CREATE TABLE IF NOT EXISTS public.latest_topics (
-    topic_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    topic_id UUID PRIMARY KEY,
+    chapter_id UUID NOT NULL REFERENCES public.latest_chapters(chapter_id) ON DELETE CASCADE,
     exam_name TEXT NOT NULL,
     subject_name TEXT NOT NULL,
     chapter_name TEXT NOT NULL,
@@ -47,13 +50,13 @@ CREATE TABLE IF NOT EXISTS public.latest_topics (
     topic_description TEXT,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW(),
-    FOREIGN KEY (exam_name, subject_name, chapter_name) REFERENCES public.latest_chapters(exam_name, subject_name, chapter_name) ON DELETE CASCADE,
     UNIQUE (exam_name, subject_name, chapter_name, topic_name)
 );
 
 -- 5. CONCEPTS
 CREATE TABLE IF NOT EXISTS public.latest_concepts (
-    concept_id TEXT PRIMARY KEY, -- keep text or uuid since CSV uses text/UUIDs
+    concept_id TEXT PRIMARY KEY,
+    topic_id UUID REFERENCES public.latest_topics(topic_id) ON DELETE CASCADE,
     exam_name TEXT NOT NULL,
     subject_name TEXT NOT NULL,
     chapter_name TEXT NOT NULL,
@@ -63,13 +66,12 @@ CREATE TABLE IF NOT EXISTS public.latest_concepts (
     concept_formula TEXT,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW(),
-    FOREIGN KEY (exam_name, subject_name, chapter_name, topic_name) REFERENCES public.latest_topics(exam_name, subject_name, chapter_name, topic_name) ON DELETE CASCADE,
     UNIQUE (exam_name, subject_name, chapter_name, topic_name, concept_name)
 );
 
 -- 6. CONCEPT TEMPLATES
 CREATE TABLE IF NOT EXISTS public.latest_concept_templates (
-    template_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    template_id UUID PRIMARY KEY,
     concept_id TEXT REFERENCES public.latest_concepts(concept_id) ON DELETE CASCADE,
     original_template_id TEXT,
     

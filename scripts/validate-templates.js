@@ -41,7 +41,7 @@ async function main() {
   const PAGE_SIZE = 1000;
   while (true) {
     const { data, error } = await supabase
-      .from('rl_concepts')
+      .from('latest_concepts')
       .select('concept_id, exam_name, subject_name, chapter_name, concept_name')
       .range(conceptStart, conceptStart + PAGE_SIZE - 1);
     if (error) { console.error('❌ Cannot load concepts:', error.message); process.exit(1); }
@@ -51,14 +51,14 @@ async function main() {
   }
   const conceptMap = new Map(concepts.map((c) => [c.concept_id, c]));
   console.log(`  ✅ ${concepts.length} concepts loaded`);
-
+ 
   // ── 2. Load all templates with pagination ─────────────────────
   console.log('📥 Loading templates (paginated)...');
   let templates = [];
   let templateStart = 0;
   while (true) {
     const { data, error } = await supabase
-      .from('rl_concept_templates')
+      .from('latest_concept_templates')
       .select('template_id, concept_id, exam_name, difficulty_level, stem_template, variables, status')
       .range(templateStart, templateStart + PAGE_SIZE - 1);
     if (error) { console.error('❌ Cannot load templates:', error.message); process.exit(1); }
