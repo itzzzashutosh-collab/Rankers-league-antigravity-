@@ -401,17 +401,33 @@ async function main() {
       difficulty_num = 3;
     }
 
+    const tplId = isUUID(r.concept_template_id) ? r.concept_template_id : randomUUID();
+    const origTplId = r.concept_template_id.trim();
+
+    if (!conceptTemplatesMap.has(r.concept_id)) {
+      conceptTemplatesMap.set(r.concept_id, new Map());
+    }
+    const levelsMap = conceptTemplatesMap.get(r.concept_id);
+    if (!levelsMap.has(difficulty)) {
+      levelsMap.set(difficulty, []);
+    }
+    const list = levelsMap.get(difficulty);
+    const index = list.length;
+
+    const fallbackName = `${r.concept_name.trim()} - ${difficulty.charAt(0).toUpperCase() + difficulty.slice(1)} Template ${index + 1}`;
+    const tName = r.template_name && r.template_name.trim() ? r.template_name.trim() : fallbackName;
+
     const vars = extractVarsFromFormula(r.formula_latex);
     const templateObj = {
-      template_id: isUUID(r.concept_template_id) ? r.concept_template_id : randomUUID(),
+      template_id: tplId,
       concept_id: r.concept_id,
-      original_template_id: r.concept_template_id,
+      original_template_id: origTplId,
       exam_name: r.exam_name.trim(),
       subject_name: r.subject_name.trim(),
       chapter_name: r.chapter_name.trim(),
       topic_name: r.topic_name.trim(),
       concept_name: r.concept_name.trim(),
-      template_name: r.template_name || null,
+      template_name: tName,
       template_type: difficulty === 'easy' ? 'direct_substitution' : difficulty === 'medium' ? 'formula_rearrangement' : 'logical_trap',
       difficulty_level: difficulty,
       difficulty_number: difficulty_num,
@@ -428,14 +444,7 @@ async function main() {
       merged_concept_names: [],
     };
 
-    if (!conceptTemplatesMap.has(r.concept_id)) {
-      conceptTemplatesMap.set(r.concept_id, new Map());
-    }
-    const levelsMap = conceptTemplatesMap.get(r.concept_id);
-    if (!levelsMap.has(difficulty)) {
-      levelsMap.set(difficulty, []);
-    }
-    levelsMap.get(difficulty).push(templateObj);
+    list.push(templateObj);
     addedOriginalCount++;
   }
 
@@ -470,6 +479,10 @@ async function main() {
       const stubsNeeded = Math.max(0, 2 - existingForLevel.length);
 
       for (let i = 0; i < stubsNeeded; i++) {
+        const index = existingForLevel.length + i;
+        const tplId = randomUUID();
+        const tName = `${c.concept_name} - ${dl.level.charAt(0).toUpperCase() + dl.level.slice(1)} Template ${index + 1}`;
+
         const hasFormula = !!c.concept_formula;
         const vars = extractVarsFromFormula(c.concept_formula);
 
@@ -539,13 +552,15 @@ async function main() {
         }
 
         finalTemplates.push({
-          template_id: randomUUID(),
+          template_id: tplId,
           concept_id: c.concept_id,
+          original_template_id: tplId,
           exam_name: c.exam_name,
           subject_name: c.subject_name,
           chapter_name: c.chapter_name,
           topic_name: c.topic_name,
           concept_name: c.concept_name,
+          template_name: tName,
           template_type: dl.type,
           difficulty_level: dl.level,
           difficulty_number: dl.num,

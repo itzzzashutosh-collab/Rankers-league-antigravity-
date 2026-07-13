@@ -12,4 +12,4 @@
 - [x] Update `scripts/validate-templates.js` for 10x checks (minimum 2 templates per difficulty level)
 - [x] Run validation script to verify 100% pass rate
 - [x] Sync/copy files to `/question-template` directory
-- [ ] Commit and push changes to GitHub
+- [x] Commit and push changes to GitHub

@@ -54,7 +54,7 @@ async function main() {
   // ── 2. Load all templates ─────────────────────────────────────
   console.log('📥 Loading templates...');
   const { rows: templates } = await client.query(`
-    SELECT template_id, concept_id, exam_name, difficulty_level, stem_template, variables, status 
+    SELECT template_id, concept_id, exam_name, difficulty_level, stem_template, variables, status, original_template_id, template_name 
     FROM public.latest_concept_templates;
   `);
   console.log(`  ✅ ${templates.length} templates loaded`);
@@ -82,6 +82,16 @@ async function main() {
     // Check empty stem
     if (!t.stem_template || t.stem_template.trim().length < 10) {
       warnings.push(`Template ${t.template_id} has very short stem_template: "${t.stem_template}"`);
+    }
+
+    // Check original_template_id
+    if (!t.original_template_id || t.original_template_id.trim().length === 0) {
+      errors.push(`Template ${t.template_id} has empty original_template_id`);
+    }
+
+    // Check template_name
+    if (!t.template_name || t.template_name.trim().length === 0) {
+      errors.push(`Template ${t.template_id} has empty template_name`);
     }
   }
 
