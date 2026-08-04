@@ -8,7 +8,7 @@ import { Contest } from "@/types/contests";
 import { ContestService } from "@/services/ContestService";
 import { createClient, DEMO_MOCK_PROFILE } from "@/utils/supabase/client";
 import { EXAM_CATEGORY_LABELS, ExamCategory } from "@/types/auth";
-import { Sparkles, Target, Filter, SlidersHorizontal, ChevronDown, ChevronUp, CheckCircle2, RotateCcw } from "lucide-react";
+import { Sparkles, Target, Filter, SlidersHorizontal, ChevronDown, ChevronUp, CheckCircle2, RotateCcw, Calendar, Zap, CheckCircle } from "lucide-react";
 
 // Discovery Components
 import { ContestHero } from "@/components/contests/ContestHero";
@@ -27,12 +27,14 @@ export default function ContestsListingPage() {
   const [userExamName, setUserExamName] = React.useState<string>("JEE Main");
   const [isFilterOpen, setIsFilterOpen] = React.useState(false);
 
+  // Status Filter State: 'upcoming' (default), 'live', 'completed'
+  const [statusTab, setStatusTab] = React.useState<"upcoming" | "live" | "completed">("upcoming");
+
   // Filter States
   const [searchTerm, setSearchTerm] = React.useState("");
   const [activeCategory, setActiveCategory] = React.useState("All");
   const [activeDifficulty, setActiveDifficulty] = React.useState("All");
   const [activeFeeType, setActiveFeeType] = React.useState<"free" | "paid" | "all">("all");
-  const [activeStatus, setActiveStatus] = React.useState("All");
   const [sortBy, setSortBy] = React.useState("date");
   const [targetExamFilter, setTargetExamFilter] = React.useState<string>("RECOMMENDED");
 
@@ -71,7 +73,7 @@ export default function ContestsListingPage() {
         searchTerm,
         difficulty: activeDifficulty,
         entryFeeType: activeFeeType,
-        status: activeStatus,
+        status: statusTab === "upcoming" ? "upcoming" : statusTab === "live" ? "ongoing" : "completed",
         sortBy,
       });
       setAllContests(results);
@@ -80,7 +82,7 @@ export default function ContestsListingPage() {
     } finally {
       setTimeout(() => setIsLoading(false), 350);
     }
-  }, [activeCategory, searchTerm, activeDifficulty, activeFeeType, activeStatus, sortBy]);
+  }, [activeCategory, searchTerm, activeDifficulty, activeFeeType, statusTab, sortBy]);
 
   React.useEffect(() => {
     fetchContests();
@@ -91,7 +93,7 @@ export default function ContestsListingPage() {
     setActiveCategory("All");
     setActiveDifficulty("All");
     setActiveFeeType("all");
-    setActiveStatus("All");
+    setStatusTab("upcoming");
     setSortBy("date");
     setTargetExamFilter("RECOMMENDED");
   };
@@ -133,8 +135,7 @@ export default function ContestsListingPage() {
   const activeFiltersCount =
     (activeCategory !== "All" ? 1 : 0) +
     (activeDifficulty !== "All" ? 1 : 0) +
-    (activeFeeType !== "all" ? 1 : 0) +
-    (activeStatus !== "All" ? 1 : 0);
+    (activeFeeType !== "all" ? 1 : 0);
 
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground selection:bg-primary/20">
@@ -213,27 +214,51 @@ export default function ContestsListingPage() {
         <Section className="py-8 bg-background/50">
           <Container className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col gap-6">
-              
-              {/* Top Controls: Search, Interactive Filter Button, Sort */}
-              <div className="flex flex-col md:flex-row gap-4 items-center justify-between bg-card/40 border border-border/40 p-4 rounded-2xl">
-                
-                {/* Search Bar */}
-                <div className="w-full md:flex-1">
-                  <ContestSearch onSearch={setSearchTerm} />
+
+              {/* Top Status 3-State Toggle Switch Bar: Active, Live, Completed */}
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-card/60 border border-border/40 p-3 rounded-2xl">
+                <div className="flex items-center gap-2 w-full sm:w-auto">
+                  <span className="text-xs font-black uppercase tracking-wider text-muted-foreground ml-2 hidden lg:inline-block">
+                    Contest Status:
+                  </span>
+                  <div className="bg-muted/50 p-1 rounded-xl flex items-center gap-1 border border-border/40 w-full sm:w-auto">
+                    {[
+                      { id: "upcoming", label: "🟢 Active & Upcoming", icon: Calendar },
+                      { id: "live", label: "⚡ Live Now", icon: Zap },
+                      { id: "completed", label: "🏁 Completed / Past", icon: CheckCircle },
+                    ].map((tab) => {
+                      const Icon = tab.icon;
+                      const isActive = statusTab === tab.id;
+                      return (
+                        <button
+                          key={tab.id}
+                          onClick={() => setStatusTab(tab.id as any)}
+                          className={`flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-xs font-black transition-all ${
+                            isActive
+                              ? "bg-primary text-primary-foreground shadow-md shadow-primary/20"
+                              : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
+                          }`}
+                        >
+                          <Icon className="w-3.5 h-3.5" />
+                          <span>{tab.label}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
 
-                <div className="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end">
+                <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
                   {/* Collapsible Filter Toggle Button */}
                   <button
                     onClick={() => setIsFilterOpen(!isFilterOpen)}
-                    className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all border ${
+                    className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all border ${
                       isFilterOpen || activeFiltersCount > 0
                         ? "bg-primary text-primary-foreground border-primary shadow-md shadow-primary/20"
                         : "bg-muted/40 text-muted-foreground border-border/40 hover:bg-muted/70 hover:text-foreground"
                     }`}
                   >
                     <SlidersHorizontal className="w-4 h-4" />
-                    <span>Filters & Options</span>
+                    <span>Filters</span>
                     {activeFiltersCount > 0 && (
                       <span className="bg-background text-foreground text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center">
                         {activeFiltersCount}
@@ -245,6 +270,11 @@ export default function ContestsListingPage() {
                   {/* Sort Dropdown */}
                   <ContestSort value={sortBy} onChange={setSortBy} className="w-auto shrink-0" />
                 </div>
+              </div>
+
+              {/* Search Panel */}
+              <div className="w-full">
+                <ContestSearch onSearch={setSearchTerm} />
               </div>
 
               {/* Expandable Filter Drawer Panel */}
@@ -270,8 +300,8 @@ export default function ContestsListingPage() {
                     onDifficultyChange={setActiveDifficulty}
                     activeFeeType={activeFeeType}
                     onFeeTypeChange={setActiveFeeType}
-                    activeStatus={activeStatus}
-                    onStatusChange={setActiveStatus}
+                    activeStatus="All"
+                    onStatusChange={() => {}}
                     onReset={handleResetFilters}
                   />
                 </div>
@@ -288,7 +318,7 @@ export default function ContestsListingPage() {
                     <div className="flex items-center gap-2">
                       <Sparkles className="w-4 h-4 text-amber-500" />
                       <h2 className="text-base font-black text-foreground tracking-tight">
-                        🎯 Active Championships & Competitions ({userExamName})
+                        🎯 {statusTab === "upcoming" ? "Active & Upcoming" : statusTab === "live" ? "Live Ongoing" : "Completed / Past"} Contests ({userExamName})
                       </h2>
                     </div>
                     <span className="text-xs font-bold text-primary bg-primary/10 border border-primary/20 px-3 py-1 rounded-full">

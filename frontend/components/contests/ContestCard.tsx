@@ -99,55 +99,6 @@ export function ContestCard({ contest, className }: ContestCardProps) {
           </div>
         </div>
 
-        {/* Status badges in banner bottom */}
-        <div className="absolute bottom-4 left-4 flex gap-1.5 flex-wrap pointer-events-none">
-          {contest.isFeatured && <ContestBadge isFeatured />}
-          {contest.isTrending && <ContestBadge isTrending />}
-          <ContestBadge status={contest.status} />
-        </div>
-      </div>
-
-      {/* Content Details */}
-      <div className="p-5 flex flex-col flex-1">
-        <div className="flex items-center gap-1.5 mb-2.5">
-          <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-widest">
-            {contest.category}
-          </span>
-          <span className="text-muted-foreground/40">•</span>
-          <ContestBadge difficulty={contest.difficulty} />
-        </div>
-
-        <Link href={`/contests/${contest.slug}`} className="group/title block mb-3">
-          <h3 className="text-base sm:text-lg font-black text-foreground group-hover/title:text-primary transition-colors leading-snug tracking-tight">
-            {contest.title}
-          </h3>
-        </Link>
-
-        {/* Prominent High-Visibility Prize Pool Banner */}
-        <div className="mb-4 bg-amber-500/10 border border-amber-500/25 p-3 rounded-xl flex items-center justify-between shadow-sm">
-          <div>
-            <span className="text-[10px] font-extrabold text-amber-500 uppercase tracking-widest block">
-              70% Audited Cash Pool
-            </span>
-            <span className="text-xl font-black text-amber-400 tracking-tight block">
-              {contest.prizePool === 0 ? "Recognition Only" : `₹${contest.prizePool.toLocaleString("en-IN")}`}
-            </span>
-          </div>
-          <div className="w-9 h-9 rounded-lg bg-amber-500/20 border border-amber-500/30 flex items-center justify-center shrink-0">
-            <Award className="w-5 h-5 text-amber-400" />
-          </div>
-        </div>
-
-        {/* Dynamic Countdown */}
-        {contest.status !== "completed" && (
-          <div className="mb-4 bg-destructive/5 border border-destructive/10 rounded-xl p-2.5 flex items-center justify-between">
-            <span className="text-[10px] font-bold text-destructive/80 uppercase tracking-widest">
-              Starts In:
-            </span>
-            <ContestCountdown targetDate={contest.date} />
-          </div>
-        )}
-
         {/* Mini parameter columns */}
         <div className="grid grid-cols-2 gap-3 text-xs mb-4 pb-4 border-b border-border/30">
           <div className="flex items-center gap-2 text-muted-foreground">
@@ -159,12 +110,12 @@ export function ContestCard({ contest, className }: ContestCardProps) {
           </div>
           
           <div className="flex items-center gap-2 text-muted-foreground">
-            <Award className="w-3.5 h-3.5 text-primary shrink-0" />
+            <Users className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
             <div>
-              <span className="block font-semibold text-foreground">
-                {contest.prizePool === 0 ? "Recognition Only" : `₹${contest.prizePool.toLocaleString("en-IN")}`}
+              <span className="block font-bold text-foreground">
+                {contest.maxParticipants ? contest.maxParticipants.toLocaleString("en-IN") : "10,000"} Seats
               </span>
-              <span className="text-[10px]">Reward Pool</span>
+              <span className="text-[10px] text-muted-foreground">Total Capacity</span>
             </div>
           </div>
 
@@ -187,18 +138,18 @@ export function ContestCard({ contest, className }: ContestCardProps) {
           </div>
         </div>
 
-        {/* Seat occupancy bar */}
-        <div className="mb-5">
-          <div className="flex items-center justify-between text-[10px] text-muted-foreground mb-1.5 font-medium">
-            <span className="flex items-center gap-1">
-              <Users className="w-3 h-3 text-muted-foreground/80" />
-              <strong>{contest.participants.toLocaleString("en-IN")}</strong> registered
+        {/* Seat occupancy bar with total capacity */}
+        <div className="mb-5 bg-muted/20 p-2.5 rounded-xl border border-border/30">
+          <div className="flex items-center justify-between text-[11px] text-muted-foreground mb-1.5 font-bold">
+            <span className="flex items-center gap-1.5 text-foreground">
+              <Users className="w-3.5 h-3.5 text-primary" />
+              <span>{contest.participants.toLocaleString("en-IN")} Registered</span>
             </span>
-            <span>
-              {contest.seatsAvailable === 0 ? "Full Capacity" : `${contest.seatsAvailable.toLocaleString("en-IN")} left`}
+            <span className="text-emerald-400 font-extrabold">
+              {contest.seatsAvailable === 0 ? "Full Capacity" : `${contest.seatsAvailable.toLocaleString("en-IN")} Seats Left`}
             </span>
           </div>
-          <div className="w-full h-1 bg-muted rounded-full overflow-hidden">
+          <div className="w-full h-1.5 bg-muted/60 rounded-full overflow-hidden">
             <div
               className={cn(
                 "h-full rounded-full transition-all duration-500",
@@ -206,7 +157,7 @@ export function ContestCard({ contest, className }: ContestCardProps) {
                   ? "bg-destructive"
                   : fillPercent >= 70
                   ? "bg-amber-500"
-                  : "bg-primary"
+                  : "bg-emerald-500"
               )}
               style={{ width: `${fillPercent}%` }}
             />
