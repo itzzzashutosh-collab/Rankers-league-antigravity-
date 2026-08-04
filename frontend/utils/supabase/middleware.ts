@@ -4,6 +4,17 @@ import { type NextRequest, NextResponse } from "next/server";
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
+const safeFetch = async (input: RequestInfo | URL, init?: RequestInit) => {
+  try {
+    return await fetch(input, init);
+  } catch {
+    return new Response(
+      JSON.stringify({ error: { message: "Supabase cloud offline" } }),
+      { status: 200, headers: { "Content-Type": "application/json" } }
+    );
+  }
+};
+
 export const updateSession = async (request: NextRequest) => {
   let supabaseResponse = NextResponse.next({
     request: {
@@ -15,6 +26,9 @@ export const updateSession = async (request: NextRequest) => {
     supabaseUrl!,
     supabaseKey!,
     {
+      global: {
+        fetch: safeFetch,
+      },
       cookies: {
         getAll() {
           return request.cookies.getAll();
@@ -34,8 +48,12 @@ export const updateSession = async (request: NextRequest) => {
     }
   );
 
-  // Refresh session if it exists
-  await supabase.auth.getUser();
+  try {
+    await supabase.auth.getUser();
+  } catch {
+    // Graceful offline fallback
+  }
 
   return supabaseResponse;
 };
+

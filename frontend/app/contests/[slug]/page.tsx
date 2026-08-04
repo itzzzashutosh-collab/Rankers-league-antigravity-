@@ -99,12 +99,20 @@ export default async function ContestDetailsPage({ params }: Props) {
     ],
   };
 
+  let startDateISO = "2026-07-12";
+  try {
+    const parsedDate = new Date(contest.date);
+    if (!isNaN(parsedDate.getTime())) {
+      startDateISO = parsedDate.toISOString().split("T")[0];
+    }
+  } catch {}
+
   const contestSchema = {
     "@context": "https://schema.org",
     "@type": "EducationEvent",
     "name": contest.title,
     "description": contest.overview,
-    "startDate": new Date(contest.date).toISOString().split('T')[0], // Simplified date parse
+    "startDate": startDateISO,
     "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
     "eventStatus": "https://schema.org/EventScheduled",
     "location": {

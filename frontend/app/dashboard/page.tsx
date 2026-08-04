@@ -27,15 +27,20 @@ export default async function DashboardPage() {
     .eq("id", user.id)
     .single();
 
-  const liveContest = enrollments.find(e => e.status === "live") || null;
-  const upcomingEnrollments = enrollments
+  const safeEnrollments = Array.isArray(enrollments) ? enrollments : [];
+  const safeAchievements = Array.isArray(achievements) ? achievements : [];
+  const safeActivity = Array.isArray(activity) ? activity : [];
+  const safeAuraHistory = Array.isArray(auraHistory) ? auraHistory : [];
+
+  const liveContest = safeEnrollments.find(e => e.status === "live") || null;
+  const upcomingEnrollments = safeEnrollments
     .filter(e => e.status === "registered")
     .slice(0, 2);
-  const completedEnrollments = enrollments
+  const completedEnrollments = safeEnrollments
     .filter(e => e.status === "completed")
     .slice(0, 2);
 
-  const latestResult = enrollments
+  const latestResult = safeEnrollments
     .filter(e => e.status === "completed")
     .sort((a, b) => new Date(b.contest_date).getTime() - new Date(a.contest_date).getTime())[0] || null;
 
@@ -109,8 +114,8 @@ export default async function DashboardPage() {
           {/* Aura Tiers & History Hub */}
           <AuraHub
             currentAura={profile?.aura_points || 0}
-            monthlyAura={stats.monthly_aura_earned}
-            history={auraHistory}
+            monthlyAura={stats?.monthly_aura_earned || 0}
+            history={safeAuraHistory}
           />
         </div>
 
@@ -129,13 +134,13 @@ export default async function DashboardPage() {
                 </Button>
               </Link>
             </div>
-            {achievements.length === 0 ? (
+            {safeAchievements.length === 0 ? (
               <div className="p-6 border border-dashed border-border/50 rounded-2xl text-center text-xs text-muted-foreground bg-card/20">
                 No achievements unlocked yet.
               </div>
             ) : (
               <div className="flex flex-col gap-3">
-                {achievements.slice(0, 3).map((ach) => (
+                {safeAchievements.slice(0, 3).map((ach) => (
                   <AchievementCard key={ach.id} achievement={ach} />
                 ))}
               </div>
@@ -143,7 +148,7 @@ export default async function DashboardPage() {
           </div>
 
           {/* Timeline Feed */}
-          <ActivityTimeline activities={activity} />
+          <ActivityTimeline activities={safeActivity} />
         </div>
 
       </div>

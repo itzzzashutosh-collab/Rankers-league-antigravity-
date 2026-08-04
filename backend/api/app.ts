@@ -9,6 +9,8 @@ import profileRoutes from "../routes/profile.js";
 import dashboardRoutes from "../routes/dashboard.js";
 import notificationRoutes from "../routes/notifications.js";
 import leaderboardRoutes from "../routes/leaderboard.js";
+import bankAgentRoutes from "../routes/bankAgent.js";
+import contestAgentRoutes from "../routes/contestAgent.js";
 
 // Load environment variables
 dotenv.config({ path: `${process.cwd()}/.env` });
@@ -48,6 +50,8 @@ app.use("/api/v1/profile", profileRoutes);
 app.use("/api/v1/dashboard", dashboardRoutes);
 app.use("/api/v1/notifications", notificationRoutes);
 app.use("/api/v1/leaderboard", leaderboardRoutes);
+app.use("/api/v1/bank-agent", bankAgentRoutes);
+app.use("/api/v1/contest-agent", contestAgentRoutes);
 
 // ─── 404 Handler ─────────────────────────────────────────────────────────────
 app.use((req, res) => {

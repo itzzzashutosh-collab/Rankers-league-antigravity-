@@ -1,9 +1,11 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Cpu, RefreshCw, Layers, ShieldCheck, Zap, Activity, DollarSign, FileText, Key, Plus, Lock, Check, Play, Terminal, X } from "lucide-react";
+import { Cpu, RefreshCw, Layers, ShieldCheck, Zap, Activity, DollarSign, FileText, Key, Plus, Lock, Check, Play, Terminal, X, BookOpen, Trophy } from "lucide-react";
 import { aiAgentService, AiAgent, AiTaskPlan } from "@/services/aiAgentService";
 import { aiCredentialsService, AiCredential } from "@/services/aiCredentialsService";
+import BankAgentTab from "./BankAgentTab";
+import ContestAgentTab from "./ContestAgentTab";
 
 interface PlaygroundLog {
   timestamp: string;
@@ -20,7 +22,7 @@ interface DecisionItem {
 }
 
 export default function AdminAgentsPage() {
-  const [activeTab, setActiveTab] = useState<"nodes" | "prompts" | "credentials">("nodes");
+  const [activeTab, setActiveTab] = useState<"nodes" | "bank" | "contests" | "prompts" | "credentials">("nodes");
   const [agents, setAgents] = useState<AiAgent[]>([]);
   const [plans, setPlans] = useState<AiTaskPlan[]>([]);
   const [prompts, setPrompts] = useState<any[]>([]);
@@ -153,6 +155,8 @@ export default function AdminAgentsPage() {
       <div className="flex border-b border-border/40 gap-4 shrink-0 font-sans">
         {[
           { id: "nodes", name: "Telemetry & Nodes", icon: Activity },
+          { id: "bank", name: "Question Bank Agent", icon: BookOpen },
+          { id: "contests", name: "Contest Agent", icon: Trophy },
           { id: "prompts", name: "Agent Prompts Library", icon: FileText },
           { id: "credentials", name: "Credentials Vault & Models", icon: Key },
         ].map(t => {
@@ -337,6 +341,12 @@ export default function AdminAgentsPage() {
           </div>
         </div>
       )}
+
+      {/* Tab Content: Question Bank Agent */}
+      {activeTab === "bank" && <BankAgentTab />}
+
+      {/* Tab Content: Contest Agent */}
+      {activeTab === "contests" && <ContestAgentTab />}
 
       {/* Tab Content 2: Prompts */}
       {activeTab === "prompts" && (

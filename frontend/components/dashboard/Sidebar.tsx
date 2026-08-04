@@ -15,7 +15,6 @@ import { createClient } from "@/utils/supabase/client";
 const NAV_ITEMS = [
   { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard", exact: true },
   { href: "/dashboard/my-contests", icon: Trophy, label: "My Contests" },
-  { href: "/dashboard/results", icon: BarChart3, label: "Results" },
   { href: "/dashboard/performance", icon: TrendingUp, label: "Performance" },
   { href: "/dashboard/achievements", icon: Star, label: "Achievements" },
   { href: "/dashboard/profile", icon: User, label: "Profile" },

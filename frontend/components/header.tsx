@@ -174,12 +174,6 @@ export function Header() {
               Leaderboard
             </Link>
             <Link
-              href="/results"
-              className="text-xs font-black tracking-wide uppercase text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Results
-            </Link>
-            <Link
               href="/rewards"
               className="text-xs font-black tracking-wide uppercase text-muted-foreground hover:text-foreground transition-colors"
             >
@@ -389,13 +383,6 @@ export function Header() {
                   className="text-sm font-semibold text-foreground hover:text-primary transition-colors block"
                 >
                   Leaderboard
-                </Link>
-                <Link
-                  href="/results"
-                  onClick={() => setMobileOpen(false)}
-                  className="text-sm font-semibold text-foreground hover:text-primary transition-colors block"
-                >
-                  Results
                 </Link>
                 <Link
                   href="/rewards"

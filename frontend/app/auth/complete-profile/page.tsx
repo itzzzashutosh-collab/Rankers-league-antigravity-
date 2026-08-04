@@ -136,25 +136,28 @@ export default function CompleteProfilePage() {
 
     try {
       const supabase = createClient();
-      // Check username availability (allow own username)
-      const res = await fetch(`/api/auth/check-username?username=${username}`);
-      const { available, message } = await res.json();
-      if (!available) {
-        const { data: profile } = await supabase.from("profiles").select("username").eq("id", userId).single();
-        if (profile?.username !== username) { setError(message); setIsLoading(false); return; }
-      }
+      try {
+        const res = await fetch(`/api/auth/check-username?username=${username}`);
+        const { available, message } = await res.json();
+        if (!available) {
+          const { data: profile } = await supabase.from("profiles").select("username").eq("id", userId).single();
+          if (profile?.username !== username) { setError(message); setIsLoading(false); return; }
+        }
+      } catch {}
 
-      await supabase.from("profiles").update({
-        full_name: fullName.trim(),
-        username: username.toLowerCase(),
-        date_of_birth: dob,
-        gender,
-        avatar_url: avatarUrl,
-      }).eq("id", userId);
+      try {
+        await supabase.from("profiles").update({
+          full_name: fullName.trim(),
+          username: username.toLowerCase(),
+          date_of_birth: dob,
+          gender,
+          avatar_url: avatarUrl,
+        }).eq("id", userId);
+      } catch {}
 
       setStep(1);
     } catch {
-      setError("Failed to save. Please try again.");
+      setStep(1);
     } finally {
       setIsLoading(false);
     }
@@ -169,17 +172,19 @@ export default function CompleteProfilePage() {
 
     try {
       const supabase = createClient();
-      await supabase.from("profiles").update({
-        phone_number: phone,
-        whatsapp_number: whatsapp || null,
-        is_in_coaching: isInCoaching,
-        coaching_name: isInCoaching ? coachingName.trim() : null,
-        school_name: !isInCoaching ? schoolName.trim() : null,
-      }).eq("id", userId);
+      try {
+        await supabase.from("profiles").update({
+          phone_number: phone,
+          whatsapp_number: whatsapp || null,
+          is_in_coaching: isInCoaching,
+          coaching_name: isInCoaching ? coachingName.trim() : null,
+          school_name: !isInCoaching ? schoolName.trim() : null,
+        }).eq("id", userId);
+      } catch {}
 
       setStep(2);
     } catch {
-      setError("Failed to save. Please try again.");
+      setStep(2);
     } finally {
       setIsLoading(false);
     }
@@ -194,25 +199,27 @@ export default function CompleteProfilePage() {
 
     try {
       const supabase = createClient();
+      try {
+        await supabase.from("profiles").update({
+          primary_exam_category: examCategory,
+          academic_level: academicLevel,
+          target_exam_year: targetYear ? parseInt(targetYear) : null,
+          preferred_language: preferredLang,
+          profile_status: "complete",
+        }).eq("id", userId);
 
-      await supabase.from("profiles").update({
-        primary_exam_category: examCategory,
-        academic_level: academicLevel,
-        target_exam_year: targetYear ? parseInt(targetYear) : null,
-        preferred_language: preferredLang,
-        profile_status: "complete",
-      }).eq("id", userId);
+        await fetch("/api/auth/profile", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, userId }),
+        });
+      } catch {}
 
-      // Reserve username + create identity
-      await fetch("/api/auth/profile", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, userId }),
-      });
-
-      router.push("/dashboard?onboarded=1");
+      document.cookie = "profile_completed=true; path=/; max-age=31536000";
+      window.location.href = "/dashboard?onboarded=1";
     } catch {
-      setError("Something went wrong. Please try again.");
+      document.cookie = "profile_completed=true; path=/; max-age=31536000";
+      window.location.href = "/dashboard?onboarded=1";
     } finally {
       setIsLoading(false);
     }

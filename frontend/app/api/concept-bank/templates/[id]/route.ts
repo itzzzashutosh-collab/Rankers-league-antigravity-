@@ -10,12 +10,13 @@ const supabase = createClient(
  * GET /api/concept-bank/templates/[id]
  * Fetch a single concept template
  */
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     const { data, error } = await supabase
       .from('latest_concept_templates')
       .select('*')
-      .eq('template_id', params.id)
+      .eq('template_id', id)
       .single();
 
     if (error) throw error;
@@ -31,13 +32,14 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
  * PUT /api/concept-bank/templates/[id]
  * Update a single template's blueprint or metadata
  */
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     const body = await request.json();
     const { data, error } = await supabase
       .from('latest_concept_templates')
       .update(body)
-      .eq('template_id', params.id)
+      .eq('template_id', id)
       .select()
       .single();
 
@@ -53,12 +55,13 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
  * DELETE /api/concept-bank/templates/[id]
  * Delete a template from the bank
  */
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     const { error } = await supabase
       .from('latest_concept_templates')
       .delete()
-      .eq('template_id', params.id);
+      .eq('template_id', id);
 
     if (error) throw error;
 

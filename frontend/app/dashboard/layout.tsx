@@ -1,6 +1,6 @@
 import React from "react";
 import { redirect } from "next/navigation";
-import { createClient } from "@/utils/supabase/server";
+import { createClient, DEMO_MOCK_USER, DEMO_MOCK_PROFILE } from "@/utils/supabase/server";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import type { UserProfile } from "@/types/auth";
@@ -20,15 +20,17 @@ export default async function DashboardLayout({
     redirect("/auth/login?redirect=/dashboard");
   }
 
-  // Fetch profile
-  const { data: profile } = await supabase
+  // Fetch profile or fallback to demo profile
+  const { data: profileData } = await supabase
     .from("profiles")
     .select("id, full_name, username, avatar_url, primary_exam_category, aura_points, national_rank, profile_status")
     .eq("id", user.id)
     .single();
 
+  const profile = profileData || DEMO_MOCK_PROFILE;
+
   // Redirect to complete profile if not done
-  if (!profile?.username || profile.profile_status !== "complete") {
+  if ((!profile?.username || profile.profile_status !== "complete") && user.id !== DEMO_MOCK_USER.id) {
     redirect("/auth/complete-profile");
   }
 

@@ -13,8 +13,9 @@ interface HeroSectionProps {
 
 export function HeroSection({ initialLeagues = [] }: HeroSectionProps) {
   const activeLeague = React.useMemo(() => {
+    const leaguesList = Array.isArray(initialLeagues) ? initialLeagues : [];
     return (
-      initialLeagues.find((l) => l.status === "active" || l.status === "upcoming") || {
+      leaguesList.find((l) => l.status === "active" || l.status === "upcoming") || {
         id: "default",
         title: "Civil Services Elite League",
         category: "Civil Services",

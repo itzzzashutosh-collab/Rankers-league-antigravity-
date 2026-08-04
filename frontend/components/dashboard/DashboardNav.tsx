@@ -26,7 +26,6 @@ const NAV_ITEMS = [
   { label: "My Contests",   href: "/dashboard/my-contests", icon: Trophy },
   { label: "Performance",   href: "/dashboard/performance", icon: BarChart2 },
   { label: "Achievements",  href: "/dashboard/achievements",icon: Medal },
-  { label: "Results",       href: "/dashboard/results",     icon: FileText },
   { label: "Prize Architect", href: "/dashboard/prize-matrix-architect", icon: Calculator },
   { label: "Profile",       href: "/dashboard/profile",     icon: User },
   { label: "Settings",      href: "/dashboard/settings",    icon: Settings },

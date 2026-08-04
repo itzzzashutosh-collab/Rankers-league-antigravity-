@@ -53,10 +53,14 @@ export interface Contest {
   id: string;
   slug: string;
   title: string;
+  tagline?: string;
+  level?: number;
   exam: string;
   category: string;
   entryFee: number; // in Credits or INR
   prizePool: number;
+  totalCollection?: number;
+  platformMargin?: number;
   participants: number;
   maxParticipants: number;
   difficulty: ContestDifficulty;

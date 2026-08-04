@@ -56,6 +56,18 @@ export function ContestCard({ contest, className }: ContestCardProps) {
         {/* Badges row inside banner */}
         <div className="absolute top-4 left-4 right-4 flex items-center justify-between pointer-events-none">
           <div className="flex flex-col gap-1.5 items-start">
+            <div className="flex items-center gap-1.5">
+              {contest.level && (
+                <span className="text-[9px] font-black text-amber-400 bg-black/70 backdrop-blur-md px-2 py-0.5 rounded border border-amber-500/30 uppercase tracking-wider">
+                  LEVEL {contest.level}
+                </span>
+              )}
+              {contest.tagline && (
+                <span className="text-[9px] font-black text-foreground bg-primary/20 backdrop-blur-md px-2 py-0.5 rounded border border-primary/30 uppercase tracking-wider">
+                  {contest.tagline}
+                </span>
+              )}
+            </div>
             <span className="text-[9px] font-bold text-foreground bg-background/80 backdrop-blur-md px-2 py-0.5 rounded border border-border/40 uppercase tracking-widest">
               {contest.exam}
             </span>
@@ -105,14 +117,26 @@ export function ContestCard({ contest, className }: ContestCardProps) {
           <ContestBadge difficulty={contest.difficulty} />
         </div>
 
-        <Link href={`/contests/${contest.slug}`}>
-          <Typography
-            variant="h4"
-            className="mb-3 hover:text-primary transition-colors line-clamp-1 font-bold tracking-tight"
-          >
+        <Link href={`/contests/${contest.slug}`} className="group/title block mb-3">
+          <h3 className="text-base sm:text-lg font-black text-foreground group-hover/title:text-primary transition-colors leading-snug tracking-tight">
             {contest.title}
-          </Typography>
+          </h3>
         </Link>
+
+        {/* Prominent High-Visibility Prize Pool Banner */}
+        <div className="mb-4 bg-amber-500/10 border border-amber-500/25 p-3 rounded-xl flex items-center justify-between shadow-sm">
+          <div>
+            <span className="text-[10px] font-extrabold text-amber-500 uppercase tracking-widest block">
+              70% Audited Cash Pool
+            </span>
+            <span className="text-xl font-black text-amber-400 tracking-tight block">
+              {contest.prizePool === 0 ? "Recognition Only" : `₹${contest.prizePool.toLocaleString("en-IN")}`}
+            </span>
+          </div>
+          <div className="w-9 h-9 rounded-lg bg-amber-500/20 border border-amber-500/30 flex items-center justify-center shrink-0">
+            <Award className="w-5 h-5 text-amber-400" />
+          </div>
+        </div>
 
         {/* Dynamic Countdown */}
         {contest.status !== "completed" && (

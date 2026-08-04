@@ -3,9 +3,12 @@
 import * as React from "react";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
-import { Container, Section } from "@/components/ui";
+import { Container, Section, Typography, Button } from "@/components/ui";
 import { Contest } from "@/types/contests";
 import { ContestService } from "@/services/ContestService";
+import { createClient, DEMO_MOCK_PROFILE } from "@/utils/supabase/client";
+import { EXAM_CATEGORY_LABELS, ExamCategory } from "@/types/auth";
+import { Sparkles, Target, Filter, SlidersHorizontal, ChevronDown, ChevronUp, CheckCircle2, RotateCcw } from "lucide-react";
 
 // Discovery Components
 import { ContestHero } from "@/components/contests/ContestHero";
@@ -18,8 +21,11 @@ import { ContestEmptyState } from "@/components/contests/ContestEmptyState";
 import { ContestBreadcrumb } from "@/components/contests/ContestBreadcrumb";
 
 export default function ContestsListingPage() {
-  const [contests, setContests] = React.useState<Contest[]>([]);
+  const [allContests, setAllContests] = React.useState<Contest[]>([]);
   const [isLoading, setIsLoading] = React.useState(true);
+  const [userExamCategory, setUserExamCategory] = React.useState<ExamCategory>("JEE_MAIN");
+  const [userExamName, setUserExamName] = React.useState<string>("JEE Main");
+  const [isFilterOpen, setIsFilterOpen] = React.useState(false);
 
   // Filter States
   const [searchTerm, setSearchTerm] = React.useState("");
@@ -28,8 +34,35 @@ export default function ContestsListingPage() {
   const [activeFeeType, setActiveFeeType] = React.useState<"free" | "paid" | "all">("all");
   const [activeStatus, setActiveStatus] = React.useState("All");
   const [sortBy, setSortBy] = React.useState("date");
+  const [targetExamFilter, setTargetExamFilter] = React.useState<string>("RECOMMENDED");
 
-  // Query database/local contents
+  // Fetch User Target Exam on mount
+  React.useEffect(() => {
+    async function loadUserProfile() {
+      try {
+        const supabase = createClient();
+        const { data: userRes } = await supabase.auth.getUser();
+        if (userRes?.user) {
+          const { data: profile } = await supabase
+            .from("profiles")
+            .select("primary_exam_category")
+            .eq("id", userRes.user.id)
+            .single();
+          if (profile?.primary_exam_category) {
+            setUserExamCategory(profile.primary_exam_category as ExamCategory);
+            setUserExamName(EXAM_CATEGORY_LABELS[profile.primary_exam_category as ExamCategory] || "JEE Main");
+            return;
+          }
+        }
+      } catch {}
+      // Default to demo profile exam category
+      setUserExamCategory(DEMO_MOCK_PROFILE.primary_exam_category as ExamCategory);
+      setUserExamName(EXAM_CATEGORY_LABELS[DEMO_MOCK_PROFILE.primary_exam_category as ExamCategory] || "JEE Main");
+    }
+    loadUserProfile();
+  }, []);
+
+  // Fetch all contests
   const fetchContests = React.useCallback(async () => {
     setIsLoading(true);
     try {
@@ -41,12 +74,11 @@ export default function ContestsListingPage() {
         status: activeStatus,
         sortBy,
       });
-      setContests(results);
+      setAllContests(results);
     } catch (err) {
       console.error("Failed to query contests", err);
     } finally {
-      // Add slight delay for premium loading experience simulation
-      setTimeout(() => setIsLoading(false), 450);
+      setTimeout(() => setIsLoading(false), 350);
     }
   }, [activeCategory, searchTerm, activeDifficulty, activeFeeType, activeStatus, sortBy]);
 
@@ -61,9 +93,48 @@ export default function ContestsListingPage() {
     setActiveFeeType("all");
     setActiveStatus("All");
     setSortBy("date");
+    setTargetExamFilter("RECOMMENDED");
   };
 
+  // Exam matching logic
+  const isMatchForUser = React.useCallback((contest: Contest, examCategory: ExamCategory, examName: string) => {
+    const examLower = contest.exam.toLowerCase();
+    const categoryLower = contest.category.toLowerCase();
+    const targetLower = examName.toLowerCase();
+
+    if (examCategory === "JEE_MAIN" || examCategory === "JEE_ADVANCED") {
+      return categoryLower.includes("engineering") || examLower.includes("jee");
+    }
+    if (examCategory === "UPSC_CSE") {
+      return categoryLower.includes("civil services") || examLower.includes("upsc");
+    }
+    if (examCategory === "NEET_UG" || examCategory === "NEET_PG") {
+      return categoryLower.includes("medical") || examLower.includes("neet");
+    }
+    if (examCategory === "CLAT" || examCategory === "AILET") {
+      return categoryLower.includes("law") || examLower.includes("clat");
+    }
+    if (examCategory === "CAT" || examCategory === "XAT" || examCategory === "GMAT") {
+      return categoryLower.includes("finance") || examLower.includes("cat") || examLower.includes("frm");
+    }
+    return examLower.includes(targetLower) || categoryLower.includes(targetLower);
+  }, []);
+
+  // Filter contests matching target or active filters
+  const displayedContests = React.useMemo(() => {
+    if (targetExamFilter === "RECOMMENDED") {
+      return allContests.filter((c) => isMatchForUser(c, userExamCategory, userExamName));
+    }
+    return allContests;
+  }, [allContests, isMatchForUser, targetExamFilter, userExamCategory, userExamName]);
+
   const breadcrumbs = [{ label: "Championship Arenas" }];
+
+  const activeFiltersCount =
+    (activeCategory !== "All" ? 1 : 0) +
+    (activeDifficulty !== "All" ? 1 : 0) +
+    (activeFeeType !== "all" ? 1 : 0) +
+    (activeStatus !== "All" ? 1 : 0);
 
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground selection:bg-primary/20">
@@ -74,56 +145,167 @@ export default function ContestsListingPage() {
         <ContestHero />
 
         {/* Navigation Breadcrumbs */}
-        <Section className="py-4 border-b border-border/25 bg-secondary/20">
-          <Container className="max-w-6xl mx-auto">
+        <Section className="py-3 border-b border-border/25 bg-secondary/20">
+          <Container className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <ContestBreadcrumb items={breadcrumbs} />
           </Container>
         </Section>
 
-        {/* Workspace Listings Area */}
-        <Section className="py-12 bg-background/50">
-          <Container className="max-w-6xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-              
-              {/* Sidebar Filters */}
-              <div className="lg:col-span-1">
-                <ContestFilters
-                  activeCategory={activeCategory}
-                  onCategoryChange={setActiveCategory}
-                  activeDifficulty={activeDifficulty}
-                  onDifficultyChange={setActiveDifficulty}
-                  activeFeeType={activeFeeType}
-                  onFeeTypeChange={setActiveFeeType}
-                  activeStatus={activeStatus}
-                  onStatusChange={setActiveStatus}
-                  onReset={handleResetFilters}
-                />
+        {/* Intelligent Target Exam Banner Bar */}
+        <Section className="py-4 border-b border-border/30 bg-card/60 backdrop-blur-md">
+          <Container className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0">
+                <Target className="w-5 h-5 text-primary" />
               </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">
+                    Your Target Exam:
+                  </span>
+                  <span className="bg-primary/15 text-primary text-xs font-black px-3 py-1 rounded-full border border-primary/25">
+                    🎯 {userExamName}
+                  </span>
+                </div>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  Displaying contests tailored specifically for {userExamName} (Levels 1 to 5).
+                </p>
+              </div>
+            </div>
 
-              {/* Contest Display Grid & Controls */}
-              <div className="lg:col-span-3 flex flex-col gap-6">
+            {/* Quick target exam switcher */}
+            <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide py-1">
+              {[
+                { label: `🎯 ${userExamName} Contests`, id: "RECOMMENDED" },
+                { label: "Engineering (JEE)", id: "JEE" },
+                { label: "Civil Services (UPSC)", id: "UPSC" },
+                { label: "Medical (NEET)", id: "NEET" },
+              ].map((pill) => (
+                <button
+                  key={pill.id}
+                  onClick={() => {
+                    setTargetExamFilter(pill.id);
+                    if (pill.id === "JEE") {
+                      setUserExamCategory("JEE_MAIN");
+                      setUserExamName("JEE Main");
+                    } else if (pill.id === "UPSC") {
+                      setUserExamCategory("UPSC_CSE");
+                      setUserExamName("UPSC CSE");
+                    } else if (pill.id === "NEET") {
+                      setUserExamCategory("NEET_UG");
+                      setUserExamName("NEET UG");
+                    }
+                  }}
+                  className={`px-3.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all border ${
+                    targetExamFilter === pill.id
+                      ? "bg-primary text-primary-foreground border-primary shadow-md shadow-primary/20"
+                      : "bg-muted/40 text-muted-foreground border-border/40 hover:bg-muted/70 hover:text-foreground"
+                  }`}
+                >
+                  {pill.label}
+                </button>
+              ))}
+            </div>
+          </Container>
+        </Section>
+
+        {/* Full-Width Workspace Listings Area */}
+        <Section className="py-8 bg-background/50">
+          <Container className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col gap-6">
+              
+              {/* Top Controls: Search, Interactive Filter Button, Sort */}
+              <div className="flex flex-col md:flex-row gap-4 items-center justify-between bg-card/40 border border-border/40 p-4 rounded-2xl">
                 
-                {/* Search & Sort Panel */}
-                <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
-                  <div className="w-full sm:flex-1">
-                    <ContestSearch onSearch={setSearchTerm} />
-                  </div>
-                  <ContestSort value={sortBy} onChange={setSortBy} className="w-full sm:w-auto shrink-0" />
+                {/* Search Bar */}
+                <div className="w-full md:flex-1">
+                  <ContestSearch onSearch={setSearchTerm} />
                 </div>
 
-                {/* Listing Results */}
-                {isLoading ? (
-                  <ContestSkeleton variant="card" count={6} />
-                ) : contests.length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {contests.map((contest) => (
-                      <ContestCard key={contest.id} contest={contest} />
+                <div className="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end">
+                  {/* Collapsible Filter Toggle Button */}
+                  <button
+                    onClick={() => setIsFilterOpen(!isFilterOpen)}
+                    className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all border ${
+                      isFilterOpen || activeFiltersCount > 0
+                        ? "bg-primary text-primary-foreground border-primary shadow-md shadow-primary/20"
+                        : "bg-muted/40 text-muted-foreground border-border/40 hover:bg-muted/70 hover:text-foreground"
+                    }`}
+                  >
+                    <SlidersHorizontal className="w-4 h-4" />
+                    <span>Filters & Options</span>
+                    {activeFiltersCount > 0 && (
+                      <span className="bg-background text-foreground text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center">
+                        {activeFiltersCount}
+                      </span>
+                    )}
+                    {isFilterOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                  </button>
+
+                  {/* Sort Dropdown */}
+                  <ContestSort value={sortBy} onChange={setSortBy} className="w-auto shrink-0" />
+                </div>
+              </div>
+
+              {/* Expandable Filter Drawer Panel */}
+              {isFilterOpen && (
+                <div className="p-6 bg-card/80 backdrop-blur-md border border-border/40 rounded-2xl shadow-xl animate-in slide-in-from-top-2 duration-200">
+                  <div className="flex items-center justify-between pb-4 mb-4 border-b border-border/30">
+                    <h3 className="text-sm font-black uppercase tracking-wider text-foreground flex items-center gap-2">
+                      <Filter className="w-4 h-4 text-primary" />
+                      Refine Contests & Difficulty Levels
+                    </h3>
+                    <button
+                      onClick={handleResetFilters}
+                      className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1 font-semibold"
+                    >
+                      <RotateCcw className="w-3.5 h-3.5" /> Reset Filters
+                    </button>
+                  </div>
+
+                  <ContestFilters
+                    activeCategory={activeCategory}
+                    onCategoryChange={setActiveCategory}
+                    activeDifficulty={activeDifficulty}
+                    onDifficultyChange={setActiveDifficulty}
+                    activeFeeType={activeFeeType}
+                    onFeeTypeChange={setActiveFeeType}
+                    activeStatus={activeStatus}
+                    onStatusChange={setActiveStatus}
+                    onReset={handleResetFilters}
+                  />
+                </div>
+              )}
+
+              {/* Contest Display Grid */}
+              {isLoading ? (
+                <ContestSkeleton variant="card" count={6} />
+              ) : displayedContests.length === 0 ? (
+                <ContestEmptyState onReset={handleResetFilters} />
+              ) : (
+                <div className="flex flex-col gap-6">
+                  <div className="flex items-center justify-between pb-2 border-b border-border/30">
+                    <div className="flex items-center gap-2">
+                      <Sparkles className="w-4 h-4 text-amber-500" />
+                      <h2 className="text-base font-black text-foreground tracking-tight">
+                        🎯 Active Championships & Competitions ({userExamName})
+                      </h2>
+                    </div>
+                    <span className="text-xs font-bold text-primary bg-primary/10 border border-primary/20 px-3 py-1 rounded-full">
+                      {displayedContests.length} Arena{displayedContests.length === 1 ? "" : "s"}
+                    </span>
+                  </div>
+
+                  {/* Spacious 3-Column Grid Layout */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {displayedContests.map((contest) => (
+                      <div key={contest.id} className="relative">
+                        <ContestCard contest={contest} />
+                      </div>
                     ))}
                   </div>
-                ) : (
-                  <ContestEmptyState onReset={handleResetFilters} />
-                )}
-              </div>
+                </div>
+              )}
 
             </div>
           </Container>
