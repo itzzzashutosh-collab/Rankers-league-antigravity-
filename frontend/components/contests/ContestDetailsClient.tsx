@@ -32,7 +32,7 @@ export function ContestDetailsClient({ contest, relatedContests }: ContestDetail
   ] as const;
 
   const breadcrumbs = [
-    { label: "Championship Arenas", href: "/contests" },
+    { label: "Contests", href: "/contests" },
     { label: contest.title },
   ];
 
@@ -288,7 +288,7 @@ export function ContestDetailsClient({ contest, relatedContests }: ContestDetail
             <div className="flex items-center justify-between">
               <div>
                 <Typography variant="h3" className="font-extrabold text-foreground tracking-tight">
-                  Related Championship Arenas
+                  Related Contests
                 </Typography>
                 <p className="text-xs text-muted-foreground mt-1">
                   Discover additional leagues matching your category and preparation calibrations.

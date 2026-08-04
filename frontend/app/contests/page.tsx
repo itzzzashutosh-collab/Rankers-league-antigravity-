@@ -130,7 +130,7 @@ export default function ContestsListingPage() {
     return allContests;
   }, [allContests, isMatchForUser, targetExamFilter, userExamCategory, userExamName]);
 
-  const breadcrumbs = [{ label: "Championship Arenas" }];
+  const breadcrumbs = [{ label: "Contests" }];
 
   const activeFiltersCount =
     (activeCategory !== "All" ? 1 : 0) +
