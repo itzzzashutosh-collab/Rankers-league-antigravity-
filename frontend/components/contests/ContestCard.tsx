@@ -33,7 +33,6 @@ export function ContestCard({ contest, className }: ContestCardProps) {
     e.preventDefault();
     e.stopPropagation();
     setCopied(true);
-    // Copy mockup URL to clipboard
     const fullUrl = typeof window !== "undefined" ? `${window.location.origin}/contests/${contest.slug}` : "";
     navigator.clipboard.writeText(fullUrl).catch(() => {});
     setTimeout(() => setCopied(false), 2000);
@@ -44,31 +43,29 @@ export function ContestCard({ contest, className }: ContestCardProps) {
       variant="glass"
       hoverEffect="lift-glow"
       padding="none"
-      className={cn("flex flex-col h-full border border-border/40 relative group", className)}
+      className={cn("flex flex-col h-full min-h-[460px] border border-border/40 relative group", className)}
     >
-      {/* Premium Banner Gradient with noise texture overlay */}
-      <div className={cn("h-36 relative overflow-hidden bg-gradient-to-r", contest.bannerGradient)}>
+      {/* Premium Banner Header */}
+      <div className={cn("h-36 relative overflow-hidden bg-gradient-to-r shrink-0", contest.bannerGradient)}>
         <div className="absolute inset-0 bg-noise opacity-20" />
-        
-        {/* Grid pattern overlay */}
         <div className="absolute inset-0 bg-grid-pattern opacity-10" />
 
-        {/* Badges row inside banner */}
+        {/* Level, Tagline, & Action Buttons */}
         <div className="absolute top-4 left-4 right-4 flex items-center justify-between pointer-events-none">
           <div className="flex flex-col gap-1.5 items-start">
             <div className="flex items-center gap-1.5">
               {contest.level && (
-                <span className="text-[9px] font-black text-amber-400 bg-black/70 backdrop-blur-md px-2 py-0.5 rounded border border-amber-500/30 uppercase tracking-wider">
+                <span className="text-[10px] font-black text-amber-400 bg-black/80 backdrop-blur-md px-2.5 py-0.5 rounded border border-amber-500/40 uppercase tracking-wider shadow-sm">
                   LEVEL {contest.level}
                 </span>
               )}
               {contest.tagline && (
-                <span className="text-[9px] font-black text-foreground bg-primary/20 backdrop-blur-md px-2 py-0.5 rounded border border-primary/30 uppercase tracking-wider">
+                <span className="text-[10px] font-black text-foreground bg-primary/25 backdrop-blur-md px-2.5 py-0.5 rounded border border-primary/40 uppercase tracking-wider shadow-sm">
                   {contest.tagline}
                 </span>
               )}
             </div>
-            <span className="text-[9px] font-bold text-foreground bg-background/80 backdrop-blur-md px-2 py-0.5 rounded border border-border/40 uppercase tracking-widest">
+            <span className="text-[10px] font-bold text-foreground bg-background/90 backdrop-blur-md px-2.5 py-0.5 rounded border border-border/50 uppercase tracking-widest">
               {contest.exam}
             </span>
           </div>
@@ -98,69 +95,115 @@ export function ContestCard({ contest, className }: ContestCardProps) {
             </button>
           </div>
         </div>
+      </div>
 
-        {/* Mini parameter columns */}
-        <div className="grid grid-cols-2 gap-3 text-xs mb-4 pb-4 border-b border-border/30">
-          <div className="flex items-center gap-2 text-muted-foreground">
-            <Calendar className="w-3.5 h-3.5 text-primary shrink-0" />
-            <div>
-              <span className="block font-semibold text-foreground">{contest.date}</span>
-              <span className="text-[10px]">{contest.time}</span>
-            </div>
+      {/* Main Content Area */}
+      <div className="p-6 flex flex-col flex-1 justify-between">
+        <div>
+          {/* Category & Difficulty Row */}
+          <div className="flex items-center gap-2 mb-2.5">
+            <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-widest">
+              {contest.category}
+            </span>
+            <span className="text-muted-foreground/40">•</span>
+            <ContestBadge difficulty={contest.difficulty} />
           </div>
-          
-          <div className="flex items-center gap-2 text-muted-foreground">
-            <Users className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
+
+          {/* Contest Title */}
+          <Link href={`/contests/${contest.slug}`} className="group/title block mb-4">
+            <h3 className="text-lg sm:text-xl font-extrabold text-foreground group-hover/title:text-primary transition-colors leading-snug tracking-tight">
+              {contest.title}
+            </h3>
+          </Link>
+
+          {/* Prominent Prize Pool Display */}
+          <div className="mb-4 bg-amber-500/10 border border-amber-500/25 p-3.5 rounded-xl flex items-center justify-between shadow-sm">
             <div>
-              <span className="block font-bold text-foreground">
-                {contest.maxParticipants ? contest.maxParticipants.toLocaleString("en-IN") : "10,000"} Seats
+              <span className="text-[10px] font-extrabold text-amber-500 uppercase tracking-widest block">
+                70% Audited Reward Pool
               </span>
-              <span className="text-[10px] text-muted-foreground">Total Capacity</span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2 text-muted-foreground">
-            <Clock className="w-3.5 h-3.5 text-primary shrink-0" />
-            <div>
-              <span className="block font-semibold text-foreground">{contest.duration}</span>
-              <span className="text-[10px]">Championship Duration</span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2 text-muted-foreground">
-            <Globe className="w-3.5 h-3.5 text-primary shrink-0" />
-            <div>
-              <span className="block font-semibold text-foreground">{contest.country}</span>
-              <span className="text-[10px] flex items-center gap-1">
-                <Languages className="w-3 h-3 text-muted-foreground/80" /> {contest.language}
+              <span className="text-2xl font-black text-amber-400 tracking-tight block">
+                {contest.prizePool === 0 ? "Recognition Only" : `₹${contest.prizePool.toLocaleString("en-IN")}`}
               </span>
             </div>
+            <div className="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center shrink-0">
+              <Award className="w-6 h-6 text-amber-400" />
+            </div>
           </div>
-        </div>
 
-        {/* Seat occupancy bar with total capacity */}
-        <div className="mb-5 bg-muted/20 p-2.5 rounded-xl border border-border/30">
-          <div className="flex items-center justify-between text-[11px] text-muted-foreground mb-1.5 font-bold">
-            <span className="flex items-center gap-1.5 text-foreground">
-              <Users className="w-3.5 h-3.5 text-primary" />
-              <span>{contest.participants.toLocaleString("en-IN")} Registered</span>
-            </span>
-            <span className="text-emerald-400 font-extrabold">
-              {contest.seatsAvailable === 0 ? "Full Capacity" : `${contest.seatsAvailable.toLocaleString("en-IN")} Seats Left`}
-            </span>
+          {/* Starts In Countdown */}
+          {contest.status !== "completed" && (
+            <div className="mb-4 bg-destructive/5 border border-destructive/15 rounded-xl p-2.5 flex items-center justify-between">
+              <span className="text-[10px] font-bold text-destructive/90 uppercase tracking-widest">
+                Starts In:
+              </span>
+              <ContestCountdown targetDate={contest.date} />
+            </div>
+          )}
+
+          {/* Key Specs Grid */}
+          <div className="grid grid-cols-2 gap-3 text-xs mb-4 pb-4 border-b border-border/30">
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <Calendar className="w-3.5 h-3.5 text-primary shrink-0" />
+              <div>
+                <span className="block font-semibold text-foreground">{contest.date}</span>
+                <span className="text-[10px]">{contest.time}</span>
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <Users className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
+              <div>
+                <span className="block font-bold text-foreground">
+                  {contest.maxParticipants ? contest.maxParticipants.toLocaleString("en-IN") : "10,000"} Seats
+                </span>
+                <span className="text-[10px] text-muted-foreground">Total Capacity</span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <Clock className="w-3.5 h-3.5 text-primary shrink-0" />
+              <div>
+                <span className="block font-semibold text-foreground">{contest.duration}</span>
+                <span className="text-[10px]">Exam Duration</span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <Globe className="w-3.5 h-3.5 text-primary shrink-0" />
+              <div>
+                <span className="block font-semibold text-foreground">{contest.country}</span>
+                <span className="text-[10px] flex items-center gap-1">
+                  <Languages className="w-3 h-3 text-muted-foreground/80" /> {contest.language}
+                </span>
+              </div>
+            </div>
           </div>
-          <div className="w-full h-1.5 bg-muted/60 rounded-full overflow-hidden">
-            <div
-              className={cn(
-                "h-full rounded-full transition-all duration-500",
-                fillPercent >= 90
-                  ? "bg-destructive"
-                  : fillPercent >= 70
-                  ? "bg-amber-500"
-                  : "bg-emerald-500"
-              )}
-              style={{ width: `${fillPercent}%` }}
-            />
+
+          {/* Seat Occupancy Bar */}
+          <div className="mb-5 bg-muted/20 p-3 rounded-xl border border-border/30">
+            <div className="flex items-center justify-between text-[11px] text-muted-foreground mb-1.5 font-bold">
+              <span className="flex items-center gap-1.5 text-foreground">
+                <Users className="w-3.5 h-3.5 text-primary" />
+                <span>{contest.participants.toLocaleString("en-IN")} Registered</span>
+              </span>
+              <span className="text-emerald-400 font-extrabold">
+                {contest.seatsAvailable === 0 ? "Full Capacity" : `${contest.seatsAvailable.toLocaleString("en-IN")} Seats Left`}
+              </span>
+            </div>
+            <div className="w-full h-2 bg-muted/60 rounded-full overflow-hidden">
+              <div
+                className={cn(
+                  "h-full rounded-full transition-all duration-500",
+                  fillPercent >= 90
+                    ? "bg-destructive"
+                    : fillPercent >= 70
+                    ? "bg-amber-500"
+                    : "bg-emerald-500"
+                )}
+                style={{ width: `${fillPercent}%` }}
+              />
+            </div>
           </div>
         </div>
 
@@ -170,9 +213,9 @@ export function ContestCard({ contest, className }: ContestCardProps) {
             <span className="text-[9px] text-muted-foreground font-semibold uppercase tracking-widest">
               Entry Fee
             </span>
-            <span className="text-sm font-bold text-foreground">
+            <span className="text-base font-extrabold text-foreground">
               {contest.entryFee === 0 ? (
-                <span className="text-emerald-500 font-extrabold">FREE</span>
+                <span className="text-emerald-500 font-black">FREE</span>
               ) : (
                 `₹${contest.entryFee}`
               )}
@@ -180,9 +223,9 @@ export function ContestCard({ contest, className }: ContestCardProps) {
           </div>
 
           <Link href={`/contests/${contest.slug}`}>
-            <Button size="sm" className="rounded-lg text-xs font-semibold gap-1 group-hover:bg-primary/95 transition-all">
+            <Button size="md" className="rounded-xl text-xs font-bold gap-1.5 group-hover:bg-primary/95 transition-all shadow-md">
               View Details
-              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
             </Button>
           </Link>
         </div>
