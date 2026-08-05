@@ -108,7 +108,7 @@ export function ContestDetailsClient({ contest, relatedContests }: ContestDetail
                     <div className="flex flex-col gap-4">
                       <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
                         <BookOpen className="w-4.5 h-4.5 text-primary" />
-                        Championship Workspace Structure
+                        Contest Workspace Structure
                       </h3>
                       <div className="grid sm:grid-cols-2 gap-4">
                         {contest.structure.map((item, index) => (
@@ -129,7 +129,7 @@ export function ContestDetailsClient({ contest, relatedContests }: ContestDetail
                     <div className="flex flex-col gap-6 mt-2">
                       <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
                         <Clock className="w-4.5 h-4.5 text-primary" />
-                        Championship Linear Timeline
+                        Contest Linear Timeline
                       </h3>
                       <ContestTimeline steps={contest.timeline} />
                     </div>

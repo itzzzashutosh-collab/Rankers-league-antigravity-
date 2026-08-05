@@ -22,7 +22,7 @@ export function ContestRules({ customRules, className }: ContestRulesProps) {
             Academic integrity protocol active
           </span>
           <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
-            All championships are audited under active browser proctoring systems to establish verified standing credentials. Fraudulent actions result in instant disqualified standing.
+            All contests are audited under active browser proctoring systems to establish verified standing credentials. Fraudulent actions result in instant disqualified standing.
           </p>
         </div>
       </div>
@@ -66,14 +66,14 @@ export function ContestRules({ customRules, className }: ContestRulesProps) {
             </ul>
           </Card>
 
-          {/* Championship Specific Rules */}
+          {/* Contest Specific Rules */}
           {customRules && customRules.length > 0 && (
             <Card variant="gradient-border" className="p-5 rounded-2xl bg-card/40 border border-primary/20">
               <h4 className="text-sm font-bold text-primary mb-1 flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4" />
                 Syllabus & Marking Guidelines
               </h4>
-              <p className="text-xs text-muted-foreground mb-4">Specific guidelines calibrated to this championship arena:</p>
+              <p className="text-xs text-muted-foreground mb-4">Specific guidelines calibrated to this contest arena:</p>
               <ul className="list-disc list-inside text-xs text-muted-foreground flex flex-col gap-2.5 pl-1 leading-relaxed">
                 {customRules.map((pt, pIdx) => (
                   <li key={pIdx} className="marker:text-primary/60">

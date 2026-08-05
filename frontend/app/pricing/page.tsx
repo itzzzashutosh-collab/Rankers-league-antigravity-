@@ -129,7 +129,7 @@ export default function PricingPage() {
               className="text-muted-foreground text-base sm:text-lg max-w-2xl mx-auto leading-relaxed mb-10"
             >
               Choose a plan built for you — the student, the aspirant, the champion.
-              Compete in India&apos;s most rigorous mock championship leagues and climb the national ranks.
+              Compete in India&apos;s most rigorous mock contest leagues and climb the national ranks.
             </motion.p>
 
             {/* Billing toggle */}

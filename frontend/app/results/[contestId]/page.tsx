@@ -154,7 +154,7 @@ export default function ResultDetailsPage({ params }: Props) {
                     </div>
                     <div>
                       <h3 className="text-base font-extrabold text-foreground tracking-tight">
-                        Championship Completed
+                        Contest Completed
                       </h3>
                       <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
                         You placed outside the winning zone. See the gap analysis metrics below to calculate recovery offsets.

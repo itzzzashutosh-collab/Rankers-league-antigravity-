@@ -90,25 +90,55 @@ export class ContestAdapter {
 
 // Local mock repository implementation loaded with rich client content files.
 export class MockContestRepository implements ContestRepository {
+  /** Dynamically compute a contest's live status based on current time */
+  private static computeStatus(contest: Contest): Contest["status"] {
+    const now = new Date();
+
+    // Parse the contest date + time into a real Date
+    const dateStr = contest.date; // e.g. "July 12, 2026"
+    const timeStr = contest.time; // e.g. "09:30 AM"
+    const startDate = new Date(`${dateStr} ${timeStr}`);
+    if (isNaN(startDate.getTime())) return contest.status; // fallback if unparseable
+
+    // Parse duration into milliseconds e.g. "1h 30m" -> 5400000
+    let durationMs = 0;
+    const durMatch = contest.duration.match(/(?:(\d+)h)?\s*(?:(\d+)m)?/);
+    if (durMatch) {
+      const hrs = parseInt(durMatch[1] || "0", 10);
+      const mins = parseInt(durMatch[2] || "0", 10);
+      durationMs = (hrs * 60 + mins) * 60 * 1000;
+    }
+    const endDate = new Date(startDate.getTime() + durationMs);
+
+    if (now > endDate) return "completed";
+    if (now >= startDate && now <= endDate) return "active";
+    return "upcoming";
+  }
+
   async findAll(): Promise<Contest[]> {
-    return contestsContent;
+    return contestsContent.map((c) => ({
+      ...c,
+      status: MockContestRepository.computeStatus(c as Contest),
+    }));
   }
 
   async findBySlug(slug: string): Promise<ContestDetail | null> {
     const contest = contestsContent.find((c) => c.slug === slug);
     if (!contest) return null;
-    
-    // In our static content layer, contestsContent is typed as ContestDetail[] which matches this
-    return contest as ContestDetail;
+    // Recompute status
+    const status = MockContestRepository.computeStatus(contest as Contest);
+    return { ...(contest as ContestDetail), status };
   }
 
   async findFeatured(): Promise<Contest[]> {
-    return contestsContent.filter((c) => c.isFeatured);
+    const all = await this.findAll();
+    return all.filter((c) => c.isFeatured);
   }
 
   async search(query: string): Promise<Contest[]> {
     const q = query.toLowerCase();
-    return contestsContent.filter(
+    const all = await this.findAll();
+    return all.filter(
       (c) =>
         c.title.toLowerCase().includes(q) ||
         c.exam.toLowerCase().includes(q) ||
@@ -119,3 +149,4 @@ export class MockContestRepository implements ContestRepository {
 
 // Global Repository Instance
 export const contestRepository: ContestRepository = new MockContestRepository();
+

@@ -10,7 +10,7 @@ import { Award, FileCheck } from "lucide-react";
 export const metadata: Metadata = {
   title: "Official Contest Results & Standings | Ranker's League",
   description:
-    "View the certified rankings, final standings, safe zones, and prize payout matrices for completed proctored national championships.",
+    "View the certified rankings, final standings, safe zones, and prize payout matrices for completed proctored national contests.",
   alternates: {
     canonical: "/results",
   },
@@ -27,7 +27,7 @@ export default function ResultsDirectoryPage() {
     "@context": "https://schema.org",
     "@type": "WebPage",
     "name": "Official Contest Results & Standings | Ranker's League",
-    "description": "Certified standings and payout matrices for completed proctored national championships.",
+    "description": "Certified standings and payout matrices for completed proctored national contests.",
     "url": "https://rankers-league.com/results"
   };
 
@@ -52,7 +52,7 @@ export default function ResultsDirectoryPage() {
               Official Results Portal
             </Typography>
             <Typography variant="subtitle" className="text-muted-foreground text-sm leading-relaxed max-w-xl">
-              Certified standings and prize distributions for completed championships. Standings are finalized post double proctor check-ins.
+              Certified standings and prize distributions for completed contests. Standings are finalized post double proctor check-ins.
             </Typography>
           </div>
         </Section>

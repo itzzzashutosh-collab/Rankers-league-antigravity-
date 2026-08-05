@@ -14,8 +14,8 @@ interface ContestEmptyStateProps {
 
 export function ContestEmptyState({
   onReset,
-  title = "No Championships Found",
-  description = "No active competitions match your filter settings. Please adjust your criteria or reset filters to browse all championships.",
+  title = "No Contests Found",
+  description = "No active competitions match your filter settings. Please adjust your criteria or reset filters to browse all contests.",
   className,
 }: ContestEmptyStateProps) {
   return (

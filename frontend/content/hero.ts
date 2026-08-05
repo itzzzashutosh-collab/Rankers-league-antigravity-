@@ -5,7 +5,7 @@ export const heroContent = {
     line2: "Earn your rank.",
   },
   subline:
-    "Join scheduled national championships that replicate the intensity of India\u2019s most prestigious competitive examinations. Benchmark your caliber against thousands of aspirants under standardized conditions.",
+    "Join scheduled national contests that replicate the intensity of India\u2019s most prestigious competitive examinations. Benchmark your caliber against thousands of aspirants under standardized conditions.",
   primaryCta: { label: "Explore Contests", href: "/challenges" },
   secondaryCta: { label: "View Leaderboard", href: "/standings" },
   stats: [

@@ -34,7 +34,7 @@ export const featuredContestsContent: FeaturedContest[] = [
   },
   {
     id: "jee-apex-s7",
-    title: "IIT JEE Apex Championship",
+    title: "IIT JEE Apex Contest",
     exam: "JEE Advanced",
     entryFee: 349,
     prizePool: 750000,

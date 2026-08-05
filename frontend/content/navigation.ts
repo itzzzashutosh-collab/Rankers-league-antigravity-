@@ -12,11 +12,11 @@ export interface MegaMenuCategory {
 export const navigationContent = {
   megaMenu: [
     {
-      heading: "Championships",
+      heading: "Contests",
       links: [
         { name: "Civil Services Elite", description: "UPSC Prelims & Mains replicas", path: "/contests/upsc-elite" },
         { name: "Engineering Apex", description: "IIT JEE Advanced adaptive arenas", path: "/contests/jee-advanced" },
-        { name: "Medical Prime", description: "NEET UG high-fidelity championships", path: "/contests/neet-prime" },
+        { name: "Medical Prime", description: "NEET UG high-fidelity contests", path: "/contests/neet-prime" },
         { name: "All Competitions", description: "Browse our active 13+ arenas", path: "/contests" },
       ],
     },

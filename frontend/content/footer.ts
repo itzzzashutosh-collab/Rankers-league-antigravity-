@@ -2,17 +2,17 @@ export const footerContent = {
   brand: {
     name: "Ranker\u2019s League",
     tagline:
-      "The prestigious global arena for scheduled competitive examination championships. Encounter national-level challengers in exact replicas of top-tier assessments.",
+      "India\u2019s premier competitive exam platform. Challenge yourself in scheduled national-level contests replicating top-tier examinations.",
   },
   directories: [
     {
-      heading: "Championships",
+      heading: "Contests",
       links: [
-        { name: "Civil Services Elite", path: "/challenges/upsc-elite" },
-        { name: "Engineering Apex", path: "/challenges/iit-apex" },
-        { name: "Medical Prime", path: "/challenges/neet-prime" },
-        { name: "Management League", path: "/challenges/cat-management" },
-        { name: "All Competitions", path: "/challenges" },
+        { name: "Civil Services Contest", path: "/contests" },
+        { name: "Engineering Contest", path: "/contests" },
+        { name: "Medical Contest", path: "/contests" },
+        { name: "Management Contest", path: "/contests" },
+        { name: "All Contests", path: "/contests" },
       ],
     },
     {

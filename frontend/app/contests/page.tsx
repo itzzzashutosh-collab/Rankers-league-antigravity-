@@ -73,7 +73,7 @@ export default function ContestsListingPage() {
         searchTerm,
         difficulty: activeDifficulty,
         entryFeeType: activeFeeType,
-        status: statusTab === "upcoming" ? "upcoming" : statusTab === "live" ? "ongoing" : "completed",
+        status: statusTab === "upcoming" ? "upcoming" : statusTab === "live" ? "active" : "completed",
         sortBy,
       });
       setAllContests(results);

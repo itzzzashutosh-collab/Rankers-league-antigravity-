@@ -2,8 +2,9 @@ import { FAQItem } from "../types/contests";
 
 export const globalFAQContent: FAQItem[] = [
   {
-    question: "What is a Championship on Ranker's League?",
-    answer: "A Championship is a scheduled, high-fidelity competitive arena replicating the exact rules, syllabus boundaries, and difficulty thresholds of national competitive examinations. Participants compete simultaneously under active proctoring lockdown protocols to establish verified percentiles.",
+    question: "What is a Contest on Ranker's League?",
+    answer: "A Contest is a scheduled, high-fidelity competitive arena replicating the exact rules, syllabus boundaries, and difficulty thresholds of national competitive examinations. Participants compete simultaneously under active proctoring lockdown protocols to establish verified percentiles.",
+
     category: "General",
   },
   {
@@ -38,7 +39,7 @@ export const contestSpecificFAQs: Record<string, FAQItem[]> = {
   ],
   "jee-advanced": [
     {
-      question: "How does partial marking work in the IIT JEE Advanced Apex Championship?",
+      question: "How does partial marking work in the IIT JEE Advanced Apex Contest?",
       answer: "We support precise partial marking rules for multi-correct choice questions. If a question has options A, B, and C correct, selecting only A and B awards partial positive marks, provided no incorrect options are marked.",
       category: "Syllabus & Rules",
     },

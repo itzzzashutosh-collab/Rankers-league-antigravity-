@@ -92,9 +92,9 @@ export const contestsContent: ContestDetail[] = [
     faq: globalFAQContent
   },
   {
-    id: "jee-precision-championship",
-    slug: "jee-precision-championship",
-    title: "All-India JEE Precision Championship",
+    id: "jee-precision-contest",
+    slug: "jee-precision-contest",
+    title: "All-India JEE Precision Contest",
     tagline: "Precision Arena",
     level: 3,
     exam: "JEE Main & Advanced",
@@ -117,7 +117,7 @@ export const contestsContent: ContestDetail[] = [
     isFeatured: true,
     isTrending: true,
     registrationDeadline: "July 17, 2026 11:59 PM",
-    overview: "All-India JEE Precision Championship replicates official NTA/IIT JEE exam conditions under proctored lockdown for verified national standing percentiles.",
+    overview: "All-India JEE Precision Contest replicates official NTA/IIT JEE exam conditions under proctored lockdown for verified national standing percentiles.",
     eligibility: "JEE Main & Advanced aspirants across India.",
     structure: [
       "90 NTA & IIT Pattern Questions across PCM",
@@ -214,9 +214,9 @@ export const contestsContent: ContestDetail[] = [
     faq: globalFAQContent
   },
   {
-    id: "upsc-precision-championship",
-    slug: "upsc-precision-championship",
-    title: "All-India UPSC Prelims Precision Championship",
+    id: "upsc-precision-contest",
+    slug: "upsc-precision-contest",
+    title: "All-India UPSC Prelims Precision Contest",
     tagline: "Precision Arena",
     level: 3,
     exam: "UPSC CSE Prelims",
@@ -239,7 +239,7 @@ export const contestsContent: ContestDetail[] = [
     isFeatured: true,
     isTrending: true,
     registrationDeadline: "July 17, 2026 11:59 PM",
-    overview: "All-India UPSC Prelims Precision Championship features 100 questions modeled on exact UPSC difficulty to provide national merit percentiles.",
+    overview: "All-India UPSC Prelims Precision Contest features 100 questions modeled on exact UPSC difficulty to provide national merit percentiles.",
     eligibility: "UPSC Civil Services aspirants.",
     structure: [
       "100 GS-1 Questions",
@@ -331,9 +331,9 @@ export const contestsContent: ContestDetail[] = [
     faq: globalFAQContent
   },
   {
-    id: "neet-precision-championship",
-    slug: "neet-precision-championship",
-    title: "All-India NEET Precision Championship",
+    id: "neet-precision-contest",
+    slug: "neet-precision-contest",
+    title: "All-India NEET Precision Contest",
     tagline: "Precision Arena",
     level: 3,
     exam: "NEET UG",
@@ -356,7 +356,7 @@ export const contestsContent: ContestDetail[] = [
     isFeatured: true,
     isTrending: true,
     registrationDeadline: "July 17, 2026 11:59 PM",
-    overview: "All-India NEET Precision Championship simulates official 200-question NTA paper format under strict proctored timer.",
+    overview: "All-India NEET Precision Contest simulates official 200-question NTA paper format under strict proctored timer.",
     eligibility: "NEET UG candidates across India.",
     structure: [
       "180 Attemptable Questions across PCB",
@@ -411,9 +411,9 @@ export const contestsContent: ContestDetail[] = [
     faq: globalFAQContent
   },
   {
-    id: "clat-precision-championship",
-    slug: "clat-precision-championship",
-    title: "All-India Legal Reasoning & CLAT Championship",
+    id: "clat-precision-contest",
+    slug: "clat-precision-contest",
+    title: "All-India Legal Reasoning & CLAT Contest",
     tagline: "Precision Arena",
     level: 3,
     exam: "CLAT",
@@ -436,7 +436,7 @@ export const contestsContent: ContestDetail[] = [
     isFeatured: false,
     isTrending: false,
     registrationDeadline: "July 21, 2026 11:59 PM",
-    overview: "All-India Legal Reasoning & CLAT Championship evaluates passage-based legal reasoning, constitutional law, and comprehension.",
+    overview: "All-India Legal Reasoning & CLAT Contest evaluates passage-based legal reasoning, constitutional law, and comprehension.",
     eligibility: "CLAT UG / PG candidates.",
     structure: [
       "120 Passage-Based Legal & Critical Reasoning Questions"
@@ -449,7 +449,7 @@ export const contestsContent: ContestDetail[] = [
   },
 
   // ───────────────────────────────────────────────────────────────────────────
-  // 5. APEX & GRAND NATIONAL CHAMPIONSHIPS - LEVELS 4 & 5
+  // 5. APEX & GRAND NATIONAL CONTESTS - LEVELS 4 & 5
   // ───────────────────────────────────────────────────────────────────────────
   {
     id: "national-grandmaster-cup",
@@ -497,7 +497,7 @@ export const contestsContent: ContestDetail[] = [
   {
     id: "grand-national-apex-league",
     slug: "grand-national-apex-league",
-    title: "Grand National Apex Championship",
+    title: "Grand National Apex Contest",
     tagline: "Grand National Apex",
     level: 5,
     exam: "Grand National Competition",
@@ -520,10 +520,10 @@ export const contestsContent: ContestDetail[] = [
     isFeatured: true,
     isTrending: true,
     registrationDeadline: "July 24, 2026 11:59 PM",
-    overview: "Grand National Apex Championship is India's largest national academic contest with 50,000 seat capacity, ₹17.15 Lakhs prize pool, and official Ranker's League Academic Medals.",
+    overview: "Grand National Apex Contest is India's largest national academic contest with 50,000 seat capacity, ₹17.15 Lakhs prize pool, and official Ranker's League Academic Medals.",
     eligibility: "Open to all student contenders across India.",
     structure: [
-      "120 Championship Questions across Physics, Chemistry, Math & GK",
+      "120 Exam Questions across Physics, Chemistry, Math & GK",
       "Full proctored proctoring feed & proctor log",
       "Official Grand National Merit Certificates & Cash Rewards"
     ],

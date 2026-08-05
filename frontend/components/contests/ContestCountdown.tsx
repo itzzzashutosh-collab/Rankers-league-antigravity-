@@ -59,7 +59,7 @@ export function ContestCountdown({
         )}
       >
         <Clock className="w-3.5 h-3.5" />
-        CHAMPIONSHIP CLOSED
+        CONTEST CLOSED
       </div>
     );
   }
