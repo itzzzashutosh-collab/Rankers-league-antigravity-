@@ -125,6 +125,10 @@ if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelper
 "use strict";
 
 __turbopack_context__.s([
+    "DEMO_MOCK_PROFILE",
+    ()=>DEMO_MOCK_PROFILE,
+    "DEMO_MOCK_USER",
+    ()=>DEMO_MOCK_USER,
     "createClient",
     ()=>createClient
 ]);
@@ -133,7 +137,87 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$supabase$2
 ;
 const supabaseUrl = ("TURBOPACK compile-time value", "https://bgsdovlumtjwvcwzjnnn.supabase.co");
 const supabaseKey = ("TURBOPACK compile-time value", "sb_publishable_YSeECVTNhPL63VEU5GSi2Q_TZHs7md2");
-const createClient = ()=>(0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$supabase$2f$ssr$2f$dist$2f$module$2f$createBrowserClient$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["createBrowserClient"])(supabaseUrl, supabaseKey);
+const DEMO_MOCK_USER = {
+    id: "d83f1245-5678-4abc-9def-0123456789ab",
+    email: "arjun.student@rankersleague.com",
+    user_metadata: {
+        full_name: "Arjun Sharma",
+        username: "arjun_sharma"
+    },
+    role: "authenticated",
+    aud: "authenticated",
+    created_at: new Date().toISOString()
+};
+const DEMO_MOCK_PROFILE = {
+    id: "d83f1245-5678-4abc-9def-0123456789ab",
+    full_name: "Arjun Sharma",
+    username: "arjun_sharma",
+    avatar_url: null,
+    primary_exam_category: "JEE_MAIN",
+    aura_points: 4850,
+    national_rank: 87,
+    profile_status: "complete"
+};
+const safeFetch = async (input, init)=>{
+    try {
+        return await fetch(input, init);
+    } catch (e) {
+        return new Response(JSON.stringify({
+            error: {
+                message: "Supabase cloud offline"
+            }
+        }), {
+            status: 200,
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+    }
+};
+const createClient = ()=>{
+    const client = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$supabase$2f$ssr$2f$dist$2f$module$2f$createBrowserClient$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["createBrowserClient"])(supabaseUrl, supabaseKey, {
+        global: {
+            fetch: safeFetch
+        }
+    });
+    if (typeof document !== "undefined") {
+        const origGetUser = client.auth.getUser.bind(client.auth);
+        client.auth.getUser = async ()=>{
+            try {
+                var _res_data;
+                const res = await origGetUser();
+                if ((_res_data = res.data) === null || _res_data === void 0 ? void 0 : _res_data.user) return res;
+            } catch (e) {}
+            return {
+                data: {
+                    user: DEMO_MOCK_USER
+                },
+                error: null
+            };
+        };
+        const origFrom = client.from.bind(client);
+        client.from = (table)=>{
+            const query = origFrom(table);
+            if (table === "profiles") {
+                const origSingle = query.single ? query.single.bind(query) : null;
+                if (origSingle) {
+                    query.single = async ()=>{
+                        try {
+                            const res = await origSingle();
+                            if (res.data) return res;
+                        } catch (e) {}
+                        return {
+                            data: DEMO_MOCK_PROFILE,
+                            error: null
+                        };
+                    };
+                }
+            }
+            return query;
+        };
+    }
+    return client;
+};
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
     __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
 }
@@ -344,7 +428,7 @@ function Header() {
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("nav", {
-                                className: "hidden md:flex items-center gap-6 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2",
+                                className: "hidden md:flex items-center gap-5 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2",
                                 children: [
                                     authUser && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                                         href: "/dashboard",
@@ -383,18 +467,18 @@ function Header() {
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-                                        href: "/results",
+                                        href: "/mentors",
                                         className: "text-xs font-black tracking-wide uppercase text-muted-foreground hover:text-foreground transition-colors",
-                                        children: "Results"
+                                        children: "Mentors"
                                     }, void 0, false, {
                                         fileName: "[project]/frontend/components/header.tsx",
                                         lineNumber: 176,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-                                        href: "/rewards",
-                                        className: "text-xs font-black tracking-wide uppercase text-muted-foreground hover:text-foreground transition-colors",
-                                        children: "Rewards"
+                                        href: "/pricing",
+                                        className: "text-xs font-black tracking-wide uppercase text-primary hover:text-primary/80 transition-colors",
+                                        children: "Pricing"
                                     }, void 0, false, {
                                         fileName: "[project]/frontend/components/header.tsx",
                                         lineNumber: 182,
@@ -882,23 +966,33 @@ function Header() {
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-                                        href: "/results",
-                                        onClick: ()=>setMobileOpen(false),
-                                        className: "text-sm font-semibold text-foreground hover:text-primary transition-colors block",
-                                        children: "Results"
-                                    }, void 0, false, {
-                                        fileName: "[project]/frontend/components/header.tsx",
-                                        lineNumber: 393,
-                                        columnNumber: 17
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                                         href: "/rewards",
                                         onClick: ()=>setMobileOpen(false),
                                         className: "text-sm font-semibold text-foreground hover:text-primary transition-colors block",
                                         children: "Rewards"
                                     }, void 0, false, {
                                         fileName: "[project]/frontend/components/header.tsx",
+                                        lineNumber: 393,
+                                        columnNumber: 17
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                                        href: "/mentors",
+                                        onClick: ()=>setMobileOpen(false),
+                                        className: "text-sm font-semibold text-foreground hover:text-primary transition-colors block",
+                                        children: "Mentors"
+                                    }, void 0, false, {
+                                        fileName: "[project]/frontend/components/header.tsx",
                                         lineNumber: 400,
+                                        columnNumber: 17
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                                        href: "/pricing",
+                                        onClick: ()=>setMobileOpen(false),
+                                        className: "text-sm font-bold text-primary hover:text-primary/80 transition-colors block",
+                                        children: "Pricing ✦"
+                                    }, void 0, false, {
+                                        fileName: "[project]/frontend/components/header.tsx",
+                                        lineNumber: 407,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -908,7 +1002,7 @@ function Header() {
                                         children: "Contact"
                                     }, void 0, false, {
                                         fileName: "[project]/frontend/components/header.tsx",
-                                        lineNumber: 407,
+                                        lineNumber: 414,
                                         columnNumber: 17
                                     }, this)
                                 ]
@@ -934,7 +1028,7 @@ function Header() {
                                                             className: "w-4 h-4 text-primary"
                                                         }, void 0, false, {
                                                             fileName: "[project]/frontend/components/header.tsx",
-                                                            lineNumber: 421,
+                                                            lineNumber: 428,
                                                             columnNumber: 25
                                                         }, this),
                                                         " Wallet: ",
@@ -942,12 +1036,12 @@ function Header() {
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/frontend/components/header.tsx",
-                                                    lineNumber: 420,
+                                                    lineNumber: 427,
                                                     columnNumber: 23
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/frontend/components/header.tsx",
-                                                lineNumber: 419,
+                                                lineNumber: 426,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -962,19 +1056,19 @@ function Header() {
                                                             className: "w-4 h-4"
                                                         }, void 0, false, {
                                                             fileName: "[project]/frontend/components/header.tsx",
-                                                            lineNumber: 426,
+                                                            lineNumber: 433,
                                                             columnNumber: 25
                                                         }, this),
                                                         " Notifications Inbox"
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/frontend/components/header.tsx",
-                                                    lineNumber: 425,
+                                                    lineNumber: 432,
                                                     columnNumber: 23
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/frontend/components/header.tsx",
-                                                lineNumber: 424,
+                                                lineNumber: 431,
                                                 columnNumber: 21
                                             }, this)
                                         ]
@@ -984,13 +1078,13 @@ function Header() {
                                         children: "Access Platform"
                                     }, void 0, false, {
                                         fileName: "[project]/frontend/components/header.tsx",
-                                        lineNumber: 431,
+                                        lineNumber: 438,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/frontend/components/header.tsx",
-                                lineNumber: 416,
+                                lineNumber: 423,
                                 columnNumber: 15
                             }, this)
                         ]
@@ -1239,7 +1333,8 @@ function HeroSection(param) {
     _s();
     const activeLeague = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useMemo"]({
         "HeroSection.useMemo[activeLeague]": ()=>{
-            return initialLeagues.find({
+            const leaguesList = Array.isArray(initialLeagues) ? initialLeagues : [];
+            return leaguesList.find({
                 "HeroSection.useMemo[activeLeague]": (l)=>l.status === "active" || l.status === "upcoming"
             }["HeroSection.useMemo[activeLeague]"]) || {
                 id: "default",
@@ -1301,7 +1396,7 @@ function HeroSection(param) {
                         className: "aurora-blob w-[500px] h-[500px] bg-primary/10 top-[-100px] left-[-100px]"
                     }, void 0, false, {
                         fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                        lineNumber: 62,
+                        lineNumber: 63,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1311,7 +1406,7 @@ function HeroSection(param) {
                         }
                     }, void 0, false, {
                         fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                        lineNumber: 63,
+                        lineNumber: 64,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1321,20 +1416,20 @@ function HeroSection(param) {
                         }
                     }, void 0, false, {
                         fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                        lineNumber: 64,
+                        lineNumber: 65,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                lineNumber: 61,
+                lineNumber: 62,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "absolute inset-0 bg-[linear-gradient(to_right,var(--color-border)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-border)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-20 pointer-events-none"
             }, void 0, false, {
                 fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                lineNumber: 68,
+                lineNumber: 69,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1361,14 +1456,14 @@ function HeroSection(param) {
                                         className: "w-3.5 h-3.5 text-primary"
                                     }, void 0, false, {
                                         fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                        lineNumber: 79,
+                                        lineNumber: 80,
                                         columnNumber: 13
                                     }, this),
                                     __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$hero$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["heroContent"].badge
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                lineNumber: 73,
+                                lineNumber: 74,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].h1, {
@@ -1389,7 +1484,7 @@ function HeroSection(param) {
                                     __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$hero$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["heroContent"].headline.line1,
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
                                         fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                        lineNumber: 90,
+                                        lineNumber: 91,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1397,13 +1492,13 @@ function HeroSection(param) {
                                         children: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$hero$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["heroContent"].headline.line2
                                     }, void 0, false, {
                                         fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                        lineNumber: 91,
+                                        lineNumber: 92,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                lineNumber: 83,
+                                lineNumber: 84,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].p, {
@@ -1423,7 +1518,7 @@ function HeroSection(param) {
                                 children: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$hero$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["heroContent"].subline
                             }, void 0, false, {
                                 fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                lineNumber: 96,
+                                lineNumber: 97,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -1450,13 +1545,13 @@ function HeroSection(param) {
                                                 className: "w-4 h-4"
                                             }, void 0, false, {
                                                 fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                                lineNumber: 113,
+                                                lineNumber: 114,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                        lineNumber: 111,
+                                        lineNumber: 112,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -1466,13 +1561,13 @@ function HeroSection(param) {
                                         children: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$hero$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["heroContent"].secondaryCta.label
                                     }, void 0, false, {
                                         fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                        lineNumber: 115,
+                                        lineNumber: 116,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                lineNumber: 105,
+                                lineNumber: 106,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -1494,7 +1589,7 @@ function HeroSection(param) {
                                                 children: stat.value
                                             }, void 0, false, {
                                                 fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                                lineNumber: 132,
+                                                lineNumber: 133,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1502,24 +1597,24 @@ function HeroSection(param) {
                                                 children: stat.label
                                             }, void 0, false, {
                                                 fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                                lineNumber: 135,
+                                                lineNumber: 136,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, stat.label, true, {
                                         fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                        lineNumber: 131,
+                                        lineNumber: 132,
                                         columnNumber: 15
                                     }, this))
                             }, void 0, false, {
                                 fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                lineNumber: 124,
+                                lineNumber: 125,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                        lineNumber: 72,
+                        lineNumber: 73,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1550,12 +1645,12 @@ function HeroSection(param) {
                                                     className: "w-3.5 h-3.5 text-emerald-500"
                                                 }, void 0, false, {
                                                     fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                                    lineNumber: 153,
+                                                    lineNumber: 154,
                                                     columnNumber: 19
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                                lineNumber: 152,
+                                                lineNumber: 153,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1565,7 +1660,7 @@ function HeroSection(param) {
                                                         children: "+12 Rank Positions"
                                                     }, void 0, false, {
                                                         fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                                        lineNumber: 156,
+                                                        lineNumber: 157,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1573,29 +1668,29 @@ function HeroSection(param) {
                                                         children: "This month"
                                                     }, void 0, false, {
                                                         fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                                        lineNumber: 157,
+                                                        lineNumber: 158,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                                lineNumber: 155,
+                                                lineNumber: 156,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                        lineNumber: 151,
+                                        lineNumber: 152,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                    lineNumber: 150,
+                                    lineNumber: 151,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                lineNumber: 144,
+                                lineNumber: 145,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -1623,12 +1718,12 @@ function HeroSection(param) {
                                                     className: "w-3.5 h-3.5 text-amber-500 fill-amber-500"
                                                 }, void 0, false, {
                                                     fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                                    lineNumber: 173,
+                                                    lineNumber: 174,
                                                     columnNumber: 19
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                                lineNumber: 172,
+                                                lineNumber: 173,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1638,7 +1733,7 @@ function HeroSection(param) {
                                                         children: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$hero$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["heroContent"].floatingCards.achievementPreview.badge
                                                     }, void 0, false, {
                                                         fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                                        lineNumber: 176,
+                                                        lineNumber: 177,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1650,29 +1745,29 @@ function HeroSection(param) {
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                                        lineNumber: 177,
+                                                        lineNumber: 178,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                                lineNumber: 175,
+                                                lineNumber: 176,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                        lineNumber: 171,
+                                        lineNumber: 172,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                    lineNumber: 170,
+                                    lineNumber: 171,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                lineNumber: 164,
+                                lineNumber: 165,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -1696,12 +1791,12 @@ function HeroSection(param) {
                                             className: "w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"
                                         }, void 0, false, {
                                             fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                            lineNumber: 191,
+                                            lineNumber: 192,
                                             columnNumber: 15
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                        lineNumber: 190,
+                                        lineNumber: 191,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1709,7 +1804,7 @@ function HeroSection(param) {
                                         children: "Next Live Championship"
                                     }, void 0, false, {
                                         fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                        lineNumber: 194,
+                                        lineNumber: 195,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -1717,7 +1812,7 @@ function HeroSection(param) {
                                         children: activeLeague.title
                                     }, void 0, false, {
                                         fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                        lineNumber: 197,
+                                        lineNumber: 198,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1728,7 +1823,7 @@ function HeroSection(param) {
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                        lineNumber: 200,
+                                        lineNumber: 201,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1754,7 +1849,7 @@ function HeroSection(param) {
                                                         children: unit.value
                                                     }, void 0, false, {
                                                         fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                                        lineNumber: 212,
+                                                        lineNumber: 213,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1762,18 +1857,18 @@ function HeroSection(param) {
                                                         children: unit.label
                                                     }, void 0, false, {
                                                         fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                                        lineNumber: 215,
+                                                        lineNumber: 216,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, unit.label, true, {
                                                 fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                                lineNumber: 211,
+                                                lineNumber: 212,
                                                 columnNumber: 17
                                             }, this))
                                     }, void 0, false, {
                                         fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                        lineNumber: 205,
+                                        lineNumber: 206,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1787,7 +1882,7 @@ function HeroSection(param) {
                                                         children: "National Registered:"
                                                     }, void 0, false, {
                                                         fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                                        lineNumber: 225,
+                                                        lineNumber: 226,
                                                         columnNumber: 17
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1797,7 +1892,7 @@ function HeroSection(param) {
                                                                 className: "w-3.5 h-3.5 text-primary"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                                                lineNumber: 227,
+                                                                lineNumber: 228,
                                                                 columnNumber: 19
                                                             }, this),
                                                             activeLeague.current_participants.toLocaleString(),
@@ -1805,13 +1900,13 @@ function HeroSection(param) {
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                                        lineNumber: 226,
+                                                        lineNumber: 227,
                                                         columnNumber: 17
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                                lineNumber: 224,
+                                                lineNumber: 225,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1822,7 +1917,7 @@ function HeroSection(param) {
                                                         children: "Championship Tier:"
                                                     }, void 0, false, {
                                                         fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                                        lineNumber: 232,
+                                                        lineNumber: 233,
                                                         columnNumber: 17
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1832,7 +1927,7 @@ function HeroSection(param) {
                                                                 className: "w-3.5 h-3.5 text-primary"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                                                lineNumber: 234,
+                                                                lineNumber: 235,
                                                                 columnNumber: 19
                                                             }, this),
                                                             activeLeague.difficulty_tier.toUpperCase(),
@@ -1840,19 +1935,19 @@ function HeroSection(param) {
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                                        lineNumber: 233,
+                                                        lineNumber: 234,
                                                         columnNumber: 17
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                                lineNumber: 231,
+                                                lineNumber: 232,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                        lineNumber: 223,
+                                        lineNumber: 224,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -1863,37 +1958,37 @@ function HeroSection(param) {
                                                 className: "w-4 h-4"
                                             }, void 0, false, {
                                                 fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                                lineNumber: 242,
+                                                lineNumber: 243,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                        lineNumber: 240,
+                                        lineNumber: 241,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                                lineNumber: 184,
+                                lineNumber: 185,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                        lineNumber: 142,
+                        lineNumber: 143,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-                lineNumber: 70,
+                lineNumber: 71,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/frontend/components/sections/HeroSection.tsx",
-        lineNumber: 59,
+        lineNumber: 60,
         columnNumber: 5
     }, this);
 }

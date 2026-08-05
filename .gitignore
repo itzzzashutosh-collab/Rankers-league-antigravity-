@@ -35,3 +35,12 @@ Thumbs.db
 *.njsproj
 *.sln
 *.sw?
+
+# Large generated data directories (SQL/JSON output files, question banks)
+output/
+bank/
+sample_bank/
+question-template/
+docs/
+scripts/diagnose-backend.js
+scripts/get-test-users.js

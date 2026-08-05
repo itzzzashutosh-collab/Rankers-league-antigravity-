@@ -1,7 +1,1 @@
-{
-  "/admin/agents/page": "app/admin/agents/page.js",
-  "/admin/participants/page": "app/admin/participants/page.js",
-  "/admin/communication/automation/page": "app/admin/communication/automation/page.js",
-  "/admin/finance/overview/page": "app/admin/finance/overview/page.js",
-  "/admin/communication/templates/page": "app/admin/communication/templates/page.js"
-}
+{}

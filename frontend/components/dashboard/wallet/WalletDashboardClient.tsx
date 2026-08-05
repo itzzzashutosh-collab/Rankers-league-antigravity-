@@ -180,44 +180,87 @@ export default function WalletDashboardClient({
 
   return (
     <div className="space-y-8 animate-fade-in">
-      {/* Header section */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-black tracking-tight text-foreground flex items-center gap-2.5">
-            <Wallet className="w-7 h-7 text-primary" />
-            Financial Center
-          </h1>
-          <p className="text-sm text-muted-foreground mt-1">
-            Secure billing, balance distributions, and prize settlement ledger.
-          </p>
-        </div>
+      {/* ── Premium Balance Hero ─────────────────────────────────────────────── */}
+      <div className="relative overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-card via-card/80 to-background p-8 shadow-2xl">
+        {/* Ambient glow blobs */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 rounded-full bg-primary/8 blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 right-0 w-48 h-48 rounded-full bg-emerald-500/5 blur-2xl pointer-events-none" />
 
-        {/* Quick action actions */}
-        <div className="flex flex-wrap gap-3">
-          <Link href="/dashboard/wallet/payment-methods">
-            <Button variant="outline" className="text-xs font-bold gap-1.5 border-border/60 hover:bg-muted/40">
-              <CreditCard className="w-3.5 h-3.5" />
-              Linked Methods
-            </Button>
-          </Link>
-          <Button
-            onClick={() => {
-              setDepositError(null);
-              setDepositSuccessRef(null);
-              setShowAddBalance(true);
-            }}
-            className="text-xs font-bold gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-950/10"
-          >
-            <ArrowDownLeft className="w-3.5 h-3.5" />
-            Add Balance
-          </Button>
-          <Link href="/dashboard/wallet/withdraw">
-            <Button className="text-xs font-bold gap-1.5 bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/25">
-              <ArrowUpRight className="w-3.5 h-3.5" />
-              Withdraw Winnings
-            </Button>
-          </Link>
+        <div className="relative z-10">
+          <div className="flex flex-col lg:flex-row lg:items-center gap-8">
+            {/* Left: Big Balance Display */}
+            <div className="flex-1 text-center lg:text-left">
+              <div className="flex items-center justify-center lg:justify-start gap-2 mb-3">
+                <div className="p-2 rounded-xl bg-primary/10 border border-primary/20">
+                  <Wallet className="w-5 h-5 text-primary" />
+                </div>
+                <div>
+                  <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Available Balance</p>
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping inline-block" />
+                    <span className="text-[10px] text-emerald-500 font-bold">Ready to Withdraw</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="text-5xl sm:text-6xl font-extrabold font-heading text-foreground tracking-tight mb-2">
+                {formatCurrency(balances.available_balance)}
+              </div>
+
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 mt-4 text-xs text-muted-foreground">
+                <span className="flex items-center gap-1.5">
+                  <TrendingUp className="w-3.5 h-3.5 text-emerald-500" />
+                  Lifetime Earned: <strong className="text-foreground ml-1">{formatCurrency(balances.lifetime_earnings)}</strong>
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <Download className="w-3.5 h-3.5 text-primary" />
+                  Total Withdrawn: <strong className="text-foreground ml-1">{formatCurrency(balances.lifetime_withdrawals)}</strong>
+                </span>
+              </div>
+            </div>
+
+            {/* Right: Quick Actions */}
+            <div className="flex flex-row lg:flex-col gap-3 justify-center lg:justify-start lg:min-w-[200px]">
+              <Button
+                onClick={() => {
+                  setDepositError(null);
+                  setDepositSuccessRef(null);
+                  setShowAddBalance(true);
+                }}
+                className="flex-1 lg:flex-none text-xs font-bold gap-2 bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-950/15 py-3"
+              >
+                <ArrowDownLeft className="w-4 h-4" />
+                Add Money
+              </Button>
+              <Link href="/dashboard/wallet/withdraw" className="flex-1 lg:flex-none">
+                <Button className="w-full text-xs font-bold gap-2 bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/20 py-3">
+                  <ArrowUpRight className="w-4 h-4" />
+                  Withdraw
+                </Button>
+              </Link>
+              <Link href="/dashboard/wallet/transactions" className="flex-1 lg:flex-none">
+                <Button variant="outline" className="w-full text-xs font-bold gap-2 border-border/60 hover:bg-muted/30 py-3">
+                  <Layers className="w-4 h-4" />
+                  History
+                </Button>
+              </Link>
+            </div>
+          </div>
         </div>
+      </div>
+
+      {/* ── Balance breakdown header (compact) ──────────────────────────────── */}
+      <div className="flex items-center justify-between">
+        <h2 className="text-sm font-black text-foreground uppercase tracking-widest flex items-center gap-2">
+          <DollarSign className="w-4 h-4 text-primary" />
+          Balance Overview
+        </h2>
+        <Link href="/dashboard/wallet/payment-methods">
+          <Button variant="ghost" className="text-xs font-bold gap-1.5 border-border/50 border hover:bg-muted/30">
+            <CreditCard className="w-3.5 h-3.5" />
+            Linked Payment Methods
+          </Button>
+        </Link>
       </div>
 
       {/* Grid of Main Balances */}

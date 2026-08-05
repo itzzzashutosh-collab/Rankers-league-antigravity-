@@ -25,6 +25,22 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 ;
 const supabaseUrl = ("TURBOPACK compile-time value", "https://bgsdovlumtjwvcwzjnnn.supabase.co");
 const supabaseKey = ("TURBOPACK compile-time value", "sb_publishable_YSeECVTNhPL63VEU5GSi2Q_TZHs7md2");
+const safeFetch = async (input, init)=>{
+    try {
+        return await fetch(input, init);
+    } catch  {
+        return new Response(JSON.stringify({
+            error: {
+                message: "Supabase cloud offline"
+            }
+        }), {
+            status: 200,
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+    }
+};
 const updateSession = async (request)=>{
     let supabaseResponse = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$esm$2f$server$2f$web$2f$exports$2f$index$2e$js__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__["NextResponse"].next({
         request: {
@@ -32,6 +48,9 @@ const updateSession = async (request)=>{
         }
     });
     const supabase = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$supabase$2f$ssr$2f$dist$2f$module$2f$createServerClient$2e$js__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__["createServerClient"])(supabaseUrl, supabaseKey, {
+        global: {
+            fetch: safeFetch
+        },
         cookies: {
             getAll () {
                 return request.cookies.getAll();
@@ -45,8 +64,11 @@ const updateSession = async (request)=>{
             }
         }
     });
-    // Refresh session if it exists
-    await supabase.auth.getUser();
+    try {
+        await supabase.auth.getUser();
+    } catch  {
+    // Graceful offline fallback
+    }
     return supabaseResponse;
 };
 }),
@@ -62,7 +84,6 @@ __turbopack_context__.s([
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$esm$2f$api$2f$server$2e$js__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/node_modules/next/dist/esm/api/server.js [middleware-edge] (ecmascript) <locals>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$esm$2f$server$2f$web$2f$exports$2f$index$2e$js__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/esm/server/web/exports/index.js [middleware-edge] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$utils$2f$supabase$2f$middleware$2e$ts__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/frontend/utils/supabase/middleware.ts [middleware-edge] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$supabase$2f$ssr$2f$dist$2f$module$2f$createServerClient$2e$js__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@supabase/ssr/dist/module/createServerClient.js [middleware-edge] (ecmascript)");
 ;
 ;
 ;
@@ -83,36 +104,25 @@ const AUTH_ONLY_ROUTES = [
 const PUBLIC_PASSTHROUGH = [
     "/auth/callback"
 ];
+// ─────────────────────────────────────────────────────────────────────────────
+// TESTING PHASE TOGGLE
+// Set to true to disable all auth walls & login redirects for seamless testing.
+// Re-activate by setting to false when ready for production deployment.
+// ─────────────────────────────────────────────────────────────────────────────
+const TESTING_MODE = true;
 async function middleware(request) {
-    const { pathname } = request.nextUrl;
-    // Always allow OAuth callback and public assets through
-    if (PUBLIC_PASSTHROUGH.some((p)=>pathname.startsWith(p))) {
+    if ("TURBOPACK compile-time truthy", 1) {
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$esm$2f$server$2f$web$2f$exports$2f$index$2e$js__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__["NextResponse"].next();
     }
-    // First refresh the session
-    const response = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$utils$2f$supabase$2f$middleware$2e$ts__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__["updateSession"])(request);
+    //TURBOPACK unreachable
+    ;
+    const pathname = undefined;
+    const demoCookie = undefined;
+    const isDemoUser = undefined;
     // Build supabase client to check session
-    const supabase = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$supabase$2f$ssr$2f$dist$2f$module$2f$createServerClient$2e$js__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__["createServerClient"])(("TURBOPACK compile-time value", "https://bgsdovlumtjwvcwzjnnn.supabase.co"), ("TURBOPACK compile-time value", "sb_publishable_YSeECVTNhPL63VEU5GSi2Q_TZHs7md2"), {
-        cookies: {
-            getAll () {
-                return request.cookies.getAll();
-            },
-            setAll () {}
-        }
-    });
-    const { data: { user } } = await supabase.auth.getUser();
-    // Redirect unauthenticated users away from protected routes
-    if (PROTECTED_ROUTES.some((r)=>pathname.startsWith(r)) && !user) {
-        const loginUrl = new URL("/auth/login", request.url);
-        loginUrl.searchParams.set("redirect", pathname);
-        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$esm$2f$server$2f$web$2f$exports$2f$index$2e$js__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__["NextResponse"].redirect(loginUrl);
-    }
-    // Redirect authenticated users away from auth-only routes
-    // (only if their profile is complete; otherwise let them through to complete it)
-    if (AUTH_ONLY_ROUTES.some((r)=>pathname === r) && user) {
-        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$esm$2f$server$2f$web$2f$exports$2f$index$2e$js__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__["NextResponse"].redirect(new URL("/", request.url));
-    }
-    return response;
+    const supabase = undefined;
+    let user;
+    const isAuthenticated = undefined;
 }
 const config = {
     matcher: [

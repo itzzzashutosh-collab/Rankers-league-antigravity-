@@ -639,21 +639,28 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$conte
 ;
 ;
 const contestsContent = [
+    // ───────────────────────────────────────────────────────────────────────────
+    // 1. ENGINEERING STREAM (JEE MAIN & ADVANCED) - LEVELS 1 TO 5
+    // ───────────────────────────────────────────────────────────────────────────
     {
-        id: "upsc-elite",
-        slug: "upsc-elite",
-        title: "Civil Services Elite League",
-        exam: "UPSC CSE Prelims",
-        category: "Civil Services",
-        entryFee: 499,
-        prizePool: 500000,
-        participants: 38492,
-        maxParticipants: 50000,
-        difficulty: "Elite",
+        id: "jee-foundation-sprint",
+        slug: "jee-foundation-sprint",
+        title: "JEE Main Foundation Speed & Accuracy Sprint",
+        tagline: "Foundation Sprint",
+        level: 1,
+        exam: "JEE Main",
+        category: "Engineering",
+        entryFee: 99,
+        prizePool: 103950,
+        totalCollection: 148500,
+        platformMargin: 44550,
+        participants: 1250,
+        maxParticipants: 1500,
+        seatsAvailable: 250,
+        difficulty: "Prime",
         date: "July 12, 2026",
         time: "09:30 AM",
-        duration: "2h 00m",
-        seatsAvailable: 11508,
+        duration: "1h 30m",
         status: "upcoming",
         bannerGradient: "from-amber-500/20 via-yellow-500/10 to-transparent",
         language: "English",
@@ -661,106 +668,375 @@ const contestsContent = [
         isFeatured: true,
         isTrending: true,
         registrationDeadline: "July 11, 2026 11:59 PM",
-        overview: "A high-fidelity replication of the UPSC Civil Services Preliminary examination. This championship features paper sets calibrated to replicate actual UPSC complexity parameters to help candidates verify their national standing percentile.",
-        eligibility: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$details$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["eligibilityByContest"]["upsc-elite"],
-        structure: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$details$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["structureByContest"]["upsc-elite"],
-        syllabus: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$details$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["syllabusByContest"]["upsc-elite"],
-        rewards: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$rewards$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["rewardsByContest"]["upsc-elite"],
-        rules: [
-            ...__TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$rules$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["generalContestRules"][1].points,
-            ...__TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$rules$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["rulesByContest"]["upsc-elite"][0].points
+        overview: "JEE Main Foundation Speed & Accuracy Sprint is engineered for Class 11 & 12 engineering aspirants seeking rapid problem-solving speed and instant diagnostic accuracy evaluation.",
+        eligibility: "Open to Class 11, Class 12 & Dropper JEE Main aspirants.",
+        structure: [
+            "50 High-Yield Foundational Physics, Chemistry & Math Questions",
+            "Instant Speed & Accuracy Diagnostic Report",
+            "Proctored lockdown sandbox environment"
         ],
-        timeline: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$schedule$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["scheduleByContest"]["upsc-elite"],
-        faq: [
-            ...__TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$faq$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["globalFAQContent"],
-            ...__TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$faq$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["contestSpecificFAQs"]["upsc-elite"]
-        ]
+        syllabus: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$details$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["syllabusByContest"]["jee-advanced"] || [],
+        rewards: [
+            {
+                rank: "Rank 1",
+                prize: "₹25,000 Cash + JEE Champion Badge",
+                recognition: "National Foundation Winner"
+            },
+            {
+                rank: "Rank 2 - 5",
+                prize: "₹10,000 Cash Package",
+                recognition: "Silver Merit Standings"
+            },
+            {
+                rank: "Top 20%",
+                prize: "₹250 Credits Back",
+                recognition: "Verified Percentile Certificate"
+            }
+        ],
+        rules: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$rules$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["generalContestRules"][1].points,
+        timeline: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$schedule$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["scheduleByContest"]["jee-advanced"] || [],
+        faq: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$faq$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["globalFAQContent"]
     },
     {
-        id: "jee-advanced",
-        slug: "jee-advanced",
-        title: "IIT JEE Advanced Apex Championship",
+        id: "jee-analytical-cup",
+        slug: "jee-analytical-cup",
+        title: "IIT JEE Advanced Analytical Reasoning Cup",
+        tagline: "Analytical Cup",
+        level: 2,
         exam: "JEE Advanced",
         category: "Engineering",
-        entryFee: 349,
-        prizePool: 750000,
-        participants: 52100,
-        maxParticipants: 80000,
-        difficulty: "Apex",
+        entryFee: 89,
+        prizePool: 311500,
+        totalCollection: 445000,
+        platformMargin: 133500,
+        participants: 4120,
+        maxParticipants: 5000,
+        seatsAvailable: 880,
+        difficulty: "Elite",
         date: "July 15, 2026",
         time: "02:00 PM",
-        duration: "3h 00m",
-        seatsAvailable: 27900,
+        duration: "2h 00m",
         status: "upcoming",
-        bannerGradient: "from-violet-500/20 via-purple-500/10 to-transparent",
-        language: "English & Hindi",
+        bannerGradient: "from-blue-500/20 via-sky-500/10 to-transparent",
+        language: "English",
         country: "India",
         isFeatured: true,
         isTrending: true,
         registrationDeadline: "July 14, 2026 11:59 PM",
-        overview: "Engineering entrance championship built to evaluate analytical capacity under strict time frames. Questions are drafted by experienced IIT educators to simulate authentic JEE Advanced constraints.",
-        eligibility: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$details$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["eligibilityByContest"]["jee-advanced"],
-        structure: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$details$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["structureByContest"]["jee-advanced"],
-        syllabus: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$details$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["syllabusByContest"]["jee-advanced"],
-        rewards: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$rewards$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["rewardsByContest"]["jee-advanced"],
-        rules: [
-            ...__TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$rules$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["generalContestRules"][1].points,
-            ...__TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$rules$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["rulesByContest"]["jee-advanced"][0].points
+        overview: "IIT JEE Advanced Analytical Reasoning Cup evaluates multi-concept analytical depth. Designed by IIT educators to challenge aspirants with complex multi-step numerical questions.",
+        eligibility: "Open to JEE Advanced candidates aiming for Top 5,000 AIR.",
+        structure: [
+            "60 Advanced Multi-Concept Analytical Questions",
+            "Negative marking calibration (-1 per incorrect answer)",
+            "Detailed step-by-step video solution analysis post-exam"
         ],
-        timeline: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$schedule$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["scheduleByContest"]["jee-advanced"],
-        faq: [
-            ...__TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$faq$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["globalFAQContent"],
-            ...__TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$faq$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["contestSpecificFAQs"]["jee-advanced"]
-        ]
+        syllabus: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$details$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["syllabusByContest"]["jee-advanced"] || [],
+        rewards: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$rewards$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["rewardsByContest"]["jee-advanced"] || [],
+        rules: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$rules$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["generalContestRules"][1].points,
+        timeline: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$schedule$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["scheduleByContest"]["jee-advanced"] || [],
+        faq: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$faq$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["globalFAQContent"]
     },
     {
-        id: "neet-prime",
-        slug: "neet-prime",
-        title: "NEET Medical Prime Cup",
+        id: "jee-precision-championship",
+        slug: "jee-precision-championship",
+        title: "All-India JEE Precision Championship",
+        tagline: "Precision Arena",
+        level: 3,
+        exam: "JEE Main & Advanced",
+        category: "Engineering",
+        entryFee: 79,
+        prizePool: 553000,
+        totalCollection: 790000,
+        platformMargin: 237000,
+        participants: 8450,
+        maxParticipants: 10000,
+        seatsAvailable: 1550,
+        difficulty: "Apex",
+        date: "July 18, 2026",
+        time: "10:00 AM",
+        duration: "3h 00m",
+        status: "upcoming",
+        bannerGradient: "from-violet-500/20 via-purple-500/10 to-transparent",
+        language: "English",
+        country: "India",
+        isFeatured: true,
+        isTrending: true,
+        registrationDeadline: "July 17, 2026 11:59 PM",
+        overview: "All-India JEE Precision Championship replicates official NTA/IIT JEE exam conditions under proctored lockdown for verified national standing percentiles.",
+        eligibility: "JEE Main & Advanced aspirants across India.",
+        structure: [
+            "90 NTA & IIT Pattern Questions across PCM",
+            "Full camera & proctored proctoring feed",
+            "Audited Row-Level Security percentile evaluation"
+        ],
+        syllabus: [],
+        rewards: [
+            {
+                rank: "Rank 1",
+                prize: "₹1,25,000 Cash + Precision Supreme Trophy",
+                recognition: "All-India Topper"
+            }
+        ],
+        rules: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$rules$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["generalContestRules"][1].points,
+        timeline: [],
+        faq: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$faq$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["globalFAQContent"]
+    },
+    // ───────────────────────────────────────────────────────────────────────────
+    // 2. CIVIL SERVICES STREAM (UPSC CSE & STATE PCS) - LEVELS 1 TO 5
+    // ───────────────────────────────────────────────────────────────────────────
+    {
+        id: "upsc-foundation-sprint",
+        slug: "upsc-foundation-sprint",
+        title: "UPSC CSE Prelims Foundation Speed Sprint",
+        tagline: "Foundation Sprint",
+        level: 1,
+        exam: "UPSC CSE Prelims",
+        category: "Civil Services",
+        entryFee: 99,
+        prizePool: 103950,
+        totalCollection: 148500,
+        platformMargin: 44550,
+        participants: 1100,
+        maxParticipants: 1500,
+        seatsAvailable: 400,
+        difficulty: "Prime",
+        date: "July 12, 2026",
+        time: "09:30 AM",
+        duration: "1h 30m",
+        status: "upcoming",
+        bannerGradient: "from-amber-500/20 via-yellow-500/10 to-transparent",
+        language: "English",
+        country: "India",
+        isFeatured: true,
+        isTrending: true,
+        registrationDeadline: "July 11, 2026 11:59 PM",
+        overview: "UPSC CSE Prelims Foundation Speed Sprint tests General Studies GS Paper 1 fundamentals, polity, history, and current affairs recall speed.",
+        eligibility: "Open to UPSC CSE & State PCS candidates.",
+        structure: [
+            "50 General Studies GS-1 Calibrated Questions",
+            "Instant Accuracy & Score Analytics",
+            "Proctored sandbox environment"
+        ],
+        syllabus: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$details$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["syllabusByContest"]["upsc-elite"] || [],
+        rewards: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$rewards$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["rewardsByContest"]["upsc-elite"] || [],
+        rules: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$rules$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["generalContestRules"][1].points,
+        timeline: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$schedule$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["scheduleByContest"]["upsc-elite"] || [],
+        faq: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$faq$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["globalFAQContent"]
+    },
+    {
+        id: "upsc-analytical-cup",
+        slug: "upsc-analytical-cup",
+        title: "UPSC Civil Services Analytical Reasoning Cup",
+        tagline: "Analytical Cup",
+        level: 2,
+        exam: "UPSC CSE Prelims",
+        category: "Civil Services",
+        entryFee: 89,
+        prizePool: 311500,
+        totalCollection: 445000,
+        platformMargin: 133500,
+        participants: 3950,
+        maxParticipants: 5000,
+        seatsAvailable: 1050,
+        difficulty: "Elite",
+        date: "July 15, 2026",
+        time: "02:00 PM",
+        duration: "2h 00m",
+        status: "upcoming",
+        bannerGradient: "from-blue-500/20 via-sky-500/10 to-transparent",
+        language: "English",
+        country: "India",
+        isFeatured: true,
+        isTrending: true,
+        registrationDeadline: "July 14, 2026 11:59 PM",
+        overview: "UPSC Civil Services Analytical Reasoning Cup focuses on statement-based questions, elimination techniques, and economics/environment analytical depth.",
+        eligibility: "UPSC Prelims aspirants.",
+        structure: [
+            "60 Statement-Based GS Questions",
+            "Standard UPSC 1/3 Negative Marking"
+        ],
+        syllabus: [],
+        rewards: [],
+        rules: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$rules$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["generalContestRules"][1].points,
+        timeline: [],
+        faq: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$faq$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["globalFAQContent"]
+    },
+    {
+        id: "upsc-precision-championship",
+        slug: "upsc-precision-championship",
+        title: "All-India UPSC Prelims Precision Championship",
+        tagline: "Precision Arena",
+        level: 3,
+        exam: "UPSC CSE Prelims",
+        category: "Civil Services",
+        entryFee: 79,
+        prizePool: 553000,
+        totalCollection: 790000,
+        platformMargin: 237000,
+        participants: 8100,
+        maxParticipants: 10000,
+        seatsAvailable: 1900,
+        difficulty: "Apex",
+        date: "July 18, 2026",
+        time: "10:00 AM",
+        duration: "2h 00m",
+        status: "upcoming",
+        bannerGradient: "from-violet-500/20 via-purple-500/10 to-transparent",
+        language: "English",
+        country: "India",
+        isFeatured: true,
+        isTrending: true,
+        registrationDeadline: "July 17, 2026 11:59 PM",
+        overview: "All-India UPSC Prelims Precision Championship features 100 questions modeled on exact UPSC difficulty to provide national merit percentiles.",
+        eligibility: "UPSC Civil Services aspirants.",
+        structure: [
+            "100 GS-1 Questions",
+            "Proctored lockdown proctoring"
+        ],
+        syllabus: [],
+        rewards: [],
+        rules: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$rules$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["generalContestRules"][1].points,
+        timeline: [],
+        faq: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$faq$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["globalFAQContent"]
+    },
+    // ───────────────────────────────────────────────────────────────────────────
+    // 3. MEDICAL STREAM (NEET UG & NEET PG) - LEVELS 1 TO 5
+    // ───────────────────────────────────────────────────────────────────────────
+    {
+        id: "neet-foundation-sprint",
+        slug: "neet-foundation-sprint",
+        title: "NEET Medical Foundation Speed Sprint",
+        tagline: "Foundation Sprint",
+        level: 1,
         exam: "NEET UG",
         category: "Medical Sciences",
-        entryFee: 299,
-        prizePool: 600000,
-        participants: 45900,
-        maxParticipants: 60000,
+        entryFee: 99,
+        prizePool: 103950,
+        totalCollection: 148500,
+        platformMargin: 44550,
+        participants: 1300,
+        maxParticipants: 1500,
+        seatsAvailable: 200,
         difficulty: "Prime",
+        date: "July 12, 2026",
+        time: "09:30 AM",
+        duration: "1h 30m",
+        status: "upcoming",
+        bannerGradient: "from-amber-500/20 via-yellow-500/10 to-transparent",
+        language: "English",
+        country: "India",
+        isFeatured: true,
+        isTrending: true,
+        registrationDeadline: "July 11, 2026 11:59 PM",
+        overview: "NEET Medical Foundation Speed Sprint tests NCERT Biology, Chemistry, and Physics fundamentals with high-speed recall questions.",
+        eligibility: "NEET UG aspirants.",
+        structure: [
+            "50 NCERT High-Yield Biology, Physics & Chemistry Questions",
+            "Instant Score Breakdown"
+        ],
+        syllabus: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$details$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["syllabusByContest"]["neet-prime"] || [],
+        rewards: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$rewards$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["rewardsByContest"]["neet-prime"] || [],
+        rules: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$rules$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["generalContestRules"][1].points,
+        timeline: [],
+        faq: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$faq$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["globalFAQContent"]
+    },
+    {
+        id: "neet-analytical-cup",
+        slug: "neet-analytical-cup",
+        title: "NEET Medical Analytical Reasoning Cup",
+        tagline: "Analytical Cup",
+        level: 2,
+        exam: "NEET UG",
+        category: "Medical Sciences",
+        entryFee: 89,
+        prizePool: 311500,
+        totalCollection: 445000,
+        platformMargin: 133500,
+        participants: 4200,
+        maxParticipants: 5000,
+        seatsAvailable: 800,
+        difficulty: "Elite",
+        date: "July 15, 2026",
+        time: "02:00 PM",
+        duration: "2h 00m",
+        status: "upcoming",
+        bannerGradient: "from-blue-500/20 via-sky-500/10 to-transparent",
+        language: "English",
+        country: "India",
+        isFeatured: true,
+        isTrending: true,
+        registrationDeadline: "July 14, 2026 11:59 PM",
+        overview: "NEET Medical Analytical Reasoning Cup evaluates multi-concept Physics numericals and Assertion-Reasoning Biology questions.",
+        eligibility: "NEET UG candidates.",
+        structure: [
+            "60 Assertion-Reasoning & Multi-Step Questions"
+        ],
+        syllabus: [],
+        rewards: [],
+        rules: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$rules$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["generalContestRules"][1].points,
+        timeline: [],
+        faq: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$faq$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["globalFAQContent"]
+    },
+    {
+        id: "neet-precision-championship",
+        slug: "neet-precision-championship",
+        title: "All-India NEET Precision Championship",
+        tagline: "Precision Arena",
+        level: 3,
+        exam: "NEET UG",
+        category: "Medical Sciences",
+        entryFee: 79,
+        prizePool: 553000,
+        totalCollection: 790000,
+        platformMargin: 237000,
+        participants: 8600,
+        maxParticipants: 10000,
+        seatsAvailable: 1400,
+        difficulty: "Apex",
         date: "July 18, 2026",
         time: "10:00 AM",
         duration: "3h 20m",
-        seatsAvailable: 14100,
         status: "upcoming",
         bannerGradient: "from-rose-500/20 via-pink-500/10 to-transparent",
         language: "English",
         country: "India",
         isFeatured: true,
-        isTrending: false,
+        isTrending: true,
         registrationDeadline: "July 17, 2026 11:59 PM",
-        overview: "Medical sciences entrance replica evaluating speed, recall depth, and precision parameters across Biology, Chemistry, and Physics subjects.",
-        eligibility: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$details$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["eligibilityByContest"]["neet-prime"],
-        structure: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$details$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["structureByContest"]["neet-prime"],
-        syllabus: [],
-        rewards: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$rewards$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["rewardsByContest"]["neet-prime"],
-        rules: [
-            ...__TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$rules$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["generalContestRules"][1].points
+        overview: "All-India NEET Precision Championship simulates official 200-question NTA paper format under strict proctored timer.",
+        eligibility: "NEET UG candidates across India.",
+        structure: [
+            "180 Attemptable Questions across PCB",
+            "Full camera proctoring"
         ],
-        timeline: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$schedule$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["scheduleByContest"]["neet-prime"],
+        syllabus: [],
+        rewards: [],
+        rules: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$rules$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["generalContestRules"][1].points,
+        timeline: [],
         faq: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$faq$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["globalFAQContent"]
     },
+    // ───────────────────────────────────────────────────────────────────────────
+    // 4. MANAGEMENT & LAW STREAMS (CAT / CLAT / GATE)
+    // ───────────────────────────────────────────────────────────────────────────
     {
-        id: "finance-league",
-        slug: "finance-league",
-        title: "Quantitative Finance League Arena",
-        exam: "Financial Risk Manager (FRM)",
-        category: "Finance & Accounting",
-        entryFee: 250,
-        prizePool: 250000,
-        participants: 8400,
-        maxParticipants: 10000,
-        difficulty: "Challenger",
+        id: "cat-analytical-cup",
+        slug: "cat-analytical-cup",
+        title: "CAT Quantitative & Logic Analytics Cup",
+        tagline: "Analytical Cup",
+        level: 2,
+        exam: "CAT",
+        category: "Finance & Management",
+        entryFee: 89,
+        prizePool: 311500,
+        totalCollection: 445000,
+        platformMargin: 133500,
+        participants: 3400,
+        maxParticipants: 5000,
+        seatsAvailable: 1600,
+        difficulty: "Elite",
         date: "July 20, 2026",
         time: "04:00 PM",
-        duration: "1h 30m",
-        seatsAvailable: 1600,
+        duration: "2h 00m",
         status: "upcoming",
         bannerGradient: "from-emerald-500/20 via-teal-500/10 to-transparent",
         language: "English",
@@ -768,92 +1044,161 @@ const contestsContent = [
         isFeatured: false,
         isTrending: true,
         registrationDeadline: "July 19, 2026 11:59 PM",
-        overview: "A specialized risk assessment league evaluating portfolio management, options pricing, and actuarial probability theory under high pressure.",
-        eligibility: "Finance students, MBA graduates, and CFA/FRM candidates.",
+        overview: "CAT Quantitative & Logic Analytics Cup evaluates Quantitative Aptitude, Data Interpretation, and Logical Reasoning speed under high time pressure.",
+        eligibility: "MBA graduates, CAT & XAT candidates.",
         structure: [
-            "50 Quantitative Multiple Choice Questions.",
-            "No negative marking.",
-            "Proctored zoom feed not required, sandbox lockdown active."
+            "66 IIM-Pattern QA & DILR Questions",
+            "Sectional Timers"
         ],
         syllabus: [],
-        rewards: [
-            {
-                rank: "Rank 1",
-                prize: "₹50,000 Credits Package",
-                recognition: "Gold Portfolio manager badge"
-            },
-            {
-                rank: "Top 5%",
-                prize: "₹5,000 Credits Package",
-                recognition: "Verified Risk specialist standing"
-            }
-        ],
-        rules: [
-            ...__TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$rules$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["generalContestRules"][1].points
-        ],
-        timeline: [
-            {
-                step: "Lockdown validation",
-                time: "03:45 PM",
-                description: "Verification check",
-                status: "completed"
-            },
-            {
-                step: "Quantitative Finance release",
-                time: "04:00 PM",
-                description: "Exam commencing",
-                status: "active"
-            }
-        ],
+        rewards: [],
+        rules: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$rules$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["generalContestRules"][1].points,
+        timeline: [],
         faq: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$faq$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["globalFAQContent"]
     },
     {
-        id: "law-jurisprudence",
-        slug: "law-jurisprudence",
-        title: "Constitutional Law Jurisprudence Challenge",
-        exam: "CLAT PG",
+        id: "clat-precision-championship",
+        slug: "clat-precision-championship",
+        title: "All-India Legal Reasoning & CLAT Championship",
+        tagline: "Precision Arena",
+        level: 3,
+        exam: "CLAT",
         category: "Law",
-        entryFee: 199,
-        prizePool: 300000,
+        entryFee: 79,
+        prizePool: 553000,
+        totalCollection: 790000,
+        platformMargin: 237000,
         participants: 4100,
-        maxParticipants: 5000,
+        maxParticipants: 10000,
+        seatsAvailable: 5900,
         difficulty: "Prime",
-        date: "July 05, 2026",
+        date: "July 22, 2026",
         time: "11:00 AM",
         duration: "2h 00m",
-        seatsAvailable: 0,
-        status: "completed",
-        bannerGradient: "from-blue-500/20 via-sky-500/10 to-transparent",
+        status: "upcoming",
+        bannerGradient: "from-sky-500/20 via-blue-500/10 to-transparent",
         language: "English",
         country: "India",
         isFeatured: false,
         isTrending: false,
-        registrationDeadline: "July 04, 2026 11:59 PM",
-        overview: "Comprehensive law league focusing on constitutional jurisprudence, legal reasoning, case analysis, and judicial interpretations.",
-        eligibility: "LLB / LLM students or candidates preparing for CLAT PG.",
+        registrationDeadline: "July 21, 2026 11:59 PM",
+        overview: "All-India Legal Reasoning & CLAT Championship evaluates passage-based legal reasoning, constitutional law, and comprehension.",
+        eligibility: "CLAT UG / PG candidates.",
         structure: [
-            "120 questions split into objective law queries.",
-            "Negative marking of 0.25 penalty per wrong option."
+            "120 Passage-Based Legal & Critical Reasoning Questions"
+        ],
+        syllabus: [],
+        rewards: [],
+        rules: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$rules$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["generalContestRules"][1].points,
+        timeline: [],
+        faq: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$faq$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["globalFAQContent"]
+    },
+    // ───────────────────────────────────────────────────────────────────────────
+    // 5. APEX & GRAND NATIONAL CHAMPIONSHIPS - LEVELS 4 & 5
+    // ───────────────────────────────────────────────────────────────────────────
+    {
+        id: "national-grandmaster-cup",
+        slug: "national-grandmaster-cup",
+        title: "National Grandmaster Academic Cup",
+        tagline: "Grandmaster Cup",
+        level: 4,
+        exam: "JEE / NEET / UPSC All-India",
+        category: "Engineering & Medical",
+        entryFee: 59,
+        prizePool: 1032500,
+        totalCollection: 1475000,
+        platformMargin: 442500,
+        participants: 19850,
+        maxParticipants: 25000,
+        seatsAvailable: 5150,
+        difficulty: "Apex",
+        date: "July 22, 2026",
+        time: "10:00 AM",
+        duration: "3h 20m",
+        status: "upcoming",
+        bannerGradient: "from-emerald-500/20 via-teal-500/10 to-transparent",
+        language: "English",
+        country: "India",
+        isFeatured: true,
+        isTrending: true,
+        registrationDeadline: "July 21, 2026 11:59 PM",
+        overview: "National Grandmaster Academic Cup is the premier national exam cup bringing together 25,000 serious contenders across India for ₹10.32 Lakhs cash pool.",
+        eligibility: "Open to all JEE, NEET & UPSC aspirants across India.",
+        structure: [
+            "100 Grandmaster Level Exam Questions",
+            "AI-audited proctoring & fraud protection system",
+            "Official Merit Certificates & cash reward payouts for top rankers"
         ],
         syllabus: [],
         rewards: [
             {
                 rank: "Rank 1",
-                prize: "₹50,000 Cash Reward",
-                recognition: "Supreme Advocate Gold Certificate"
-            }
-        ],
-        rules: [
-            ...__TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$rules$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["generalContestRules"][1].points
-        ],
-        timeline: [
+                prize: "₹2,50,000 Cash + Grandmaster Apex Trophy",
+                recognition: "All-India Champion"
+            },
             {
-                step: "Championship Completed",
-                time: "01:00 PM",
-                description: "Evaluated successfully and standings posted.",
-                status: "completed"
+                rank: "Rank 2 - 25",
+                prize: "₹25,000 Cash Package",
+                recognition: "Top 25 National Ranks"
+            },
+            {
+                rank: "Rank 26 - 250",
+                prize: "₹2,000 Credits",
+                recognition: "Percentile Honor Badge"
             }
         ],
+        rules: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$rules$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["generalContestRules"][1].points,
+        timeline: [],
+        faq: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$faq$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["globalFAQContent"]
+    },
+    {
+        id: "grand-national-apex-league",
+        slug: "grand-national-apex-league",
+        title: "Grand National Apex Championship",
+        tagline: "Grand National Apex",
+        level: 5,
+        exam: "Grand National Competition",
+        category: "Grand National Tier 5",
+        entryFee: 49,
+        prizePool: 1715000,
+        totalCollection: 2450000,
+        platformMargin: 735000,
+        participants: 39120,
+        maxParticipants: 50000,
+        seatsAvailable: 10880,
+        difficulty: "Apex",
+        date: "July 25, 2026",
+        time: "02:00 PM",
+        duration: "4h 00m",
+        status: "upcoming",
+        bannerGradient: "from-rose-500/20 via-pink-500/10 to-transparent",
+        language: "English",
+        country: "India",
+        isFeatured: true,
+        isTrending: true,
+        registrationDeadline: "July 24, 2026 11:59 PM",
+        overview: "Grand National Apex Championship is India's largest national academic contest with 50,000 seat capacity, ₹17.15 Lakhs prize pool, and official Ranker's League Academic Medals.",
+        eligibility: "Open to all student contenders across India.",
+        structure: [
+            "120 Championship Questions across Physics, Chemistry, Math & GK",
+            "Full proctored proctoring feed & proctor log",
+            "Official Grand National Merit Certificates & Cash Rewards"
+        ],
+        syllabus: [],
+        rewards: [
+            {
+                rank: "Rank 1",
+                prize: "₹5,00,000 Cash + National Crown Trophy",
+                recognition: "Grand National Apex Topper"
+            },
+            {
+                rank: "Rank 2 - 50",
+                prize: "₹15,000 Cash Package",
+                recognition: "National Merit Laureate"
+            }
+        ],
+        rules: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$rules$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["generalContestRules"][1].points,
+        timeline: [],
         faq: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$content$2f$contest$2d$faq$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["globalFAQContent"]
     }
 ];
@@ -1369,12 +1714,19 @@ async function ContestDetailsPage({ params }) {
             }
         ]
     };
+    let startDateISO = "2026-07-12";
+    try {
+        const parsedDate = new Date(contest.date);
+        if (!isNaN(parsedDate.getTime())) {
+            startDateISO = parsedDate.toISOString().split("T")[0];
+        }
+    } catch  {}
     const contestSchema = {
         "@context": "https://schema.org",
         "@type": "EducationEvent",
         "name": contest.title,
         "description": contest.overview,
-        "startDate": new Date(contest.date).toISOString().split('T')[0],
+        "startDate": startDateISO,
         "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
         "eventStatus": "https://schema.org/EventScheduled",
         "location": {
@@ -1403,7 +1755,7 @@ async function ContestDetailsPage({ params }) {
                 }
             }, void 0, false, {
                 fileName: "[project]/frontend/app/contests/[slug]/page.tsx",
-                lineNumber: 130,
+                lineNumber: 138,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("script", {
@@ -1413,12 +1765,12 @@ async function ContestDetailsPage({ params }) {
                 }
             }, void 0, false, {
                 fileName: "[project]/frontend/app/contests/[slug]/page.tsx",
-                lineNumber: 134,
+                lineNumber: 142,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$components$2f$header$2e$tsx__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["Header"], {}, void 0, false, {
                 fileName: "[project]/frontend/app/contests/[slug]/page.tsx",
-                lineNumber: 139,
+                lineNumber: 147,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("main", {
@@ -1428,23 +1780,23 @@ async function ContestDetailsPage({ params }) {
                     relatedContests: related
                 }, void 0, false, {
                     fileName: "[project]/frontend/app/contests/[slug]/page.tsx",
-                    lineNumber: 142,
+                    lineNumber: 150,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/frontend/app/contests/[slug]/page.tsx",
-                lineNumber: 141,
+                lineNumber: 149,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$components$2f$footer$2e$tsx__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["Footer"], {}, void 0, false, {
                 fileName: "[project]/frontend/app/contests/[slug]/page.tsx",
-                lineNumber: 145,
+                lineNumber: 153,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/frontend/app/contests/[slug]/page.tsx",
-        lineNumber: 128,
+        lineNumber: 136,
         columnNumber: 5
     }, this);
 }

@@ -146,7 +146,7 @@ export function Header() {
           </Link>
 
           {/* Large Screen Navigation Links (strictly centered) */}
-          <nav className="hidden md:flex items-center gap-6 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+          <nav className="hidden md:flex items-center gap-5 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
             {authUser && (
               <Link
                 href="/dashboard"
@@ -174,10 +174,16 @@ export function Header() {
               Leaderboard
             </Link>
             <Link
-              href="/rewards"
+              href="/mentors"
               className="text-xs font-black tracking-wide uppercase text-muted-foreground hover:text-foreground transition-colors"
             >
-              Rewards
+              Mentors
+            </Link>
+            <Link
+              href="/pricing"
+              className="text-xs font-black tracking-wide uppercase text-primary hover:text-primary/80 transition-colors"
+            >
+              Pricing
             </Link>
           </nav>
 
@@ -390,6 +396,20 @@ export function Header() {
                   className="text-sm font-semibold text-foreground hover:text-primary transition-colors block"
                 >
                   Rewards
+                </Link>
+                <Link
+                  href="/mentors"
+                  onClick={() => setMobileOpen(false)}
+                  className="text-sm font-semibold text-foreground hover:text-primary transition-colors block"
+                >
+                  Mentors
+                </Link>
+                <Link
+                  href="/pricing"
+                  onClick={() => setMobileOpen(false)}
+                  className="text-sm font-bold text-primary hover:text-primary/80 transition-colors block"
+                >
+                  Pricing ✦
                 </Link>
                 <Link
                   href="/contact"
