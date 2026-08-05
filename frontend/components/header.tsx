@@ -191,12 +191,6 @@ export function Header() {
             >
               Pricing
             </Link>
-            <Link
-              href="/legal"
-              className="text-xs font-black tracking-wide uppercase text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Legal
-            </Link>
           </nav>
 
           {/* Interactive Controls */}
@@ -429,13 +423,6 @@ export function Header() {
                   className="text-sm font-semibold text-primary hover:text-primary/80 transition-colors block"
                 >
                   Pricing
-                </Link>
-                <Link
-                  href="/legal"
-                  onClick={() => setMobileOpen(false)}
-                  className="text-sm font-semibold text-foreground hover:text-primary transition-colors block"
-                >
-                  Legal Center
                 </Link>
                 <Link
                   href="/contact"
