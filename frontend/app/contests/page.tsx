@@ -8,6 +8,7 @@ import { Contest } from "@/types/contests";
 import { ContestService } from "@/services/ContestService";
 import { createClient, DEMO_MOCK_PROFILE } from "@/utils/supabase/client";
 import { EXAM_CATEGORY_LABELS, ExamCategory } from "@/types/auth";
+import { recommendationService } from "@/services/recommendationService";
 import { Sparkles, Target, Filter, SlidersHorizontal, ChevronDown, ChevronUp, CheckCircle2, RotateCcw, Calendar, Zap, CheckCircle } from "lucide-react";
 
 // Discovery Components
@@ -138,10 +139,13 @@ export default function ContestsListingPage() {
     return examLower.includes(targetLower) || categoryLower.includes(targetLower);
   }, []);
 
-  // Filter contests matching target or active filters
+  // Filter contests matching target or active filters dynamically
   const displayedContests = React.useMemo(() => {
     if (targetExamFilter === "RECOMMENDED") {
-      return allContests.filter((c) => isMatchForUser(c, userExamCategory, userExamName));
+      return recommendationService.getRecommendedContests(allContests, {
+        examCategory: userExamCategory,
+        examName: userExamName,
+      });
     }
     if (targetExamFilter === "INDIA") {
       return allContests.filter((c) => c.currency === "INR" || c.regionScope === "india" || c.country === "India");
@@ -150,7 +154,7 @@ export default function ContestsListingPage() {
       return allContests.filter((c) => c.currency === "USD" || c.regionScope === "international" || c.category === "International" || c.country === "International");
     }
     return allContests;
-  }, [allContests, isMatchForUser, targetExamFilter, userExamCategory, userExamName]);
+  }, [allContests, targetExamFilter, userExamCategory, userExamName]);
 
   const breadcrumbs = [{ label: "Contests" }];
 
