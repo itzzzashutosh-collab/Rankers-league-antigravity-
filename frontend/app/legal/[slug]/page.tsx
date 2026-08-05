@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
+import { LanguageToggle } from "@/components/ui/LanguageToggle";
 import { legalDocuments, type LegalDocument, type LegalSection } from "@/content/legal-center";
 
 interface PageProps {
@@ -145,14 +146,12 @@ export default function PremiumLegalDocumentReaderPage({ params }: PageProps) {
 
             {/* Right: Actions (Language Switcher, Copy Full, Print, Share, Bookmark) */}
             <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide py-0.5">
-              {/* Language Switcher Button */}
-              <button
-                onClick={() => setLang(lang === "en" ? "hi" : "en")}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold border border-primary/30 bg-primary/10 text-primary hover:bg-primary/20 transition-all shrink-0"
-              >
-                <Languages className="w-3.5 h-3.5" />
-                <span>{lang === "en" ? "हिन्दी" : "English"}</span>
-              </button>
+              {/* iOS Segmented Control Language Switcher */}
+              <LanguageToggle
+                currentLang={lang}
+                onLanguageChange={(l) => setLang(l as "en" | "hi")}
+                storageKey="rankers_legal_doc_lang"
+              />
 
               <div className="h-4 w-px bg-border/50 shrink-0" />
 
@@ -300,10 +299,18 @@ export default function PremiumLegalDocumentReaderPage({ params }: PageProps) {
               </div>
 
               {/* Sections Container */}
-              <div className="space-y-8">
-                {displaySections.map((sec, i) => {
-                  const secId = `section-${i + 1}`;
-                  const isCopied = copiedSectionIndex === i;
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={lang}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.25 }}
+                  className="space-y-8"
+                >
+                  {displaySections.map((sec, i) => {
+                    const secId = `section-${i + 1}`;
+                    const isCopied = copiedSectionIndex === i;
 
                   return (
                     <motion.div
@@ -365,7 +372,8 @@ export default function PremiumLegalDocumentReaderPage({ params }: PageProps) {
                     </motion.div>
                   );
                 })}
-              </div>
+                </motion.div>
+              </AnimatePresence>
 
               {/* ── Version History Log Section ─────────────────────────────── */}
               {doc.versionHistory && doc.versionHistory.length > 0 && (
