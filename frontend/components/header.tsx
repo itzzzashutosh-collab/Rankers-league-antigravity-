@@ -162,6 +162,12 @@ export function Header() {
               Contests
             </Link>
             <Link
+              href="/exams"
+              className="text-xs font-black tracking-wide uppercase text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Exams
+            </Link>
+            <Link
               href="/live"
               className="text-xs font-black tracking-wide uppercase text-muted-foreground hover:text-foreground transition-colors"
             >
@@ -375,6 +381,13 @@ export function Header() {
                   className="text-sm font-semibold text-foreground hover:text-primary transition-colors block"
                 >
                   Contests
+                </Link>
+                <Link
+                  href="/exams"
+                  onClick={() => setMobileOpen(false)}
+                  className="text-sm font-semibold text-foreground hover:text-primary transition-colors block"
+                >
+                  Exams
                 </Link>
                 <Link
                   href="/live"
