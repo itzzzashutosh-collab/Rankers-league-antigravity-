@@ -72,6 +72,8 @@ export interface Contest {
   bannerGradient: string;
   language: string; // "English" | "Hindi" etc
   country: string; // "India" | "International"
+  regionScope?: "india" | "international" | "global";
+  currency?: "INR" | "USD";
   isFeatured: boolean;
   isTrending: boolean;
   registrationDeadline: string; // "July 11, 2026 11:59 PM"

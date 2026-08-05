@@ -127,7 +127,11 @@ export function ContestCard({ contest, className }: ContestCardProps) {
                 Up To Prize Pool
               </span>
               <span className="text-2xl font-black text-amber-400 tracking-tight block">
-                {contest.prizePool === 0 ? "Recognition Only" : `₹${contest.prizePool.toLocaleString("en-IN")}`}
+                {contest.prizePool === 0
+                  ? "Recognition Only"
+                  : contest.currency === "USD"
+                  ? `$${contest.prizePool.toLocaleString("en-US")}`
+                  : `₹${contest.prizePool.toLocaleString("en-IN")}`}
               </span>
             </div>
             <div className="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center shrink-0">
@@ -176,7 +180,9 @@ export function ContestCard({ contest, className }: ContestCardProps) {
             <div className="flex items-center gap-2 text-muted-foreground">
               <Globe className="w-3.5 h-3.5 text-primary shrink-0" />
               <div>
-                <span className="block font-semibold text-foreground">{contest.country}</span>
+                <span className="block font-semibold text-foreground">
+                  {contest.regionScope === "international" ? "🌐 Global" : contest.country}
+                </span>
                 <span className="text-[10px] flex items-center gap-1">
                   <Languages className="w-3 h-3 text-muted-foreground/80" /> {contest.language}
                 </span>
@@ -220,6 +226,8 @@ export function ContestCard({ contest, className }: ContestCardProps) {
             <span className="text-base font-extrabold text-foreground">
               {contest.entryFee === 0 ? (
                 <span className="text-emerald-500 font-black">FREE</span>
+              ) : contest.currency === "USD" ? (
+                `$${contest.entryFee}`
               ) : (
                 `₹${contest.entryFee}`
               )}

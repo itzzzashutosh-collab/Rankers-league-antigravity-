@@ -143,6 +143,12 @@ export default function ContestsListingPage() {
     if (targetExamFilter === "RECOMMENDED") {
       return allContests.filter((c) => isMatchForUser(c, userExamCategory, userExamName));
     }
+    if (targetExamFilter === "INDIA") {
+      return allContests.filter((c) => c.currency === "INR" || c.regionScope === "india" || c.country === "India");
+    }
+    if (targetExamFilter === "INTERNATIONAL") {
+      return allContests.filter((c) => c.currency === "USD" || c.regionScope === "international" || c.category === "International" || c.country === "International");
+    }
     return allContests;
   }, [allContests, isMatchForUser, targetExamFilter, userExamCategory, userExamName]);
 
@@ -190,10 +196,12 @@ export default function ContestsListingPage() {
               </div>
             </div>
 
-            {/* Quick target exam switcher */}
+            {/* Quick target exam & Regional Scope Switcher */}
             <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide py-1">
               {[
-                { label: "⚡ All 140+ Exams", id: "ALL" },
+                { label: "⚡ All 140+ Arenas", id: "ALL" },
+                { label: "🇮🇳 Indian Arenas (INR ₹)", id: "INDIA" },
+                { label: "🌐 International Arenas (USD $)", id: "INTERNATIONAL" },
                 { label: `🎯 My Exam: ${userExamName}`, id: "RECOMMENDED" },
                 { label: "Engineering", id: "JEE" },
                 { label: "Government / UPSC", id: "UPSC" },
@@ -204,6 +212,10 @@ export default function ContestsListingPage() {
                   onClick={() => {
                     setTargetExamFilter(pill.id);
                     if (pill.id === "ALL") {
+                      setActiveCategory("All");
+                    } else if (pill.id === "INDIA") {
+                      setActiveCategory("All");
+                    } else if (pill.id === "INTERNATIONAL") {
                       setActiveCategory("All");
                     } else if (pill.id === "JEE") {
                       setUserExamCategory("JEE_MAIN");

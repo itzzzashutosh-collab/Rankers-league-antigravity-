@@ -12,6 +12,7 @@ import { navigationContent } from "@/content/navigation";
 import { createClient } from "@/utils/supabase/client";
 import { UserProfile } from "@/types/auth";
 import { cn } from "@/lib/utils";
+import { regionService, RegionCode } from "@/services/regionService";
 
 function formatWalletDisplay(bal: number | null | undefined): string {
   if (bal === null || bal === undefined) return "₹0";
@@ -31,7 +32,17 @@ export function Header() {
   const [profile, setProfile] = React.useState<UserProfile | null>(null);
   const [walletBalance, setWalletBalance] = React.useState<number | null>(null);
   const [userMenuOpen, setUserMenuOpen] = React.useState(false);
+  const [selectedRegion, setSelectedRegion] = React.useState<RegionCode>("india");
   const userMenuRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    setSelectedRegion(regionService.detectUserRegion());
+  }, []);
+
+  const handleRegionChange = (newRegion: RegionCode) => {
+    setSelectedRegion(newRegion);
+    regionService.setRegion(newRegion);
+  };
 
   const isActive = (href: string) => {
     if (href === "/") return pathname === "/";
@@ -226,6 +237,34 @@ export function Header() {
                 </Link>
               </>
             )}
+
+            {/* Region Switcher */}
+            <div className="hidden sm:flex items-center bg-secondary/40 border border-border/40 rounded-xl p-0.5 text-xs font-bold select-none">
+              <button
+                onClick={() => handleRegionChange("india")}
+                className={cn(
+                  "px-2 py-1 rounded-lg text-[10px] uppercase transition-all flex items-center gap-1",
+                  selectedRegion === "india"
+                    ? "bg-card text-foreground shadow-xs border border-border/40 font-black"
+                    : "text-muted-foreground hover:text-foreground"
+                )}
+                title="India Region (INR ₹)"
+              >
+                🇮🇳 IN
+              </button>
+              <button
+                onClick={() => handleRegionChange("international")}
+                className={cn(
+                  "px-2 py-1 rounded-lg text-[10px] uppercase transition-all flex items-center gap-1",
+                  selectedRegion === "international"
+                    ? "bg-card text-foreground shadow-xs border border-border/40 font-black"
+                    : "text-muted-foreground hover:text-foreground"
+                )}
+                title="International Region (USD $)"
+              >
+                🌐 INT
+              </button>
+            </div>
 
             <Button
               variant="ghost"
