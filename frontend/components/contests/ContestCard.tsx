@@ -100,13 +100,17 @@ export function ContestCard({ contest, className }: ContestCardProps) {
       {/* Main Content Area */}
       <div className="p-6 flex flex-col flex-1 justify-between">
         <div>
-          {/* Category & Difficulty Row */}
-          <div className="flex items-center gap-2 mb-2.5">
-            <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-widest">
-              {contest.category}
+          {/* Prominent Exam Name & Category Row */}
+          <div className="flex items-center justify-between gap-2 mb-3 flex-wrap">
+            <span className="text-xs sm:text-sm font-black text-primary bg-primary/15 border border-primary/30 px-3.5 py-1 rounded-xl tracking-wide uppercase shadow-sm flex items-center gap-1.5">
+              🎯 {contest.exam}
             </span>
-            <span className="text-muted-foreground/40">•</span>
-            <ContestBadge difficulty={contest.difficulty} />
+            <div className="flex items-center gap-2">
+              <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">
+                {contest.category}
+              </span>
+              <ContestBadge difficulty={contest.difficulty} />
+            </div>
           </div>
 
           {/* Contest Title */}
@@ -120,7 +124,7 @@ export function ContestCard({ contest, className }: ContestCardProps) {
           <div className="mb-4 bg-amber-500/10 border border-amber-500/25 p-3.5 rounded-xl flex items-center justify-between shadow-sm">
             <div>
               <span className="text-[10px] font-extrabold text-amber-500 uppercase tracking-widest block">
-                70% Audited Reward Pool
+                Up To Prize Pool
               </span>
               <span className="text-2xl font-black text-amber-400 tracking-tight block">
                 {contest.prizePool === 0 ? "Recognition Only" : `₹${contest.prizePool.toLocaleString("en-IN")}`}

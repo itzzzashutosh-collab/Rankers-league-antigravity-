@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { Logo } from "@/components/ui/Logo";
+
 export const metadata: Metadata = {
   title: "Authentication — Ranker's League",
   description: "Sign in or create your Ranker's League account to join elite competitive exams.",
@@ -24,13 +26,8 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
 
       {/* Header */}
       <header className="relative z-10 flex items-center justify-between px-6 py-4 border-b border-border/30">
-        <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="w-7 h-7 rounded-lg bg-primary flex items-center justify-center">
-            <span className="text-primary-foreground font-black text-xs">RL</span>
-          </div>
-          <span className="font-black text-sm tracking-tight">
-            Ranker&apos;s <span className="text-primary">League</span>
-          </span>
+        <Link href="/" className="group">
+          <Logo size="sm" />
         </Link>
         <p className="text-xs text-muted-foreground">
           Secure Authentication · Email & Google

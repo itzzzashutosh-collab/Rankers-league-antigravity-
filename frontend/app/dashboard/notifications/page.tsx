@@ -14,9 +14,26 @@ export default async function PrivateNotificationsPage() {
     redirect("/auth/login?redirect=/dashboard/notifications");
   }
 
-  // Fetch private notifications and channel preferences
-  const notifications = await notificationService.getUserNotifications(user.id);
-  const preferences = await notificationService.getPreferences(user.id);
+  // Fetch private notifications and channel preferences safely
+  const rawNotifications = await notificationService.getUserNotifications(user.id);
+  const notifications = Array.isArray(rawNotifications) ? rawNotifications : [];
+
+  const rawPreferences = await notificationService.getPreferences(user.id);
+  const preferences = rawPreferences || {
+    user_id: user.id,
+    contest_reminders: true,
+    result_notifications: true,
+    prize_notifications: true,
+    achievement_notifications: true,
+    marketing_emails: false,
+    platform_updates: true,
+    system_alerts: true,
+    email_enabled: true,
+    sms_enabled: false,
+    whatsapp_enabled: false,
+    push_enabled: true,
+    updated_at: new Date().toISOString(),
+  };
 
   return (
     <div className="w-full">

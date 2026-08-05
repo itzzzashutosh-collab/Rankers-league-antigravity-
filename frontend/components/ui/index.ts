@@ -7,10 +7,11 @@ export * from "./layout/Spacing";
 export * from "./layout/Containers";
 export * from "./effects/Effects";
 
-// Buttons, Cards, Badges
+// Buttons, Cards, Badges, Logo
 export * from "./button";
 export * from "./cards/Card";
 export * from "./feedback/Badge";
+export * from "./Logo";
 
 // Inputs & Forms
 export * from "./forms/InputField";

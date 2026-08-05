@@ -113,14 +113,20 @@ export const walletService = {
       };
     }
 
+function safeNum(val: unknown, fallback = 0): number {
+  if (val === null || val === undefined) return fallback;
+  const n = Number(val);
+  return isNaN(n) || !isFinite(n) ? fallback : n;
+}
+
     return {
       wallet_id: data.wallet_id,
-      available_balance: Number(data.available_balance),
-      pending_rewards: Number(data.pending_rewards),
-      processing_rewards: Number(data.processing_rewards),
-      contest_entry_balance: Number(data.contest_entry_balance),
-      lifetime_earnings: Number(data.lifetime_earnings),
-      lifetime_withdrawals: Number(data.lifetime_withdrawals),
+      available_balance: safeNum(data.available_balance),
+      pending_rewards: safeNum(data.pending_rewards),
+      processing_rewards: safeNum(data.processing_rewards),
+      contest_entry_balance: safeNum(data.contest_entry_balance),
+      lifetime_earnings: safeNum(data.lifetime_earnings),
+      lifetime_withdrawals: safeNum(data.lifetime_withdrawals),
       updated_at: data.updated_at,
     };
   },
@@ -436,7 +442,8 @@ export const walletService = {
 
   // Insights / Metrics calculations
   async getFinancialInsights(userId: string): Promise<FinancialInsights> {
-    const transactions = await this.getTransactions(userId, { status: "completed" });
+    const rawTx = await this.getTransactions(userId, { status: "completed" });
+    const transactions = Array.isArray(rawTx) ? rawTx : [];
 
     let totalPrizeEarned = 0;
     let totalEntryFeesPaid = 0;
@@ -447,8 +454,9 @@ export const walletService = {
     const monthlyMap: Record<string, number> = {};
 
     transactions.forEach((tx) => {
-      const amt = Math.abs(tx.amount);
-      const date = new Date(tx.created_at);
+      if (!tx || typeof tx !== "object") return;
+      const amt = Math.abs(tx.amount || 0);
+      const date = tx.created_at ? new Date(tx.created_at) : new Date();
       const monthKey = date.toLocaleString("default", { month: "short", year: "numeric" });
 
       if (tx.type_id === "prize_credit") {

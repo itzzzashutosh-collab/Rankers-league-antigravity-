@@ -118,7 +118,7 @@ export function LiveContestCard({ contest, className }: LiveContestCardProps) {
             <Award className="w-3.5 h-3.5 text-primary shrink-0" />
             <div>
               <span className="block font-semibold text-foreground">₹{contest.prizePool.toLocaleString("en-IN")}</span>
-              <span className="text-[10px]">Reward Pool</span>
+              <span className="text-[10px]">Up To Prize Pool</span>
             </div>
           </div>
 

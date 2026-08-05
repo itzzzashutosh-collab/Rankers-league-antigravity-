@@ -208,6 +208,19 @@ export default function CompleteProfilePage() {
           profile_status: "complete",
         }).eq("id", userId);
 
+        // Mirror core identity into users table for fast dashboard reads
+        await supabase.from("users").upsert({
+          id: userId,
+          full_name: fullName.trim(),
+          username: username.toLowerCase(),
+          avatar_url: avatarUrl,
+          primary_exam_category: examCategory,
+          phone_number: phone,
+          academic_level: academicLevel,
+          target_exam_year: targetYear ? parseInt(targetYear) : null,
+          updated_at: new Date().toISOString(),
+        }, { onConflict: "id" });
+
         await fetch("/api/auth/profile", {
           method: "POST",
           headers: { "Content-Type": "application/json" },

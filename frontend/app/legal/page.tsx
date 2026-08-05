@@ -32,7 +32,9 @@ import {
 } from "lucide-react";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
-import { legalDocuments, legalCategories, type LegalDocument } from "@/content/legal-center";
+import { legalCategories } from "@/content/legal-center";
+import legalCmsService from "@/services/legalCmsService";
+import { RealTimeLegalSearch } from "@/components/legal/RealTimeLegalSearch";
 
 // Dynamic Icon Map
 const iconMap: Record<string, React.ReactNode> = {
@@ -59,7 +61,7 @@ const iconMap: Record<string, React.ReactNode> = {
 };
 
 // Category Badge Color helper
-function getCategoryColor(category: LegalDocument["category"]) {
+function getCategoryColor(category: string) {
   switch (category) {
     case "Contests & Gameplay":
       return "text-blue-500 bg-blue-500/10 border-blue-500/20";
@@ -78,17 +80,9 @@ export default function LegalCenterHubPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
 
-  // Instant filtering
+  // Dynamic CMS filtering
   const filteredDocs = useMemo(() => {
-    return legalDocuments.filter((doc) => {
-      const matchCategory = selectedCategory === "All" || doc.category === selectedCategory;
-      const matchQuery =
-        !searchTerm ||
-        doc.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        doc.shortDescription.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        doc.category.toLowerCase().includes(searchTerm.toLowerCase());
-      return matchCategory && matchQuery;
-    });
+    return legalCmsService.searchDocuments(searchTerm, selectedCategory);
   }, [searchTerm, selectedCategory]);
 
   return (
@@ -133,29 +127,14 @@ export default function LegalCenterHubPage() {
               Everything you need to know about Rankers League policies, contest rules, privacy, fair play, rewards, taxes and regulations.
             </motion.p>
 
-            {/* Instant Search Input */}
+            {/* Real-Time Legal Search Input */}
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.3 }}
-              className="relative max-w-xl mx-auto"
+              className="relative max-w-2xl mx-auto"
             >
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-muted-foreground" />
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Search policies, contest rules, refund terms, TDS rules..."
-                className="w-full pl-11 pr-10 py-3.5 rounded-2xl border border-border/60 bg-card/60 backdrop-blur-md text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/20 transition-all shadow-sm"
-              />
-              {searchTerm && (
-                <button
-                  onClick={() => setSearchTerm("")}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground p-1 rounded-full"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              )}
+              <RealTimeLegalSearch />
             </motion.div>
           </div>
         </section>
@@ -164,9 +143,9 @@ export default function LegalCenterHubPage() {
         <section className="sticky top-[60px] z-30 bg-background/90 backdrop-blur-md border-y border-border/40 py-3 shadow-xs">
           <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide py-1 w-full sm:w-auto">
-              {legalCategories.map((cat) => (
+              {legalCategories.map((cat, catIdx) => (
                 <button
-                  key={cat}
+                  key={`cat-${cat}-${catIdx}`}
                   onClick={() => setSelectedCategory(cat)}
                   className={`px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all border ${
                     selectedCategory === cat
@@ -180,7 +159,7 @@ export default function LegalCenterHubPage() {
             </div>
 
             <div className="text-xs text-muted-foreground font-semibold shrink-0">
-              Showing <span className="text-foreground font-bold">{filteredDocs.length}</span> of {legalDocuments.length} Documents
+              Showing <span className="text-foreground font-bold">{filteredDocs.length}</span> of {legalCmsService.getPublishedDocuments().length} Documents
             </div>
           </div>
         </section>
@@ -214,7 +193,7 @@ export default function LegalCenterHubPage() {
 
                     return (
                       <motion.div
-                        key={doc.slug}
+                        key={`legal-doc-${doc.slug}-${idx}`}
                         initial={{ opacity: 0, y: 15 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95 }}

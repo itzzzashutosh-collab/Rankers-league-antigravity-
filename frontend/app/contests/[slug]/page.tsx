@@ -10,6 +10,8 @@ interface Props {
   params: Promise<{ slug: string }>;
 }
 
+export const dynamicParams = true;
+
 // Generate static routes at build time
 export async function generateStaticParams() {
   return contestsContent.map((c) => ({

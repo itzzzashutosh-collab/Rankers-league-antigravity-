@@ -3,7 +3,7 @@
 import * as React from "react";
 import { LeaderboardEntry } from "@/content/leaderboard/leaderboard-data";
 import { Card } from "../ui";
-import { Trophy, TrendingUp, TrendingDown, Minus, ShieldAlert } from "lucide-react";
+import { Trophy, TrendingUp, TrendingDown, Minus, Target, IndianRupee } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface TopThreePodiumProps {
@@ -17,7 +17,6 @@ export function TopThreePodium({ entries, categoryName }: TopThreePodiumProps) {
   const rank2 = entries.find((e) => e.rank === 2);
   const rank3 = entries.find((e) => e.rank === 3);
 
-  // Podium layout renders Rank 2 (Left), Rank 1 (Center, taller), Rank 3 (Right)
   const renderPodiumCard = (entry: LeaderboardEntry | undefined, position: 1 | 2 | 3) => {
     if (!entry) {
       return (
@@ -35,21 +34,18 @@ export function TopThreePodium({ entries, categoryName }: TopThreePodiumProps) {
     const themeColors = {
       1: {
         border: "border-amber-500/30 hover:border-amber-500/50 shadow-amber-500/5 bg-amber-500/5",
-        text: "text-amber-500",
         badge: "bg-amber-500/10 text-amber-500 border-amber-500/20",
-        podiumH: "sm:min-h-[280px]"
+        podiumH: "sm:min-h-[290px]"
       },
       2: {
         border: "border-slate-400/30 hover:border-slate-400/50 shadow-slate-400/5 bg-slate-400/5",
-        text: "text-slate-400",
         badge: "bg-slate-400/10 text-slate-400 border-slate-400/20",
-        podiumH: "sm:min-h-[240px]"
+        podiumH: "sm:min-h-[250px]"
       },
       3: {
         border: "border-amber-700/30 hover:border-amber-700/50 shadow-amber-700/5 bg-amber-700/5",
-        text: "text-amber-700",
         badge: "bg-amber-700/10 text-amber-700 border-amber-700/20",
-        podiumH: "sm:min-h-[240px]"
+        podiumH: "sm:min-h-[250px]"
       }
     }[position];
 
@@ -64,8 +60,8 @@ export function TopThreePodium({ entries, categoryName }: TopThreePodiumProps) {
         )}
       >
         {/* Large Rank Indicator */}
-        <div className={cn("w-12 h-12 rounded-full border flex items-center justify-center font-extrabold text-lg shadow-sm mb-4 shrink-0", themeColors.badge)}>
-          {position}
+        <div className={cn("w-12 h-12 rounded-full border flex items-center justify-center font-extrabold text-lg shadow-sm mb-3 shrink-0", themeColors.badge)}>
+          #{position}
         </div>
 
         {/* Flag + Name */}
@@ -78,24 +74,33 @@ export function TopThreePodium({ entries, categoryName }: TopThreePodiumProps) {
           </h4>
         </div>
 
-        <span className="text-[9px] text-muted-foreground font-semibold mt-1 text-center truncate max-w-[150px]">
+        <span className="text-[9px] text-muted-foreground font-semibold mt-0.5 text-center truncate max-w-[150px]">
           {entry.institution}
         </span>
 
-        {/* Category Label */}
-        <span className="text-[8px] font-bold text-primary/70 bg-primary/5 px-2 py-0.5 rounded border border-primary/10 uppercase tracking-widest mt-2.5">
+        {/* Category Badge */}
+        <span className="text-[8px] font-bold text-primary/80 bg-primary/10 px-2.5 py-0.5 rounded-full border border-primary/20 uppercase tracking-widest mt-2">
           {entry.category.replace("-", " ")}
         </span>
 
-        {/* Score Ratio */}
-        <strong className="text-base text-foreground font-extrabold tracking-tight mt-4 select-all">
-          {entry.score} <span className="text-[10px] text-muted-foreground font-normal">/ {entry.maxScore}</span>
-        </strong>
+        {/* Contests Completed Stats */}
+        <div className="mt-3 flex flex-col items-center gap-1 w-full">
+          <div className="flex items-center justify-between w-full text-[10px] bg-secondary/40 px-2.5 py-1 rounded-lg border border-border/30">
+            <span className="text-muted-foreground font-medium">Contests:</span>
+            <span className="font-black text-foreground">{entry.contestsCompleted} Completed</span>
+          </div>
 
-        {/* Aura points */}
-        <div className="mt-2.5 px-2.5 py-1 rounded-full border border-primary/20 bg-primary/5 text-primary text-[10px] font-extrabold flex items-center gap-1 cursor-help" title="Competition points normalized for standings">
-          <span>✨ {entry.auraPoints.toLocaleString()}</span>
-          <span className="text-[8px] font-medium text-primary/70 uppercase">Aura</span>
+          <div className="flex items-center justify-between w-full text-[10px] bg-secondary/40 px-2.5 py-1 rounded-lg border border-border/30">
+            <span className="text-muted-foreground font-medium">Total Score:</span>
+            <span className="font-black text-primary">{entry.totalCombinedMarks.toLocaleString()} pts</span>
+          </div>
+
+          {entry.totalPrizeWon > 0 && (
+            <div className="flex items-center justify-between w-full text-[10px] bg-emerald-500/10 text-emerald-500 px-2.5 py-1 rounded-lg border border-emerald-500/20 font-black">
+              <span>Winnings:</span>
+              <span>₹{entry.totalPrizeWon.toLocaleString("en-IN")}</span>
+            </div>
+          )}
         </div>
 
         {/* Trend Indicator */}
@@ -127,7 +132,7 @@ export function TopThreePodium({ entries, categoryName }: TopThreePodiumProps) {
           Top Performers — {categoryName}
         </h3>
         <div className="flex items-center gap-1 text-[9px] text-muted-foreground uppercase font-bold tracking-widest">
-          <Trophy className="w-3.5 h-3.5 text-amber-500 shrink-0" /> Podium standings
+          <Trophy className="w-3.5 h-3.5 text-amber-500 shrink-0" /> Podium Standings
         </div>
       </div>
       

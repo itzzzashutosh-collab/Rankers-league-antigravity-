@@ -68,7 +68,8 @@ export default function NotificationsDashboardClient({
     );
   }
 
-  const unreadCount = notifications.filter((n) => !n.is_read).length;
+  const safeNotifList = Array.isArray(notifications) ? notifications : [];
+  const unreadCount = safeNotifList.filter((n) => !n.is_read).length;
 
   // Group notifications chronologically
   const groupNotifications = (list: UserNotification[]) => {
@@ -79,8 +80,10 @@ export default function NotificationsDashboardClient({
 
     const now = new Date();
     const oneDay = 24 * 60 * 60 * 1000;
+    const safeInputList = Array.isArray(list) ? list : [];
 
-    list.forEach((n) => {
+    safeInputList.forEach((n) => {
+      if (!n || !n.created_at) return;
       const createdDate = new Date(n.created_at);
       const diffMs = now.getTime() - createdDate.getTime();
 
@@ -100,7 +103,8 @@ export default function NotificationsDashboardClient({
 
   // Filter & Search calculation
   const getFilteredNotifications = () => {
-    return notifications.filter((n) => {
+    const list = Array.isArray(notifications) ? notifications : [];
+    return list.filter((n) => {
       const matchesSearch =
         n.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         n.description.toLowerCase().includes(searchQuery.toLowerCase());

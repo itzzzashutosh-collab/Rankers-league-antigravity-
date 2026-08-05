@@ -14,9 +14,12 @@ export default async function PaymentMethodsPage() {
     redirect("/auth/login?redirect=/dashboard/wallet/payment-methods");
   }
 
-  // Retrieve current active accounts
-  const bankAccounts = await walletService.getBankAccounts(user.id);
-  const upiAccounts = await walletService.getUpiAccounts(user.id);
+  // Retrieve current active accounts safely
+  const rawBank = await walletService.getBankAccounts(user.id);
+  const bankAccounts = Array.isArray(rawBank) ? rawBank : [];
+
+  const rawUpi = await walletService.getUpiAccounts(user.id);
+  const upiAccounts = Array.isArray(rawUpi) ? rawUpi : [];
 
   return (
     <div className="w-full">

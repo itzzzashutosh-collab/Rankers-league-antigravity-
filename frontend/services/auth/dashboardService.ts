@@ -41,11 +41,13 @@ export const dashboardService = {
       .order("created_at", { ascending: false })
       .limit(8);
 
+    const safeEnrollments = Array.isArray(enrollments) ? enrollments : [];
+
     // Calculate default stats fallback if no db record yet
     const statsFallback = stats || {
-      total_contests_joined: enrollments?.length || 0,
-      total_contests_completed: enrollments?.filter(e => e.status === "completed").length || 0,
-      total_contests_won: enrollments?.filter(e => e.prize_won > 0).length || 0,
+      total_contests_joined: safeEnrollments.length,
+      total_contests_completed: safeEnrollments.filter(e => e.status === "completed").length,
+      total_contests_won: safeEnrollments.filter(e => Number(e.prize_won) > 0).length,
       best_rank: null,
       average_score: 0,
       total_aura_earned: 0,
@@ -57,10 +59,10 @@ export const dashboardService = {
 
     return {
       stats: statsFallback,
-      enrollments: enrollments || [],
-      achievements: achievements || [],
-      activity: activity || [],
-      auraHistory: auraHistory || [],
+      enrollments: safeEnrollments,
+      achievements: Array.isArray(achievements) ? achievements : [],
+      activity: Array.isArray(activity) ? activity : [],
+      auraHistory: Array.isArray(auraHistory) ? auraHistory : [],
     };
   },
 

@@ -1,157 +1,104 @@
 import { createClient } from "@/utils/supabase/server";
 import { dashboardService } from "@/services/auth/dashboardService";
-import OverviewCards from "@/components/dashboard/OverviewCards";
-import LiveContestBanner from "@/components/dashboard/LiveContestBanner";
-import ContestCard from "@/components/dashboard/ContestCard";
-import ResultCard from "@/components/dashboard/ResultCard";
-import AuraHub from "@/components/dashboard/AuraHub";
-import AchievementCard from "@/components/dashboard/AchievementCard";
-import ActivityTimeline from "@/components/dashboard/ActivityTimeline";
-import Link from "next/link";
-import { ArrowRight, Trophy, Star, ShieldCheck } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { redirect } from "next/navigation";
+import DashboardClient from "@/components/dashboard/DashboardClient";
+
+export const dynamic = "force-dynamic";
 
 export default async function DashboardPage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return null;
+  if (!user) redirect("/auth/login?redirect=/dashboard");
 
-  // Fetch all dashboard data
-  const { stats, enrollments, achievements, activity, auraHistory } = 
-    await dashboardService.getOverviewData(user.id);
+  // Parallel data fetching
+  const [
+    { stats, enrollments, achievements },
+    profileResult,
+    userResult,
+    walletResult,
+  ] = await Promise.all([
+    dashboardService.getOverviewData(user.id),
+    supabase
+      .from("profiles")
+      .select("id, full_name, username, national_rank, primary_exam_category, avatar_url, created_at")
+      .eq("id", user.id)
+      .single(),
+    supabase
+      .from("users")
+      .select("id, full_name, username, primary_exam_category, avatar_url, phone_number, academic_level")
+      .eq("id", user.id)
+      .maybeSingle(),
+    supabase
+      .from("wallet_balances")
+      .select("available_balance")
+      .eq("wallet_id", user.id)
+      .maybeSingle(),
+  ]);
 
-  // Fetch profile for rank & total aura
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("national_rank, aura_points, primary_exam_category")
-    .eq("id", user.id)
-    .single();
+  // Merge profile data prioritize users table values if present
+  const profile = {
+    id: user.id,
+    ...profileResult.data,
+    ...(userResult.data || {}),
+    // Ensure critical fields fallback gracefully
+    full_name: userResult.data?.full_name || profileResult.data?.full_name,
+    username: userResult.data?.username || profileResult.data?.username,
+    primary_exam_category: userResult.data?.primary_exam_category || profileResult.data?.primary_exam_category,
+    avatar_url: userResult.data?.avatar_url || profileResult.data?.avatar_url,
+    national_rank: profileResult.data?.national_rank ?? null,
+    created_at: profileResult.data?.created_at ?? null,
+  };
 
-  const safeEnrollments = Array.isArray(enrollments) ? enrollments : [];
+  const walletBalance = walletResult.data?.available_balance ?? 0;
+
+  const safeEnrollments  = Array.isArray(enrollments)  ? enrollments  : [];
   const safeAchievements = Array.isArray(achievements) ? achievements : [];
-  const safeActivity = Array.isArray(activity) ? activity : [];
-  const safeAuraHistory = Array.isArray(auraHistory) ? auraHistory : [];
 
-  const liveContest = safeEnrollments.find(e => e.status === "live") || null;
-  const upcomingEnrollments = safeEnrollments
-    .filter(e => e.status === "registered")
-    .slice(0, 2);
-  const completedEnrollments = safeEnrollments
-    .filter(e => e.status === "completed")
-    .slice(0, 2);
+  const totalPrizeWon = safeEnrollments.reduce((sum, e) => sum + (Number(e.prize_won) || 0), 0);
 
-  const latestResult = safeEnrollments
-    .filter(e => e.status === "completed")
-    .sort((a, b) => new Date(b.contest_date).getTime() - new Date(a.contest_date).getTime())[0] || null;
+  const examCat = profile?.primary_exam_category || "";
+  const isNEET  = examCat.toLowerCase().includes("neet");
+  const acc     = stats?.accuracy_percentage || 0;
+  const streak  = stats?.current_streak || 0;
+
+  // Radar subjects per exam type
+  const radarSubjects = isNEET
+    ? [
+        { subject: "Physics",     accuracy: acc,                          rank1Accuracy: 90 },
+        { subject: "Chemistry",   accuracy: Math.max(0, acc - 8),         rank1Accuracy: 88 },
+        { subject: "Biology",     accuracy: Math.max(0, acc + 5),         rank1Accuracy: 92 },
+        { subject: "Speed",       accuracy: Math.min(100, acc * 0.8),     rank1Accuracy: 85 },
+        { subject: "Consistency", accuracy: Math.min(100, streak * 8),    rank1Accuracy: 88 },
+      ]
+    : [
+        { subject: "Physics",     accuracy: acc,                          rank1Accuracy: 90 },
+        { subject: "Chemistry",   accuracy: Math.max(0, acc - 8),         rank1Accuracy: 88 },
+        { subject: "Maths",       accuracy: Math.max(0, acc + 4),         rank1Accuracy: 92 },
+        { subject: "Speed",       accuracy: Math.min(100, acc * 0.8),     rank1Accuracy: 85 },
+        { subject: "Consistency", accuracy: Math.min(100, streak * 8),    rank1Accuracy: 91 },
+      ];
+
+  // Heatmap data from contest dates
+  const heatmapData = safeEnrollments
+    .filter(e => e.contest_date)
+    .map(e => ({
+      date:        e.contest_date.split("T")[0],
+      count:       1,
+      score:       e.final_score || 0,
+      contestName: e.contest_name,
+    }));
 
   return (
-    <div className="space-y-8 animate-fade-in">
-      {/* Page heading */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-black tracking-tight text-foreground">
-            My Dashboard
-          </h1>
-          <p className="text-sm text-muted-foreground mt-1">
-            Real-time status of your competitive league journey.
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-primary/10 text-primary border border-primary/20">
-            <ShieldCheck className="w-3.5 h-3.5" />
-            Active Ranker
-          </span>
-        </div>
-      </div>
-
-      {/* Live Contest Banner */}
-      <LiveContestBanner contest={liveContest} />
-
-      {/* Statistics Grid */}
-      <OverviewCards stats={stats} nationalRank={profile?.national_rank || null} />
-
-      {/* Two Column Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
-        {/* Left Column: Contests, Aura */}
-        <div className="lg:col-span-2 space-y-8">
-          {/* Upcoming Registered Contests */}
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-black text-foreground uppercase tracking-wider">
-                My Enrolled Upcomings
-              </h3>
-              <Link href="/dashboard/my-contests">
-                <Button variant="ghost" className="text-xs font-bold gap-1 text-primary hover:bg-transparent">
-                  View All Contests
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Button>
-              </Link>
-            </div>
-            {upcomingEnrollments.length === 0 ? (
-              <div className="p-6 border border-dashed border-border/50 rounded-2xl text-center text-xs text-muted-foreground bg-card/20">
-                You haven&apos;t enrolled in any upcoming contests.
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {upcomingEnrollments.map((enr) => (
-                  <ContestCard key={enr.id} enrollment={enr} variant="upcoming" />
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Latest Result Summary */}
-          {latestResult && (
-            <div className="space-y-4">
-              <h3 className="text-sm font-black text-foreground uppercase tracking-wider">
-                Latest Result Summary
-              </h3>
-              <ResultCard result={latestResult} />
-            </div>
-          )}
-
-          {/* Aura Tiers & History Hub */}
-          <AuraHub
-            currentAura={profile?.aura_points || 0}
-            monthlyAura={stats?.monthly_aura_earned || 0}
-            history={safeAuraHistory}
-          />
-        </div>
-
-        {/* Right Column: Achievements, Activity */}
-        <div className="space-y-8">
-          {/* Achievements Preview */}
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-black text-foreground uppercase tracking-wider">
-                Latest Achievements
-              </h3>
-              <Link href="/dashboard/achievements">
-                <Button variant="ghost" className="text-xs font-bold gap-1 text-primary hover:bg-transparent">
-                  View All
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Button>
-              </Link>
-            </div>
-            {safeAchievements.length === 0 ? (
-              <div className="p-6 border border-dashed border-border/50 rounded-2xl text-center text-xs text-muted-foreground bg-card/20">
-                No achievements unlocked yet.
-              </div>
-            ) : (
-              <div className="flex flex-col gap-3">
-                {safeAchievements.slice(0, 3).map((ach) => (
-                  <AchievementCard key={ach.id} achievement={ach} />
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Timeline Feed */}
-          <ActivityTimeline activities={safeActivity} />
-        </div>
-
-      </div>
-    </div>
+    <DashboardClient
+      profile={profile}
+      stats={stats}
+      enrollments={safeEnrollments}
+      achievements={safeAchievements}
+      heatmapData={heatmapData}
+      radarSubjects={radarSubjects}
+      totalPrizeWon={totalPrizeWon}
+      walletBalance={walletBalance}
+      examCategory={profile?.primary_exam_category}
+    />
   );
 }

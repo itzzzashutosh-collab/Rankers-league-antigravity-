@@ -130,7 +130,8 @@ export default function TransactionsListClient({
 
   // Perform filtration logic client side
   const filteredTransactions = React.useMemo(() => {
-    return initialTransactions.filter((tx) => {
+    const list = Array.isArray(initialTransactions) ? initialTransactions : [];
+    return list.filter((tx) => {
       // 1. Search term match
       if (searchTerm) {
         const term = searchTerm.toLowerCase();

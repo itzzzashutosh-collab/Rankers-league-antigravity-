@@ -11,7 +11,7 @@ interface ContestStatusBadgeProps {
 }
 
 export function ContestStatusBadge({ status, className }: ContestStatusBadgeProps) {
-  const configs = {
+  const configs: Record<string, { text: string; icon: any; classes: string }> = {
     live: {
       text: "Currently Live",
       icon: AlertCircle,
@@ -34,14 +34,20 @@ export function ContestStatusBadge({ status, className }: ContestStatusBadgeProp
     },
   };
 
-  const config = configs[status];
-  const Icon = config.icon;
+  const fallback = {
+    text: String(status || "upcoming").replace(/_/g, " "),
+    icon: Calendar,
+    classes: "bg-blue-500/10 text-blue-500 border-blue-500/20",
+  };
+
+  const config = configs[status] || fallback;
+  const Icon = config.icon || Calendar;
 
   return (
     <span
       className={cn(
         "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[10px] font-bold tracking-wider uppercase border font-sans select-none",
-        config.classes,
+        config.classes || "bg-blue-500/10 text-blue-500 border-blue-500/20",
         className
       )}
     >

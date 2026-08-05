@@ -3,6 +3,7 @@
 import React, { use } from "react";
 import { notFound } from "next/navigation";
 import { legalDocuments } from "@/content/legal-center";
+import legalCmsService from "@/services/legalCmsService";
 import { LegalDocumentTemplate, type StandardLegalDocumentData } from "@/components/legal/LegalDocumentTemplate";
 
 interface PageProps {
@@ -13,14 +14,17 @@ export default function LegalDocumentPage({ params }: PageProps) {
   const resolvedParams = use(params);
   const slug = resolvedParams.slug;
 
-  const docIndex = legalDocuments.findIndex((d) => d.slug === slug);
-  if (docIndex === -1) {
+  const cmsDoc = legalCmsService.getDocumentBySlug(slug);
+  if (!cmsDoc) {
     notFound();
   }
 
-  const rawDoc = legalDocuments[docIndex];
-  const prevDoc = docIndex > 0 ? legalDocuments[docIndex - 1] : null;
-  const nextDoc = docIndex < legalDocuments.length - 1 ? legalDocuments[docIndex + 1] : null;
+  const allDocs = legalCmsService.getPublishedDocuments();
+  const docIndex = allDocs.findIndex((d) => d.id === cmsDoc.id);
+  const prevDoc = docIndex > 0 ? allDocs[docIndex - 1] : null;
+  const nextDoc = docIndex < allDocs.length - 1 ? allDocs[docIndex + 1] : null;
+
+  const rawDoc = cmsDoc;
 
   // Adapt rawDoc into StandardLegalDocumentData
   const templateData: StandardLegalDocumentData = {

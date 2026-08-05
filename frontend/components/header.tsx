@@ -2,18 +2,28 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
 import { Shield, Menu, X, Bell, Sun, Moon, BookOpen, Trophy, HelpCircle, User, Settings, LogOut, ChevronDown, Wallet } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Logo } from "@/components/ui/Logo";
 import { navigationContent } from "@/content/navigation";
 import { createClient } from "@/utils/supabase/client";
 import { UserProfile } from "@/types/auth";
+import { cn } from "@/lib/utils";
+
+function formatWalletDisplay(bal: number | null | undefined): string {
+  if (bal === null || bal === undefined) return "₹0";
+  const num = Number(bal);
+  if (isNaN(num) || !isFinite(num)) return "₹0";
+  return `₹${num.toLocaleString("en-IN")}`;
+}
 
 export function Header() {
   const { theme, setTheme } = useTheme();
   const router = useRouter();
+  const pathname = usePathname();
   const [scrolled, setScrolled] = React.useState(false);
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [scrollProgress, setScrollProgress] = React.useState(0);
@@ -22,6 +32,24 @@ export function Header() {
   const [walletBalance, setWalletBalance] = React.useState<number | null>(null);
   const [userMenuOpen, setUserMenuOpen] = React.useState(false);
   const userMenuRef = React.useRef<HTMLDivElement>(null);
+
+  const isActive = (href: string) => {
+    if (href === "/") return pathname === "/";
+    if (href === "/dashboard") {
+      return pathname === "/dashboard" || pathname === "/dashboard/";
+    }
+    return pathname.startsWith(href);
+  };
+
+  const navLinks = [
+    { href: "/dashboard", label: "Dashboard", authOnly: true },
+    { href: "/contests",  label: "Contests" },
+    { href: "/exams",     label: "Exams" },
+    { href: "/live",      label: "Live" },
+    { href: "/leaderboard", label: "Leaderboard" },
+    { href: "/mentors",   label: "Mentors" },
+    { href: "/pricing",   label: "Pricing" },
+  ];
 
   // Load auth state
   React.useEffect(() => {
@@ -52,8 +80,9 @@ export function Header() {
           .eq("wallet_id", user.id)
           .maybeSingle();
 
-        if (wallet) {
-          setWalletBalance(Number(wallet.available_balance));
+        if (wallet && wallet.available_balance !== null && wallet.available_balance !== undefined) {
+          const parsed = Number(wallet.available_balance);
+          setWalletBalance(isNaN(parsed) || !isFinite(parsed) ? 0 : parsed);
         } else {
           setWalletBalance(0);
         }
@@ -77,8 +106,10 @@ export function Header() {
   React.useEffect(() => {
     const handleWalletUpdate = (e: Event) => {
       const customEvent = e as CustomEvent<{ balance: number }>;
-      if (customEvent.detail && typeof customEvent.detail.balance === "number") {
+      if (customEvent.detail && typeof customEvent.detail.balance === "number" && !isNaN(customEvent.detail.balance)) {
         setWalletBalance(customEvent.detail.balance);
+      } else {
+        setWalletBalance(0);
       }
     };
     window.addEventListener("wallet-update", handleWalletUpdate);
@@ -134,75 +165,53 @@ export function Header() {
             : "bg-transparent py-5"
         }`}
       >
-        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between gap-4 lg:gap-8">
           {/* Logo Branding */}
-          <Link href="/" className="flex items-center gap-2.5 shrink-0 z-10">
-            <div className="relative flex items-center justify-center w-9 h-9 rounded-lg bg-primary/10 border border-primary/20">
-              <Shield className="w-5 h-5 text-primary animate-pulse" />
-            </div>
-            <span className="font-heading text-lg font-bold tracking-tight bg-gradient-to-r from-foreground via-foreground/90 to-primary bg-clip-text text-transparent">
-              Ranker&apos;s League
-            </span>
+          <Link href="/" className="shrink-0">
+            <Logo size="md" />
           </Link>
 
-          {/* Large Screen Navigation Links (strictly centered) */}
-          <nav className="hidden md:flex items-center gap-5 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-            {authUser && (
-              <Link
-                href="/dashboard"
-                className="text-xs font-black tracking-wide uppercase text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Dashboard
-              </Link>
-            )}
-            <Link
-              href="/contests"
-              className="text-xs font-black tracking-wide uppercase text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Contests
-            </Link>
-            <Link
-              href="/exams"
-              className="text-xs font-black tracking-wide uppercase text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Exams
-            </Link>
-            <Link
-              href="/live"
-              className="text-xs font-black tracking-wide uppercase text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Live
-            </Link>
-            <Link
-              href="/leaderboard"
-              className="text-xs font-black tracking-wide uppercase text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Leaderboard
-            </Link>
-            <Link
-              href="/mentors"
-              className="text-xs font-black tracking-wide uppercase text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Mentors
-            </Link>
-            <Link
-              href="/pricing"
-              className="text-xs font-black tracking-wide uppercase text-primary hover:text-primary/80 transition-colors"
-            >
-              Pricing
-            </Link>
+          {/* Navigation Links (Flex layout with clean spacing & dynamic active route highlighting) */}
+          <nav className="hidden lg:flex items-center gap-2 xl:gap-3">
+            {navLinks.map((link) => {
+              if (link.authOnly && !authUser) return null;
+              const active = isActive(link.href);
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={cn(
+                    "px-3.5 py-1.5 rounded-xl font-black text-xs tracking-wide uppercase transition-all duration-200",
+                    active
+                      ? "bg-primary text-primary-foreground shadow-md shadow-primary/25 scale-[1.02]"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted/20"
+                  )}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
           </nav>
 
           {/* Interactive Controls */}
-          <div className="hidden md:flex items-center gap-4 shrink-0 ml-auto z-10">
+          <div className="hidden md:flex items-center gap-3 sm:gap-4 shrink-0 ml-auto">
             {authUser && (
               <>
-                {/* Wallet Balance Display in top right corner */}
-                <Link href="/dashboard/wallet" className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-border/40 bg-card/30 hover:bg-card/60 hover:border-primary/30 transition-all duration-200 group">
-                  <Wallet className="w-4 h-4 text-primary group-hover:scale-110 transition-transform" />
-                  <span className="text-xs font-black text-foreground font-mono">
-                    {walletBalance !== null ? `₹${walletBalance.toLocaleString("en-IN")}` : "₹0"}
-                  </span>
+                {/* Sleek Wallet Balance Display with clear icon spacing */}
+                <Link
+                  href="/dashboard/wallet"
+                  className="flex items-center gap-2.5 px-3.5 py-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 hover:border-emerald-500/50 transition-all duration-200 shadow-xs group"
+                  title="Wallet Balance"
+                >
+                  <div className="flex items-center justify-center w-5 h-5 rounded-lg bg-emerald-500/20 text-emerald-400 group-hover:scale-105 transition-transform">
+                    <Wallet className="w-3.5 h-3.5 text-emerald-400" />
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Wallet:</span>
+                    <span className="text-xs font-black text-emerald-400 font-mono tracking-tight">
+                      {formatWalletDisplay(walletBalance)}
+                    </span>
+                  </div>
                 </Link>
 
                 <Link href="/dashboard/notifications">
@@ -234,7 +243,7 @@ export function Header() {
               <div ref={userMenuRef} className="relative">
                 <button
                   onClick={() => setUserMenuOpen(!userMenuOpen)}
-                  className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-border/40 bg-card/30 hover:bg-card/60 hover:border-primary/30 transition-all duration-200"
+                  className="flex items-center gap-2.5 px-3 py-1.5 rounded-xl border border-border/40 bg-card/30 hover:bg-card/60 hover:border-primary/30 transition-all duration-200"
                 >
                   {profile?.avatar_url ? (
                     <img src={profile.avatar_url} alt="" className="w-7 h-7 rounded-lg object-cover" />
@@ -317,7 +326,7 @@ export function Header() {
               <Link href="/auth/login">
                 <Button
                   variant="outline"
-                  className="px-5 border-primary/30 text-foreground hover:border-primary hover:bg-primary/5 rounded-md"
+                  className="px-5 border-primary/30 text-foreground hover:border-primary hover:bg-primary/5 rounded-xl font-bold text-xs"
                 >
                   Sign In
                 </Button>
@@ -326,7 +335,7 @@ export function Header() {
           </div>
 
           {/* Mobile Display Controls */}
-          <div className="flex md:hidden items-center gap-2 shrink-0">
+          <div className="flex lg:hidden items-center gap-2 shrink-0">
             <Button
               variant="ghost"
               size="icon"
@@ -365,80 +374,34 @@ export function Header() {
             className="fixed inset-x-0 top-[60px] bottom-0 z-40 md:hidden bg-background/95 backdrop-blur-md border-b border-border overflow-y-auto"
           >
             <div className="flex flex-col gap-6 p-6 text-left">
-              <div className="flex flex-col gap-4">
-                {authUser && (
-                  <Link
-                    href="/dashboard"
-                    onClick={() => setMobileOpen(false)}
-                    className="text-sm font-semibold text-foreground hover:text-primary transition-colors block"
-                  >
-                    Dashboard
-                  </Link>
-                )}
-                <Link
-                  href="/contests"
-                  onClick={() => setMobileOpen(false)}
-                  className="text-sm font-semibold text-foreground hover:text-primary transition-colors block"
-                >
-                  Contests
-                </Link>
-                <Link
-                  href="/exams"
-                  onClick={() => setMobileOpen(false)}
-                  className="text-sm font-semibold text-foreground hover:text-primary transition-colors block"
-                >
-                  Exams
-                </Link>
-                <Link
-                  href="/live"
-                  onClick={() => setMobileOpen(false)}
-                  className="text-sm font-semibold text-foreground hover:text-primary transition-colors block"
-                >
-                  Live
-                </Link>
-                <Link
-                  href="/leaderboard"
-                  onClick={() => setMobileOpen(false)}
-                  className="text-sm font-semibold text-foreground hover:text-primary transition-colors block"
-                >
-                  Leaderboard
-                </Link>
-                <Link
-                  href="/rewards"
-                  onClick={() => setMobileOpen(false)}
-                  className="text-sm font-semibold text-foreground hover:text-primary transition-colors block"
-                >
-                  Rewards
-                </Link>
-                <Link
-                  href="/mentors"
-                  onClick={() => setMobileOpen(false)}
-                  className="text-sm font-semibold text-foreground hover:text-primary transition-colors block"
-                >
-                  Mentors
-                </Link>
-                <Link
-                  href="/pricing"
-                  onClick={() => setMobileOpen(false)}
-                  className="text-sm font-semibold text-primary hover:text-primary/80 transition-colors block"
-                >
-                  Pricing
-                </Link>
-                <Link
-                  href="/contact"
-                  onClick={() => setMobileOpen(false)}
-                  className="text-sm font-semibold text-foreground hover:text-primary transition-colors block"
-                >
-                  Contact
-                </Link>
+              <div className="flex flex-col gap-2">
+                {navLinks.map((link) => {
+                  if (link.authOnly && !authUser) return null;
+                  const active = isActive(link.href);
+                  return (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      onClick={() => setMobileOpen(false)}
+                      className={cn(
+                        "px-4 py-2.5 rounded-xl text-xs font-black tracking-wide uppercase transition-colors block",
+                        active
+                          ? "bg-primary text-primary-foreground font-black"
+                          : "text-foreground hover:text-primary hover:bg-muted/20"
+                      )}
+                    >
+                      {link.label}
+                    </Link>
+                  );
+                })}
               </div>
 
               <div className="flex flex-col gap-3 pt-4 border-t border-border/60">
                 {authUser && (
                   <>
                     <Link href="/dashboard/wallet" onClick={() => setMobileOpen(false)} className="w-full">
-                      <Button variant="outline" className="flex items-center justify-center gap-2 w-full mt-2 h-10">
-                        <Wallet className="w-4 h-4 text-primary" /> Wallet: {walletBalance !== null ? `₹${walletBalance.toLocaleString("en-IN")}` : "₹0"}
+                      <Button variant="outline" className="flex items-center justify-center gap-2 w-full mt-2 h-10 border-emerald-500/30 bg-emerald-500/10 text-emerald-400 font-mono font-bold">
+                        <Wallet className="w-4 h-4 text-emerald-400" /> Wallet: {formatWalletDisplay(walletBalance)}
                       </Button>
                     </Link>
                     <Link href="/dashboard/notifications" onClick={() => setMobileOpen(false)} className="w-full">

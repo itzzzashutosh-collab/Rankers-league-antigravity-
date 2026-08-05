@@ -15,7 +15,8 @@ export default async function TransactionsHistoryPage() {
   }
 
   // Fetch all transactions to deliver to client filter controller
-  const transactions = await walletService.getTransactions(user.id);
+  const rawTx = await walletService.getTransactions(user.id);
+  const transactions = Array.isArray(rawTx) ? rawTx : [];
 
   return (
     <div className="w-full">

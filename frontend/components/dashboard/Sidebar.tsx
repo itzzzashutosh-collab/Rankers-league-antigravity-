@@ -6,7 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   LayoutDashboard, Trophy, BarChart3, Star, User, Settings,
-  LogOut, HelpCircle, ChevronLeft, ChevronRight, Shield, X, TrendingUp
+  LogOut, HelpCircle, ChevronLeft, ChevronRight, Shield, X, TrendingUp, Wallet, FileText
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { UserProfile, EXAM_CATEGORY_LABELS } from "@/types/auth";
@@ -16,7 +16,9 @@ const NAV_ITEMS = [
   { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard", exact: true },
   { href: "/dashboard/my-contests", icon: Trophy, label: "My Contests" },
   { href: "/dashboard/performance", icon: TrendingUp, label: "Performance" },
+  { href: "/dashboard/results", icon: FileText, label: "Report Cards" },
   { href: "/dashboard/achievements", icon: Star, label: "Achievements" },
+  { href: "/dashboard/wallet", icon: Wallet, label: "Wallet" },
   { href: "/dashboard/profile", icon: User, label: "Profile" },
   { href: "/dashboard/settings", icon: Settings, label: "Settings" },
 ];

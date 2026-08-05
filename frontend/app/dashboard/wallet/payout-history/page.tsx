@@ -14,8 +14,9 @@ export default async function PayoutHistoryPage() {
     redirect("/auth/login?redirect=/dashboard/wallet/payout-history");
   }
 
-  // Retrieve full withdrawal history
-  const payouts = await walletService.getPayoutHistory(user.id);
+  // Retrieve full withdrawal history safely
+  const rawPayouts = await walletService.getPayoutHistory(user.id);
+  const payouts = Array.isArray(rawPayouts) ? rawPayouts : [];
 
   return (
     <div className="w-full">

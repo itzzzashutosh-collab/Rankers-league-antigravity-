@@ -87,13 +87,15 @@ export default function WalletDashboardClient({
     }
   };
 
-  // Formatting utility
-  const formatCurrency = (val: number) => {
+  // Formatting utility with safe input handling
+  const formatCurrency = (val: number | null | undefined) => {
+    const num = typeof val === "number" && !isNaN(val) && isFinite(val) ? val : 0;
     return new Intl.NumberFormat("en-IN", {
       style: "currency",
       currency: "INR",
-      minimumFractionDigits: 2,
-    }).format(val);
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2,
+    }).format(num);
   };
 
   const getStatusConfig = (status: string) => {

@@ -31,31 +31,42 @@ export default function MyContestsPage() {
 
   React.useEffect(() => {
     const load = async () => {
-      const supabase = createClient();
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
+      try {
+        const supabase = createClient();
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+          setIsLoading(false);
+          return;
+        }
 
-      const { data } = await supabase
-        .from("contest_enrollments")
-        .select("*")
-        .eq("user_id", user.id);
+        const { data } = await supabase
+          .from("contest_enrollments")
+          .select("*")
+          .eq("user_id", user.id);
 
-      setEnrollments(data || []);
-      setIsLoading(false);
+        setEnrollments(Array.isArray(data) ? data : []);
+      } catch (err) {
+        console.error("Error loading enrollments:", err);
+        setEnrollments([]);
+      } finally {
+        setIsLoading(false);
+      }
     };
     load();
   }, []);
 
+  const safeEnrollments = Array.isArray(enrollments) ? enrollments : [];
+
   const getFilteredEnrollments = () => {
     switch (activeTab) {
       case "upcoming":
-        return enrollments.filter(e => e.status === "registered");
+        return safeEnrollments.filter(e => e?.status === "registered");
       case "live":
-        return enrollments.filter(e => e.status === "live");
+        return safeEnrollments.filter(e => e?.status === "live");
       case "completed":
-        return enrollments.filter(e => e.status === "completed");
+        return safeEnrollments.filter(e => e?.status === "completed");
       case "cancelled":
-        return enrollments.filter(e => e.status === "cancelled");
+        return safeEnrollments.filter(e => e?.status === "cancelled");
       default:
         return [];
     }
@@ -83,7 +94,8 @@ export default function MyContestsPage() {
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.key;
-          const count = enrollments.filter(e => {
+          const count = safeEnrollments.filter(e => {
+            if (!e) return false;
             if (tab.key === "upcoming") return e.status === "registered";
             return e.status === tab.key;
           }).length;

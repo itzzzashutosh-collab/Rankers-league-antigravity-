@@ -4,23 +4,23 @@ import * as React from "react";
 import { LeaderboardHero } from "@/components/live/LeaderboardHero";
 import { TopThreePodium } from "@/components/live/TopThreePodium";
 import { LeaderboardEmptyState } from "@/components/live/LeaderboardEmptyState";
-import { Card, Typography, Badge, InputField } from "@/components/ui";
+import { Card, Badge, InputField } from "@/components/ui";
 
 // Mock data content databases
-import { leaderboardData, LeaderboardEntry } from "@/content/leaderboard/leaderboard-data";
+import { leaderboardData, leaderboardContests, LeaderboardEntry } from "@/content/leaderboard/leaderboard-data";
 import { leaderboardCategories } from "@/content/leaderboard/leaderboard-categories";
 import { timeFilters, regionFilters, viewFilters } from "@/content/leaderboard/leaderboard-filters";
 import { leaderboardFAQ } from "@/content/leaderboard/leaderboard-faq";
-import { leaderboardConfig } from "@/content/leaderboard/leaderboard-config";
 
 // Icons
-import { Search, Trophy, Globe, Clock, SlidersHorizontal, ChevronLeft, ChevronRight, HelpCircle, Flame, ArrowUpRight, ArrowDownRight, Minus, Sparkles } from "lucide-react";
+import { Search, Trophy, Globe, Clock, SlidersHorizontal, ChevronLeft, ChevronRight, HelpCircle, ArrowUpRight, ArrowDownRight, Minus, Target, IndianRupee, Award } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function LeaderboardClient() {
   // State variables
   const [timeFilter, setTimeFilter] = React.useState("overall");
   const [categoryFilter, setCategoryFilter] = React.useState("all");
+  const [contestFilter, setContestFilter] = React.useState("all");
   const [regionFilter, setRegionFilter] = React.useState("india");
   const [viewFilter, setViewFilter] = React.useState("20");
   const [searchTerm, setSearchTerm] = React.useState("");
@@ -29,12 +29,13 @@ export function LeaderboardClient() {
   // Reset to first page when filters change
   React.useEffect(() => {
     setCurrentPage(1);
-  }, [timeFilter, categoryFilter, regionFilter, viewFilter, searchTerm]);
+  }, [timeFilter, categoryFilter, contestFilter, regionFilter, viewFilter, searchTerm]);
 
   // Handle resets
   const handleClearFilters = () => {
     setTimeFilter("overall");
     setCategoryFilter("all");
+    setContestFilter("all");
     setRegionFilter("india");
     setViewFilter("20");
     setSearchTerm("");
@@ -50,12 +51,15 @@ export function LeaderboardClient() {
       // 2. Category
       if (categoryFilter !== "all" && entry.category !== categoryFilter) return false;
 
-      // 3. Region
+      // 3. Contest Arena
+      if (contestFilter !== "all" && entry.contestSlug !== contestFilter) return false;
+
+      // 4. Region
       if (regionFilter !== "global") {
         if (entry.country !== regionFilter) return false;
       }
 
-      // 4. Text Search (Name, Institution, or Rank number)
+      // 5. Text Search (Name, Institution, or Rank number)
       if (searchTerm.trim() !== "") {
         const query = searchTerm.toLowerCase();
         const matchesName = entry.name.toLowerCase().includes(query);
@@ -67,9 +71,9 @@ export function LeaderboardClient() {
       return true;
     });
 
-    // Sort by auraPoints descending
-    return [...result].sort((a, b) => b.auraPoints - a.auraPoints);
-  }, [timeFilter, categoryFilter, regionFilter, searchTerm]);
+    // Sort by totalCombinedMarks descending
+    return [...result].sort((a, b) => b.totalCombinedMarks - a.totalCombinedMarks);
+  }, [timeFilter, categoryFilter, contestFilter, regionFilter, searchTerm]);
 
   // Sliced rankings based on view limit (Top N)
   const viewCount = parseInt(viewFilter) || 20;
@@ -118,8 +122,26 @@ export function LeaderboardClient() {
           </div>
 
           {/* Filters Selectors Row */}
-          <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
             
+            {/* Contest-wise Filter */}
+            <div className="flex flex-col gap-1.5 sm:col-span-2 lg:col-span-2">
+              <span className="text-[9px] text-muted-foreground uppercase font-bold tracking-widest flex items-center gap-1.5">
+                <Target className="w-3.5 h-3.5 text-primary shrink-0" /> Contest Arena Filter
+              </span>
+              <select
+                value={contestFilter}
+                onChange={(e) => setContestFilter(e.target.value)}
+                className="w-full p-2.5 bg-secondary/40 border border-border/40 hover:border-border rounded-lg text-[10px] font-bold uppercase tracking-wider outline-none text-foreground cursor-pointer"
+              >
+                {leaderboardContests.map((c) => (
+                  <option key={c.id} value={c.id} className="bg-card">
+                    {c.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
             {/* Time Filter */}
             <div className="flex flex-col gap-1.5">
               <span className="text-[9px] text-muted-foreground uppercase font-bold tracking-widest flex items-center gap-1.5">
@@ -166,24 +188,6 @@ export function LeaderboardClient() {
               </div>
             </div>
 
-            {/* View filter */}
-            <div className="flex flex-col gap-1.5">
-              <span className="text-[9px] text-muted-foreground uppercase font-bold tracking-widest flex items-center gap-1.5">
-                <Trophy className="w-3.5 h-3.5 text-primary shrink-0" /> Standings Limit
-              </span>
-              <select
-                value={viewFilter}
-                onChange={(e) => setViewFilter(e.target.value)}
-                className="w-full p-2.5 bg-secondary/40 border border-border/40 hover:border-border rounded-lg text-[10px] font-bold uppercase tracking-wider outline-none text-foreground"
-              >
-                {viewFilters.map((vf) => (
-                  <option key={vf.value} value={vf.value} className="bg-card">
-                    {vf.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-
             {/* Clear filters Button */}
             <div className="flex items-end">
               <button
@@ -199,7 +203,7 @@ export function LeaderboardClient() {
           {/* Exam Category Filters Scrollbar */}
           <div className="flex flex-col gap-1.5 border-t border-border/20 pt-4">
             <span className="text-[9px] text-muted-foreground uppercase font-bold tracking-widest mb-1.5 block">
-              Filter by Exam Championship
+              Filter by Exam Stream
             </span>
             <div className="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto pr-2">
               {leaderboardCategories.map((cat) => (
@@ -247,19 +251,15 @@ export function LeaderboardClient() {
                     <tr className="bg-card/50 text-muted-foreground border-b border-border/40 font-bold uppercase tracking-wider text-[10px]">
                       <th className="px-6 py-4 w-20 sticky left-0 bg-card/50 z-10">Rank</th>
                       <th className="px-6 py-4">Competitor</th>
-                      <th className="px-6 py-4">Championship</th>
-                      <th className="px-6 py-4">Points</th>
-                      <th className="px-6 py-4 text-right">Score Ratio</th>
+                      <th className="px-6 py-4">Contests Completed</th>
+                      <th className="px-6 py-4">Combined Marks</th>
+                      <th className="px-6 py-4">Total Winnings</th>
+                      <th className="px-6 py-4 text-right">Latest Score</th>
                       <th className="px-6 py-4 text-center">Trend</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-border/20">
                     {paginatedRankings.map((entry) => {
-                      // Lookup config levels for user badge
-                      const badgeLevel = leaderboardConfig.badgeLevels.find(
-                        (bl) => entry.auraPoints >= bl.minimumPoints
-                      ) || leaderboardConfig.badgeLevels[3];
-
                       return (
                         <tr key={`${entry.name}-${entry.category}-${entry.timeframe}`} className="hover:bg-muted/20 transition-all select-none">
                           
@@ -273,11 +273,11 @@ export function LeaderboardClient() {
                                   entry.rank === 2 ? "bg-slate-400/15 border-slate-400/30 text-slate-400" :
                                   "bg-amber-700/15 border-amber-700/30 text-amber-700"
                                 )}>
-                                  {entry.rank}
+                                  #{entry.rank}
                                 </span>
                               </div>
                             ) : (
-                              <span className="text-muted-foreground font-mono pl-1">{entry.rank}</span>
+                              <span className="text-muted-foreground font-mono pl-1">#{entry.rank}</span>
                             )}
                           </td>
 
@@ -301,19 +301,25 @@ export function LeaderboardClient() {
                             </div>
                           </td>
 
-                          {/* Category Badge */}
+                          {/* Contests Completed */}
                           <td className="px-6 py-5">
-                            <span className="text-[9px] font-bold text-foreground bg-secondary/60 px-2.5 py-0.5 rounded border border-border uppercase tracking-wide">
-                              {entry.category.replace("-", " ")}
+                            <span className="text-[10px] font-black text-foreground bg-primary/10 border border-primary/20 px-2.5 py-1 rounded-lg">
+                              🏆 {entry.contestsCompleted} Contests
                             </span>
                           </td>
 
-                          {/* Aura Points Badge */}
+                          {/* Combined Marks */}
                           <td className="px-6 py-5">
-                            <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border border-primary/20 bg-primary/5 text-primary text-[10px] font-extrabold cursor-help select-all" title="Competition points details">
-                              <Sparkles className="w-3.5 h-3.5 text-primary shrink-0" />
-                              <span>{entry.auraPoints.toLocaleString()} Aura</span>
-                            </div>
+                            <span className="text-xs font-black text-primary font-mono">
+                              🎯 {entry.totalCombinedMarks.toLocaleString()} pts
+                            </span>
+                          </td>
+
+                          {/* Total Winnings (₹) */}
+                          <td className="px-6 py-5">
+                            <span className="text-xs font-black text-emerald-400 font-mono">
+                              ₹{entry.totalPrizeWon.toLocaleString("en-IN")}
+                            </span>
                           </td>
 
                           {/* Score Ratio */}

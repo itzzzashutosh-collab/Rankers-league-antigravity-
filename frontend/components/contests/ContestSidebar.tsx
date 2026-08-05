@@ -57,9 +57,10 @@ export function ContestSidebar({ contest, className }: ContestSidebarProps) {
 
   return (
     <div className={cn("sticky top-24 flex flex-col gap-6", className)}>
-      <Card variant="glass" className="border border-border/40 shadow-xl overflow-visible">
+      <div className="bg-gradient-to-br from-card/90 via-card/70 to-card/90 backdrop-blur-xl border border-border/40 p-6 sm:p-7 rounded-3xl shadow-2xl overflow-hidden relative">
+        <div className="absolute -top-20 -right-20 w-44 h-44 rounded-full bg-primary/10 blur-2xl pointer-events-none" />
         {/* Banner highlight */}
-        <div className={cn("h-2 bg-gradient-to-r -mx-6 -mt-6 sm:-mx-8 sm:-mt-8 rounded-t-2xl mb-6", contest.bannerGradient)} />
+        <div className={cn("h-2 bg-gradient-to-r -mx-6 -mt-6 sm:-mx-7 sm:-mt-7 mb-6", contest.bannerGradient)} />
 
         {/* Dynamic Countdown */}
         {contest.status !== "completed" && (
@@ -106,7 +107,7 @@ export function ContestSidebar({ contest, className }: ContestSidebarProps) {
               <strong className="text-foreground block">
                 {contest.prizePool === 0 ? "Recognition Only" : `₹${contest.prizePool.toLocaleString("en-IN")}`}
               </strong>
-              <span>Total Reward Pool Allocation</span>
+              <span>Up To Prize Pool</span>
             </div>
           </div>
 
@@ -173,7 +174,7 @@ export function ContestSidebar({ contest, className }: ContestSidebarProps) {
             <span>Reservations secure your seat index and proctor credentials instantly.</span>
           </span>
         </div>
-      </Card>
+      </div>
 
       {/* Utility Panel */}
       <div className="flex gap-2.5">

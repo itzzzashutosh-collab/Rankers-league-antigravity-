@@ -21,32 +21,58 @@ export function ContestBadge({
   className,
 }: ContestBadgeProps) {
   if (status) {
-    const statusConfig = {
+    const statusConfig: Record<string, { text: string; icon: any; classes: string }> = {
       upcoming: {
         text: "Registration Open",
         icon: Timer,
-        classes: "bg-primary/5 text-primary border-primary/20",
+        classes: "bg-primary/10 text-primary border-primary/20",
+      },
+      registered: {
+        text: "Registered",
+        icon: Timer,
+        classes: "bg-sky-500/10 text-sky-400 border-sky-500/20",
       },
       active: {
         text: "Live Soon",
         icon: AlertTriangle,
         classes: "bg-amber-500/10 text-amber-500 border-amber-500/20 animate-pulse",
       },
+      live: {
+        text: "Live Now",
+        icon: AlertTriangle,
+        classes: "bg-red-500/10 text-red-500 border-red-500/20 animate-pulse",
+      },
+      in_progress: {
+        text: "In Progress",
+        icon: Timer,
+        classes: "bg-amber-500/10 text-amber-500 border-amber-500/20",
+      },
       completed: {
         text: "Completed",
         icon: CheckCircle,
         classes: "bg-muted text-muted-foreground border-border/80",
       },
+      ended: {
+        text: "Ended",
+        icon: CheckCircle,
+        classes: "bg-muted text-muted-foreground border-border/80",
+      },
     };
 
-    const config = statusConfig[status];
-    const Icon = config.icon;
+    const fallbackStatus = {
+      text: String(status).replace(/_/g, " "),
+      icon: Timer,
+      classes: "bg-primary/10 text-primary border-primary/20",
+    };
+
+    const config = statusConfig[status] || fallbackStatus;
+    const Icon = config.icon || Timer;
 
     return (
       <span
         className={cn(
           "inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[10px] font-bold tracking-wider uppercase border font-sans select-none",
-          config.classes,
+          config.classes || "bg-primary/10 text-primary border-primary/20",
           className
         )}
       >
@@ -57,32 +83,53 @@ export function ContestBadge({
   }
 
   if (difficulty) {
-    const diffConfig = {
+    const diffConfig: Record<string, { text: string; classes: string }> = {
       Elite: {
         text: "Elite Tier",
-        classes: "bg-red-500/5 text-red-500 border-red-500/20",
+        classes: "bg-red-500/10 text-red-500 border-red-500/20",
       },
       Apex: {
         text: "Apex Tier",
-        classes: "bg-violet-500/5 text-violet-500 border-violet-500/20",
+        classes: "bg-violet-500/10 text-violet-500 border-violet-500/20",
       },
       Prime: {
         text: "Prime Tier",
-        classes: "bg-blue-500/5 text-blue-500 border-blue-500/20",
+        classes: "bg-blue-500/10 text-blue-500 border-blue-500/20",
       },
       Challenger: {
         text: "Challenger",
-        classes: "bg-emerald-500/5 text-emerald-500 border-emerald-500/20",
+        classes: "bg-emerald-500/10 text-emerald-500 border-emerald-500/20",
+      },
+      Easy: {
+        text: "Easy",
+        classes: "bg-emerald-500/10 text-emerald-500 border-emerald-500/20",
+      },
+      Medium: {
+        text: "Medium",
+        classes: "bg-amber-500/10 text-amber-500 border-amber-500/20",
+      },
+      Hard: {
+        text: "Hard",
+        classes: "bg-red-500/10 text-red-500 border-red-500/20",
+      },
+      Expert: {
+        text: "Expert",
+        classes: "bg-purple-500/10 text-purple-500 border-purple-500/20",
       },
     };
 
-    const config = diffConfig[difficulty];
+    const fallbackDiff = {
+      text: String(difficulty),
+      classes: "bg-primary/10 text-primary border-primary/20",
+    };
+
+    const config = diffConfig[difficulty] || fallbackDiff;
 
     return (
       <span
         className={cn(
           "inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-semibold tracking-wide uppercase border select-none",
-          config.classes,
+          config.classes || "bg-primary/10 text-primary border-primary/20",
           className
         )}
       >

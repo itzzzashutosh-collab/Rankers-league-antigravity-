@@ -28,7 +28,8 @@ export function DashboardHeader({ profile, onMobileSidebarOpen }: DashboardHeade
   const notifRef = React.useRef<HTMLDivElement>(null);
   const searchRef = React.useRef<HTMLInputElement>(null);
 
-  const unreadCount = MOCK_NOTIFICATIONS.filter((n) => !n.read).length;
+  const safeNotifList = Array.isArray(MOCK_NOTIFICATIONS) ? MOCK_NOTIFICATIONS : [];
+  const unreadCount = safeNotifList.filter((n) => !n.read).length;
   const examLabel = profile.primary_exam_category
     ? EXAM_CATEGORY_LABELS[profile.primary_exam_category]
     : "Competitor";
