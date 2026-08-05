@@ -20,7 +20,10 @@ import { ContestSkeleton } from "@/components/contests/ContestSkeleton";
 import { ContestEmptyState } from "@/components/contests/ContestEmptyState";
 import { ContestBreadcrumb } from "@/components/contests/ContestBreadcrumb";
 
+import { useSearchParams } from "next/navigation";
+
 export default function ContestsListingPage() {
+  const searchParams = useSearchParams();
   const [allContests, setAllContests] = React.useState<Contest[]>([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const [userExamCategory, setUserExamCategory] = React.useState<ExamCategory>("JEE_MAIN");
@@ -36,7 +39,20 @@ export default function ContestsListingPage() {
   const [activeDifficulty, setActiveDifficulty] = React.useState("All");
   const [activeFeeType, setActiveFeeType] = React.useState<"free" | "paid" | "all">("all");
   const [sortBy, setSortBy] = React.useState("date");
-  const [targetExamFilter, setTargetExamFilter] = React.useState<string>("RECOMMENDED");
+  const [targetExamFilter, setTargetExamFilter] = React.useState<string>("ALL");
+
+  // Handle URL query parameters on mount
+  React.useEffect(() => {
+    const examParam = searchParams.get("exam");
+    const categoryParam = searchParams.get("category");
+    if (examParam) {
+      setSearchTerm(examParam.replace(/-/g, " "));
+      setTargetExamFilter("ALL");
+    } else if (categoryParam) {
+      setActiveCategory(categoryParam);
+      setTargetExamFilter("ALL");
+    }
+  }, [searchParams]);
 
   // Fetch User Target Exam on mount
   React.useEffect(() => {
@@ -177,16 +193,19 @@ export default function ContestsListingPage() {
             {/* Quick target exam switcher */}
             <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide py-1">
               {[
-                { label: `🎯 ${userExamName} Contests`, id: "RECOMMENDED" },
-                { label: "Engineering (JEE)", id: "JEE" },
-                { label: "Civil Services (UPSC)", id: "UPSC" },
-                { label: "Medical (NEET)", id: "NEET" },
+                { label: "⚡ All 140+ Exams", id: "ALL" },
+                { label: `🎯 My Exam: ${userExamName}`, id: "RECOMMENDED" },
+                { label: "Engineering", id: "JEE" },
+                { label: "Government / UPSC", id: "UPSC" },
+                { label: "Medical", id: "NEET" },
               ].map((pill) => (
                 <button
                   key={pill.id}
                   onClick={() => {
                     setTargetExamFilter(pill.id);
-                    if (pill.id === "JEE") {
+                    if (pill.id === "ALL") {
+                      setActiveCategory("All");
+                    } else if (pill.id === "JEE") {
                       setUserExamCategory("JEE_MAIN");
                       setUserExamName("JEE Main");
                     } else if (pill.id === "UPSC") {

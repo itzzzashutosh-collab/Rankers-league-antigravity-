@@ -4,6 +4,8 @@ import * as React from "react";
 import { Filter, RotateCcw, DollarSign, Award, Clock, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+import { categoryMeta } from "@/content/exams";
+
 interface ContestFiltersProps {
   activeCategory: string;
   onCategoryChange: (cat: string) => void;
@@ -29,7 +31,10 @@ export function ContestFilters({
   onReset,
   className,
 }: ContestFiltersProps) {
-  const categories = ["All", "Civil Services", "Engineering", "Medical Sciences", "Finance & Accounting", "Law"];
+  const categoriesList = [
+    { id: "All", label: "All Categories", emoji: "⚡" },
+    ...categoryMeta.map((c) => ({ id: c.id, label: c.label, emoji: c.emoji })),
+  ];
   const difficulties = ["All", "Elite", "Apex", "Prime", "Challenger"];
   const statuses = ["All", "upcoming", "completed"];
 
@@ -53,21 +58,22 @@ export function ContestFilters({
       <div className="flex flex-col gap-2">
         <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest flex items-center gap-1.5">
           <Award className="w-3.5 h-3.5" />
-          Exams & Championships
+          Exam Categories (15 Streams)
         </span>
-        <div className="flex flex-col gap-1">
-          {categories.map((cat) => (
+        <div className="grid grid-cols-2 gap-1 max-h-56 overflow-y-auto pr-1 scrollbar-thin">
+          {categoriesList.map((cat) => (
             <button
-              key={cat}
-              onClick={() => onCategoryChange(cat)}
+              key={cat.id}
+              onClick={() => onCategoryChange(cat.id)}
               className={cn(
-                "w-full text-left text-xs py-1.5 px-2.5 rounded-lg font-medium transition-all",
-                activeCategory === cat
-                  ? "bg-primary/10 text-primary"
+                "w-full text-left text-xs py-1.5 px-2 rounded-lg font-medium transition-all flex items-center gap-1.5 truncate",
+                activeCategory === cat.id
+                  ? "bg-primary/15 text-primary font-bold border border-primary/20"
                   : "text-muted-foreground hover:bg-muted hover:text-foreground"
               )}
             >
-              {cat}
+              <span>{cat.emoji}</span>
+              <span className="truncate">{cat.label}</span>
             </button>
           ))}
         </div>

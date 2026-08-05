@@ -535,5 +535,466 @@ export const contestsContent: ContestDetail[] = [
     rules: generalContestRules[1].points,
     timeline: [],
     faq: globalFAQContent
+  },
+
+  // ───────────────────────────────────────────────────────────────────────────
+  // 6. DESIGN STREAM (NID DAT / UCEED / CEED / NIFT)
+  // ───────────────────────────────────────────────────────────────────────────
+  {
+    id: "uceed-design-master-sprint",
+    slug: "uceed-design-master-sprint",
+    title: "All-India UCEED & NID Design Master Sprint",
+    tagline: "Design Master Sprint",
+    level: 2,
+    exam: "UCEED",
+    category: "Design",
+    entryFee: 79,
+    prizePool: 250000,
+    totalCollection: 350000,
+    platformMargin: 100000,
+    participants: 2800,
+    maxParticipants: 4000,
+    seatsAvailable: 1200,
+    difficulty: "Elite",
+    date: "August 15, 2026",
+    time: "10:00 AM",
+    duration: "2h 30m",
+    status: "upcoming",
+    bannerGradient: "from-pink-500/20 via-rose-500/10 to-transparent",
+    language: "English",
+    country: "India",
+    isFeatured: true,
+    isTrending: true,
+    registrationDeadline: "August 14, 2026 11:59 PM",
+    overview: "All-India UCEED & NID Design Master Sprint evaluates spatial visualization, observation, design sensitivity, and analytical drawing aptitude.",
+    eligibility: "Open to UCEED, NID DAT, CEED & NIFT design aspirants.",
+    structure: [
+      "50 Visual Reasoning & Design Sensitivity Questions",
+      "Digital Sketching Portfolio Assessment",
+      "Instant AIR Percentile Rank"
+    ],
+    syllabus: [],
+    rewards: [
+      { rank: "Rank 1", prize: "₹50,000 Cash + Design Scholar Trophy", recognition: "National Design Topper" },
+      { rank: "Rank 2 - 10", prize: "₹10,000 Cash Package", recognition: "Merit Laureate" }
+    ],
+    rules: generalContestRules[1].points,
+    timeline: [],
+    faq: globalFAQContent
+  },
+
+  // ───────────────────────────────────────────────────────────────────────────
+  // 7. COMMERCE STREAM (CA / CMA / CS / ACCA)
+  // ───────────────────────────────────────────────────────────────────────────
+  {
+    id: "ca-foundation-prestige-cup",
+    slug: "ca-foundation-prestige-cup",
+    title: "All-India CA Foundation & Inter Prestige Cup",
+    tagline: "Commerce Prestige Cup",
+    level: 2,
+    exam: "CA Foundation",
+    category: "Commerce",
+    entryFee: 99,
+    prizePool: 350000,
+    totalCollection: 500000,
+    platformMargin: 150000,
+    participants: 4100,
+    maxParticipants: 6000,
+    seatsAvailable: 1900,
+    difficulty: "Prime",
+    date: "August 18, 2026",
+    time: "02:00 PM",
+    duration: "3h 00m",
+    status: "upcoming",
+    bannerGradient: "from-violet-500/20 via-purple-500/10 to-transparent",
+    language: "English",
+    country: "India",
+    isFeatured: true,
+    isTrending: true,
+    registrationDeadline: "August 17, 2026 11:59 PM",
+    overview: "All-India CA Foundation & Inter Prestige Cup features accounting principles, business law, mercantile ethics, and corporate mathematics.",
+    eligibility: "Open to CA Foundation, CA Inter, CMA & CS candidates.",
+    structure: [
+      "100 ICAI Pattern Multiple Choice & Problem-Solving Questions",
+      "Proctored exam environment",
+      "Detailed subject-wise accuracy scorecard"
+    ],
+    syllabus: [],
+    rewards: [
+      { rank: "Rank 1", prize: "₹75,000 Cash + ICAI Ranker Shield", recognition: "All-India Topper" },
+      { rank: "Rank 2 - 15", prize: "₹12,000 Cash Package", recognition: "National Merit Scholar" }
+    ],
+    rules: generalContestRules[1].points,
+    timeline: [],
+    faq: globalFAQContent
+  },
+
+  // ───────────────────────────────────────────────────────────────────────────
+  // 8. DEFENCE STREAM (NDA / CDS / AFCAT / AGNIVEER)
+  // ───────────────────────────────────────────────────────────────────────────
+  {
+    id: "nda-cds-defence-apex",
+    slug: "nda-cds-defence-apex",
+    title: "All-India NDA & CDS Defence Valor Contest",
+    tagline: "Defence Valor Contest",
+    level: 3,
+    exam: "NDA",
+    category: "Defence",
+    entryFee: 49,
+    prizePool: 300000,
+    totalCollection: 450000,
+    platformMargin: 150000,
+    participants: 6200,
+    maxParticipants: 8000,
+    seatsAvailable: 1800,
+    difficulty: "Apex",
+    date: "August 20, 2026",
+    time: "09:00 AM",
+    duration: "2h 30m",
+    status: "upcoming",
+    bannerGradient: "from-indigo-500/20 via-blue-500/10 to-transparent",
+    language: "English",
+    country: "India",
+    isFeatured: true,
+    isTrending: true,
+    registrationDeadline: "August 19, 2026 11:59 PM",
+    overview: "All-India NDA & CDS Defence Valor Contest evaluates Mathematics, General Ability (GAT), English comprehension, and military awareness.",
+    eligibility: "Open to NDA, CDS, AFCAT & Agniveer candidates across India.",
+    structure: [
+      "120 UPSC NDA/CDS Pattern Mathematics & GAT Questions",
+      "Negative marking (-0.83 per wrong attempt)",
+      "National Defence Merit Certificate"
+    ],
+    syllabus: [],
+    rewards: [
+      { rank: "Rank 1", prize: "₹60,000 Cash + Military Valor Shield", recognition: "National Cadet Champion" },
+      { rank: "Rank 2 - 20", prize: "₹10,000 Cash Package", recognition: "Defence Merit Cadet" }
+    ],
+    rules: generalContestRules[1].points,
+    timeline: [],
+    faq: globalFAQContent
+  },
+
+  // ───────────────────────────────────────────────────────────────────────────
+  // 9. OLYMPIADS STREAM (IOQM / SOF / IMO / IPhO)
+  // ───────────────────────────────────────────────────────────────────────────
+  {
+    id: "international-math-olympiad-cup",
+    slug: "international-math-olympiad-cup",
+    title: "Global International Math & Science Olympiad Cup",
+    tagline: "Global Olympiad Cup",
+    level: 4,
+    exam: "SOF IMO",
+    category: "Olympiads",
+    entryFee: 39,
+    prizePool: 400000,
+    totalCollection: 600000,
+    platformMargin: 200000,
+    participants: 8900,
+    maxParticipants: 12000,
+    seatsAvailable: 3100,
+    difficulty: "Apex",
+    date: "August 22, 2026",
+    time: "03:00 PM",
+    duration: "2h 00m",
+    status: "upcoming",
+    bannerGradient: "from-yellow-500/20 via-amber-500/10 to-transparent",
+    language: "English",
+    country: "Both",
+    isFeatured: true,
+    isTrending: true,
+    registrationDeadline: "August 21, 2026 11:59 PM",
+    overview: "Global International Math & Science Olympiad Cup tests deep problem solving in geometry, number theory, combinatorics, and physics.",
+    eligibility: "Open to School & High School Olympiad contenders globally.",
+    structure: [
+      "40 Deep Proof-Based & Numerical Problem Challenges",
+      "Global Percentile Leaderboard",
+      "International Olympiad Medal & Digital Certificate"
+    ],
+    syllabus: [],
+    rewards: [
+      { rank: "Rank 1", prize: "₹1,00,000 Cash + International Gold Medal", recognition: "Global Olympiad Topper" },
+      { rank: "Rank 2 - 10", prize: "₹20,000 Cash Package + Silver Medal", recognition: "International Laureate" }
+    ],
+    rules: generalContestRules[1].points,
+    timeline: [],
+    faq: globalFAQContent
+  },
+
+  // ───────────────────────────────────────────────────────────────────────────
+  // 10. SCHOOL EXAMS (CBSE CLASS 10 & 12 / ICSE / IB / A-LEVELS)
+  // ───────────────────────────────────────────────────────────────────────────
+  {
+    id: "cbse-class-12-board-sprint",
+    slug: "cbse-class-12-board-sprint",
+    title: "All-India CBSE & ICSE Class 12 Board Sprint",
+    tagline: "Board Sprint",
+    level: 1,
+    exam: "CBSE Class 12",
+    category: "School",
+    entryFee: 0,
+    prizePool: 150000,
+    totalCollection: 150000,
+    platformMargin: 0,
+    participants: 9500,
+    maxParticipants: 15000,
+    seatsAvailable: 5500,
+    difficulty: "Prime",
+    date: "August 24, 2026",
+    time: "10:00 AM",
+    duration: "3h 00m",
+    status: "upcoming",
+    bannerGradient: "from-teal-500/20 via-emerald-500/10 to-transparent",
+    language: "English",
+    country: "India",
+    isFeatured: false,
+    isTrending: true,
+    registrationDeadline: "August 23, 2026 11:59 PM",
+    overview: "All-India CBSE & ICSE Class 12 Board Sprint helps students practice sample papers and past 10-year board questions under timed proctoring.",
+    eligibility: "Open to Class 10 & 12 Board exam candidates across India.",
+    structure: [
+      "70 CBSE & State Board Sample Questions",
+      "Subject-wise Score Card (Physics, Chemistry, Math, Bio)",
+      "Full Answer Explanations"
+    ],
+    syllabus: [],
+    rewards: [
+      { rank: "Rank 1", prize: "₹30,000 Cash + School Scholar Trophy", recognition: "National Board Topper" },
+      { rank: "Rank 2 - 20", prize: "₹5,000 Cash Package", recognition: "Merit Certificate" }
+    ],
+    rules: generalContestRules[1].points,
+    timeline: [],
+    faq: globalFAQContent
+  },
+
+  // ───────────────────────────────────────────────────────────────────────────
+  // 11. ENGLISH PROFICIENCY (IELTS / TOEFL / PTE / DUOLINGO)
+  // ───────────────────────────────────────────────────────────────────────────
+  {
+    id: "ielts-toefl-english-master-cup",
+    slug: "ielts-toefl-english-master-cup",
+    title: "Global IELTS & TOEFL English Proficiency Cup",
+    tagline: "English Proficiency Cup",
+    level: 2,
+    exam: "IELTS",
+    category: "English",
+    entryFee: 49,
+    prizePool: 200000,
+    totalCollection: 300000,
+    platformMargin: 100000,
+    participants: 3400,
+    maxParticipants: 5000,
+    seatsAvailable: 1600,
+    difficulty: "Intermediate" as any,
+    date: "August 26, 2026",
+    time: "04:00 PM",
+    duration: "2h 15m",
+    status: "upcoming",
+    bannerGradient: "from-rose-500/20 via-pink-500/10 to-transparent",
+    language: "English",
+    country: "Both",
+    isFeatured: false,
+    isTrending: true,
+    registrationDeadline: "August 25, 2026 11:59 PM",
+    overview: "Global IELTS & TOEFL English Proficiency Cup tests Reading, Listening, Lexical Resource, and Grammatical Range.",
+    eligibility: "Open to international study & visa aspirants.",
+    structure: [
+      "40 Reading & Grammar Passages",
+      "Listening Comprehension Audio Diagnostic",
+      "Estimated Band Score 1.0–9.0 Evaluation"
+    ],
+    syllabus: [],
+    rewards: [
+      { rank: "Rank 1", prize: "₹40,000 Cash + Band 9.0 Honor Badge", recognition: "Global English Topper" },
+      { rank: "Rank 2 - 10", prize: "₹8,000 Cash Package", recognition: "Fluency Merit Winner" }
+    ],
+    rules: generalContestRules[1].points,
+    timeline: [],
+    faq: globalFAQContent
+  },
+
+  // ───────────────────────────────────────────────────────────────────────────
+  // 12. PROGRAMMING & CS (ICPC / CODEFORCES / LEETCODE / HACKER CUP)
+  // ───────────────────────────────────────────────────────────────────────────
+  {
+    id: "algorithmic-grandmaster-code-cup",
+    slug: "algorithmic-grandmaster-code-cup",
+    title: "Global Algorithmic Code Cup (ICPC & LeetCode Style)",
+    tagline: "Code Cup Arena",
+    level: 4,
+    exam: "ICPC",
+    category: "Programming",
+    entryFee: 59,
+    prizePool: 500000,
+    totalCollection: 750000,
+    platformMargin: 250000,
+    participants: 7800,
+    maxParticipants: 10000,
+    seatsAvailable: 2200,
+    difficulty: "Apex",
+    date: "August 28, 2026",
+    time: "08:00 PM",
+    duration: "3h 00m",
+    status: "upcoming",
+    bannerGradient: "from-cyan-500/20 via-sky-500/10 to-transparent",
+    language: "English",
+    country: "Both",
+    isFeatured: true,
+    isTrending: true,
+    registrationDeadline: "August 27, 2026 11:59 PM",
+    overview: "Global Algorithmic Code Cup tests Data Structures, Dynamic Programming, Graphs, and Computational Complexity under automated judge testing.",
+    eligibility: "Open to software engineers, competitive programmers & CS students globally.",
+    structure: [
+      "6 Algorithmic Problems (Div 1/Div 2 difficulty)",
+      "Multi-language Judge Support (C++, Python, Java, Go, Rust)",
+      "Real-time AC/WA/TLE Codeforces style scoreboard"
+    ],
+    syllabus: [],
+    rewards: [
+      { rank: "Rank 1", prize: "₹1,50,000 Cash + Code Grandmaster Trophy", recognition: "Global Code Champion" },
+      { rank: "Rank 2 - 20", prize: "₹15,000 Cash Package", recognition: "Codeforces/ICPC Style Ranker" }
+    ],
+    rules: generalContestRules[1].points,
+    timeline: [],
+    faq: globalFAQContent
+  },
+
+  // ───────────────────────────────────────────────────────────────────────────
+  // 13. FINANCE STREAM (FRM / CFA / CFP / FINANCIAL MODELING)
+  // ───────────────────────────────────────────────────────────────────────────
+  {
+    id: "cfa-frm-finance-apex-contest",
+    slug: "cfa-frm-finance-apex-contest",
+    title: "All-India CFA & FRM Financial Analytics Contest",
+    tagline: "Finance Apex Contest",
+    level: 3,
+    exam: "CFA Level I",
+    category: "Finance",
+    entryFee: 99,
+    prizePool: 300000,
+    totalCollection: 450000,
+    platformMargin: 150000,
+    participants: 3200,
+    maxParticipants: 5000,
+    seatsAvailable: 1800,
+    difficulty: "Apex",
+    date: "August 29, 2026",
+    time: "11:00 AM",
+    duration: "2h 30m",
+    status: "upcoming",
+    bannerGradient: "from-green-500/20 via-emerald-500/10 to-transparent",
+    language: "English",
+    country: "Both",
+    isFeatured: false,
+    isTrending: true,
+    registrationDeadline: "August 28, 2026 11:59 PM",
+    overview: "All-India CFA & FRM Financial Analytics Contest tests Portfolio Management, Quantitative Methods, Fixed Income, Derivatives, and Risk Modeling.",
+    eligibility: "Open to CFA, FRM & Financial Analysts.",
+    structure: [
+      "80 CFA Institute Pattern Item-Set Questions",
+      "Financial Calculator & Formula Sheet Allowed",
+      "National Percentile Benchmark Report"
+    ],
+    syllabus: [],
+    rewards: [
+      { rank: "Rank 1", prize: "₹65,000 Cash + Wall Street Charter Badge", recognition: "National Finance Topper" },
+      { rank: "Rank 2 - 10", prize: "₹12,000 Cash Package", recognition: "Financial Analyst Ranker" }
+    ],
+    rules: generalContestRules[1].points,
+    timeline: [],
+    faq: globalFAQContent
+  },
+
+  // ───────────────────────────────────────────────────────────────────────────
+  // 14. GRADUATE ADMISSIONS (GATE / CSIR NET / UGC NET / IIT JAM / CUET PG)
+  // ───────────────────────────────────────────────────────────────────────────
+  {
+    id: "gate-cse-mtech-psu-contest",
+    slug: "gate-cse-mtech-psu-contest",
+    title: "All-India GATE CSE & ECE M.Tech Benchmark Contest",
+    tagline: "GATE Benchmark Contest",
+    level: 3,
+    exam: "GATE",
+    category: "Graduate",
+    entryFee: 79,
+    prizePool: 400000,
+    totalCollection: 600000,
+    platformMargin: 200000,
+    participants: 5800,
+    maxParticipants: 8000,
+    seatsAvailable: 2200,
+    difficulty: "Apex",
+    date: "August 30, 2026",
+    time: "02:00 PM",
+    duration: "3h 00m",
+    status: "upcoming",
+    bannerGradient: "from-orange-500/20 via-amber-500/10 to-transparent",
+    language: "English",
+    country: "India",
+    isFeatured: true,
+    isTrending: true,
+    registrationDeadline: "August 29, 2026 11:59 PM",
+    overview: "All-India GATE CSE & ECE M.Tech Benchmark Contest simulates IISc/IIT GATE online calculator exam environment.",
+    eligibility: "Open to B.Tech, M.Sc & GATE 2027 aspirants across India.",
+    structure: [
+      "65 Official IIT GATE Pattern NAT & MSQ Questions",
+      "Virtual Calculator Tool Interface",
+      "PSU & IIT Cutoff Estimation Report"
+    ],
+    syllabus: [],
+    rewards: [
+      { rank: "Rank 1", prize: "₹80,000 Cash + GATE Gold Rank Trophy", recognition: "AIR 1 GATE Contender" },
+      { rank: "Rank 2 - 15", prize: "₹15,000 Cash Package", recognition: "IIT M.Tech Qualified" }
+    ],
+    rules: generalContestRules[1].points,
+    timeline: [],
+    faq: globalFAQContent
+  },
+
+  // ───────────────────────────────────────────────────────────────────────────
+  // 15. HIRING ASSESSMENTS (AMAZON OA / GOOGLE OA / TCS NQT / INFOSYS)
+  // ───────────────────────────────────────────────────────────────────────────
+  {
+    id: "top-tech-faang-oa-hiring-sprint",
+    slug: "top-tech-faang-oa-hiring-sprint",
+    title: "All-India Top Tech FAANG OA & Placement Hiring Sprint",
+    tagline: "Hiring Sprint",
+    level: 3,
+    exam: "Amazon OA",
+    category: "Hiring",
+    entryFee: 49,
+    prizePool: 350000,
+    totalCollection: 500000,
+    platformMargin: 150000,
+    participants: 7400,
+    maxParticipants: 10000,
+    seatsAvailable: 2600,
+    difficulty: "Elite",
+    date: "September 02, 2026",
+    time: "07:00 PM",
+    duration: "2h 00m",
+    status: "upcoming",
+    bannerGradient: "from-sky-500/20 via-blue-500/10 to-transparent",
+    language: "English",
+    country: "Both",
+    isFeatured: true,
+    isTrending: true,
+    registrationDeadline: "September 01, 2026 11:59 PM",
+    overview: "All-India Top Tech FAANG OA & Placement Hiring Sprint simulates Amazon, Google & Microsoft Online Assessment coding and work-simulation rounds.",
+    eligibility: "Open to 2025, 2026 & 2027 batch B.Tech/BCA/MCA campus job aspirants.",
+    structure: [
+      "2 Hard LC Coding Questions + 1 System Design MCQ",
+      "Automated Test Case & Memory Complexity Profiling",
+      "FAANG Resume Review Referral for Top Performers"
+    ],
+    syllabus: [],
+    rewards: [
+      { rank: "Rank 1", prize: "₹70,000 Cash + Tech Placement Winner Trophy", recognition: "FAANG OA Rank 1" },
+      { rank: "Rank 2 - 25", prize: "₹10,000 Cash Package", recognition: "Top Tech Hireable Candidate" }
+    ],
+    rules: generalContestRules[1].points,
+    timeline: [],
+    faq: globalFAQContent
   }
 ];
+
