@@ -25,47 +25,46 @@
 }
 
 :root {
-  --background: #fafafa;
-  --foreground: #171717;
-  --card: #ffffff;
-  --card-foreground: #171717;
-  --popover: #ffffff;
-  --popover-foreground: #171717;
-  --primary: #171717;
-  --primary-foreground: #ffffff;
-  --secondary: #f4f4f5;
-  --secondary-foreground: #171717;
-  --muted: #f4f4f5;
-  --muted-foreground: #737373;
-  --accent: #f4f4f5;
-  --accent-foreground: #171717;
-  --destructive: #ef4444;
-  --destructive-foreground: #ffffff;
-  --border: #e5e5e5;
-  --input: #e5e5e5;
-  --ring: rgba(23, 23, 23, 0.1);
+  --background: oklch(1 0 0); /* Pure Clean White Light Mode */
+  --foreground: oklch(0.12 0.02 240);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.12 0.02 240);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.12 0.02 240);
+  --primary: oklch(0.55 0.25 295); /* Royal Purple Accent (#7c3aed) */
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.97 0.005 240);
+  --secondary-foreground: oklch(0.12 0.02 240);
+  --muted: oklch(0.96 0.005 240);
+  --muted-foreground: oklch(0.45 0.01 240);
+  --accent: oklch(0.96 0.005 240);
+  --accent-foreground: oklch(0.12 0.02 240);
+  --destructive: oklch(0.55 0.18 25);
+  --border: oklch(0.92 0.01 240);
+  --input: oklch(0.92 0.01 240);
+  --ring: oklch(0.55 0.25 295 / 40%);
+  --radius: 0.75rem;
 }
 
 .dark {
-  --background: #09090b;
-  --foreground: #fafafa;
-  --card: #18181b;
-  --card-foreground: #fafafa;
-  --popover: #18181b;
-  --popover-foreground: #fafafa;
-  --primary: #fafafa;
-  --primary-foreground: #09090b;
-  --secondary: #27272a;
-  --secondary-foreground: #fafafa;
-  --muted: #27272a;
-  --muted-foreground: #a1a1aa;
-  --accent: #27272a;
-  --accent-foreground: #fafafa;
-  --destructive: #ef4444;
-  --destructive-foreground: #ffffff;
-  --border: #27272a;
-  --input: #27272a;
-  --ring: rgba(250, 250, 250, 0.1);
+  --background: oklch(0.06 0.01 270); /* Deep Obsidian Black (#09090f) */
+  --foreground: oklch(0.98 0.005 270);
+  --card: oklch(0.10 0.015 270); /* Rich Dark Obsidian Card */
+  --card-foreground: oklch(0.98 0.005 270);
+  --popover: oklch(0.10 0.015 270);
+  --popover-foreground: oklch(0.98 0.005 270);
+  --primary: oklch(0.68 0.25 295); /* Vibrant Glowing Royal Purple (#a855f7) */
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.15 0.03 290);
+  --secondary-foreground: oklch(0.98 0.005 270);
+  --muted: oklch(0.15 0.02 290);
+  --muted-foreground: oklch(0.70 0.02 290);
+  --accent: oklch(0.20 0.04 295);
+  --accent-foreground: oklch(0.98 0.005 270);
+  --destructive: oklch(0.45 0.15 25);
+  --border: oklch(0.22 0.04 290 / 60%);
+  --input: oklch(0.22 0.04 290 / 60%);
+  --ring: oklch(0.68 0.25 295 / 50%);
 }
 
 body {
