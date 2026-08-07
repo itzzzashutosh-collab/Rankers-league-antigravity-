@@ -337,16 +337,14 @@ export function Header() {
                           Account Settings
                         </Link>
 
-                        <a
-                          href="http://localhost:3002"
-                          target="_blank"
-                          rel="noopener noreferrer"
+                        <Link
+                          href="/admin"
                           onClick={() => setUserMenuOpen(false)}
                           className="flex items-center gap-2.5 px-4 py-2.5 text-xs font-bold text-primary hover:bg-primary/10 transition-colors border-t border-border/20"
                         >
                           <Shield className="w-3.5 h-3.5 text-primary" />
                           Admin Command Portal
-                        </a>
+                        </Link>
                       </div>
                       <div className="py-1 border-t border-border/30">
                         <button
