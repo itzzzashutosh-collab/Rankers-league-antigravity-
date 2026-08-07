@@ -54,7 +54,7 @@ export function HeroSection({ initialLeagues }: HeroSectionProps) {
       {/* Subtle Grid overlay */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,var(--color-border)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-border)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-20 pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
         
         {/* Left Side Copy */}
         <div className="lg:col-span-7 flex flex-col gap-6 text-left">
@@ -72,7 +72,7 @@ export function HeroSection({ initialLeagues }: HeroSectionProps) {
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="w-full h-[160px] sm:h-[200px] md:h-[230px] my-1 relative -ml-2"
+            className="w-full h-[160px] sm:h-[200px] md:h-[230px] my-1 relative"
           >
             <ParticleText
               text="Compete. Rise. Earn your rank."
@@ -90,6 +90,7 @@ export function HeroSection({ initialLeagues }: HeroSectionProps) {
               fontSize="clamp(1.8rem, 5.5vw, 4.2rem)"
               fontWeight={900}
               glow={true}
+              align="left"
             />
           </motion.div>
 
@@ -97,7 +98,7 @@ export function HeroSection({ initialLeagues }: HeroSectionProps) {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-base sm:text-lg text-muted-foreground leading-relaxed max-w-xl"
+            className="text-base sm:text-lg text-muted-foreground leading-relaxed max-w-2xl"
           >
             {heroContent.subline}
           </motion.p>
@@ -130,7 +131,7 @@ export function HeroSection({ initialLeagues }: HeroSectionProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="grid grid-cols-3 gap-6 pt-10 border-t border-border/40 max-w-lg"
+            className="grid grid-cols-3 gap-6 pt-10 border-t border-border/40 w-full"
           >
             {heroContent.stats.map((stat) => (
               <div key={stat.label}>

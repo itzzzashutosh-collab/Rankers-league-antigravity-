@@ -19,6 +19,7 @@ export interface ParticleTextProps {
   fontWeight?: number | string;
   fontFamily?: string;
   glow?: boolean;
+  align?: 'left' | 'center';
   className?: string;
   style?: CSSProperties;
 }
@@ -109,6 +110,7 @@ export const ParticleText = ({
   fontWeight = 800,
   fontFamily = 'inherit',
   glow = true,
+  align = 'center',
   className = '',
   style
 }: ParticleTextProps) => {
@@ -311,12 +313,13 @@ export const ParticleText = ({
       const targets: Target[] = [];
       const step = Math.max(2, Math.floor(density));
 
+      const startX = align === 'left' ? 0 : (width / 2 - offscreen.width / 2);
       for (let y = 0; y < offscreen.height; y += step) {
         for (let x = 0; x < offscreen.width; x += step) {
           const alpha = imageData.data[(y * offscreen.width + x) * 4 + 3];
           if (alpha > 40) {
             targets.push({
-              x: width / 2 - offscreen.width / 2 + x,
+              x: startX + x,
               y: height / 2 - offscreen.height / 2 + y,
               alpha: alpha / 255
             });

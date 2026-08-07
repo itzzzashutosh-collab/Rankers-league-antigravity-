@@ -56,9 +56,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} ${outfit.variable} font-sans antialiased`}>
+      <body className={`${inter.variable} ${outfit.variable} font-sans antialiased min-h-screen w-full`}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
-          <QueryProvider>{children}</QueryProvider>
+          <QueryProvider>
+            <div className="relative min-h-screen flex flex-col w-full overflow-x-hidden">
+              {children}
+            </div>
+          </QueryProvider>
         </ThemeProvider>
       </body>
     </html>

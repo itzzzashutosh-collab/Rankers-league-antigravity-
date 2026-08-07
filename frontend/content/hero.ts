@@ -9,9 +9,9 @@ export const heroContent = {
   primaryCta: { label: "Explore Contests", href: "/challenges" },
   secondaryCta: { label: "View Leaderboard", href: "/standings" },
   stats: [
-    { value: "2,40,000+", label: "Registered Aspirants" },
-    { value: "99.8%", label: "Accuracy Replication" },
-    { value: "0%", label: "Standing Compromise" },
+    { value: "100%", label: "Guaranteed Auto-Refunds" },
+    { value: "70%", label: "Live Seat Confirmation" },
+    { value: "AIR 1", label: "Calibrated Proctoring" },
   ],
   floatingCards: {
     contestPreview: {

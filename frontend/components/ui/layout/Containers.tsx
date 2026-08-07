@@ -30,7 +30,7 @@ export const Section = React.forwardRef<HTMLElement, SectionProps>(
     return (
       <section ref={ref} className={cn("py-24 relative overflow-hidden", className)} {...props}>
         {radialGlow && <div className="absolute inset-0 radial-glow pointer-events-none" />}
-        <div className="max-w-7xl mx-auto px-6 relative z-10">{children}</div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">{children}</div>
       </section>
     );
   }
@@ -161,7 +161,7 @@ Stack.displayName = "Stack";
 export const Container = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, children, ...props }, ref) => {
     return (
-      <div ref={ref} className={cn("max-w-7xl mx-auto px-6 w-full", className)} {...props}>
+      <div ref={ref} className={cn("max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full", className)} {...props}>
         {children}
       </div>
     );

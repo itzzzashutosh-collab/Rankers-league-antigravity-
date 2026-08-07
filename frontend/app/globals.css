@@ -104,9 +104,22 @@
 @layer base {
   * {
     @apply border-border outline-ring/50 transition-colors duration-250;
+    box-sizing: border-box;
+  }
+  html {
+    @apply font-sans scroll-smooth;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden;
   }
   body {
     @apply bg-background text-foreground antialiased selection:bg-primary/20 selection:text-foreground min-h-screen;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden;
+    position: relative;
     background-image: 
       radial-gradient(at 15% 15%, rgba(147, 51, 234, 0.07) 0px, transparent 55%),
       radial-gradient(at 85% 25%, rgba(168, 85, 247, 0.05) 0px, transparent 50%),
@@ -119,9 +132,15 @@
       radial-gradient(at 85% 25%, rgba(168, 85, 247, 0.16) 0px, transparent 50%),
       radial-gradient(at 50% 75%, rgba(126, 34, 206, 0.14) 0px, transparent 60%);
   }
-  html {
-    @apply font-sans scroll-smooth;
-  }
+}
+
+/* Luxury Horizontal Scrollbar Hiding & Smoothing Utilities */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }
 
 /* Premium Custom Utilities */

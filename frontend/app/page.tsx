@@ -1,8 +1,6 @@
 import { Header } from "@/components/header";
 import { AnnouncementBar } from "@/components/sections/AnnouncementBar";
 import { HeroSection } from "@/components/sections/HeroSection";
-import { TrustedBySection } from "@/components/sections/TrustedBySection";
-import { StatisticsSection } from "@/components/sections/StatisticsSection";
 import { WhyRankersLeague } from "@/components/sections/WhyRankersLeague";
 import { CompetitionCategories } from "@/components/sections/CompetitionCategories";
 import { FeaturedLeagues } from "@/components/sections/FeaturedLeagues";
@@ -39,13 +37,7 @@ export default async function Home() {
         {/* 2. Hero Section */}
         <HeroSection initialLeagues={championships || []} />
 
-        {/* 3. Trusted By */}
-        <TrustedBySection />
-
-        {/* 4. Platform Statistics */}
-        <StatisticsSection />
-
-        {/* 5. Why Ranker's League */}
+        {/* 3. Why Ranker's League */}
         <WhyRankersLeague />
 
         {/* 6. Competition Categories */}

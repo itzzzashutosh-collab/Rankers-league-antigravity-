@@ -176,56 +176,58 @@ export function Header() {
             : "bg-transparent py-5"
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between gap-4 lg:gap-8">
-          {/* Logo Branding */}
-          <Link href="/" className="shrink-0">
-            <Logo size="md" />
-          </Link>
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4 lg:gap-8">
+          {/* Left Section: Logo Branding + Left-Shifted Navigation Links */}
+          <div className="flex items-center gap-4 xl:gap-6 min-w-0">
+            <Link href="/" className="shrink-0">
+              <Logo size="md" />
+            </Link>
 
-          {/* Navigation Links (Flex layout with clean spacing & dynamic active route highlighting) */}
-          <nav className="hidden lg:flex items-center gap-2 xl:gap-3">
-            {navLinks.map((link) => {
-              if (link.authOnly && !authUser) return null;
-              const active = isActive(link.href);
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={cn(
-                    "px-3.5 py-1.5 rounded-xl font-black text-xs tracking-wide uppercase transition-all duration-200",
-                    active
-                      ? "bg-primary text-primary-foreground shadow-md shadow-primary/25 scale-[1.02]"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted/20"
-                  )}
-                >
-                  {link.label}
-                </Link>
-              );
-            })}
-          </nav>
+            {/* Navigation Links */}
+            <nav className="hidden lg:flex items-center gap-0.5 xl:gap-1">
+              {navLinks.map((link) => {
+                if (link.authOnly && !authUser) return null;
+                const active = isActive(link.href);
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={cn(
+                      "px-2 xl:px-2.5 py-1.5 rounded-xl font-bold text-[11px] xl:text-xs tracking-wide uppercase transition-all duration-200 shrink-0",
+                      active
+                        ? "bg-primary text-primary-foreground shadow-md shadow-primary/25 scale-[1.02]"
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted/20"
+                    )}
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
+            </nav>
+          </div>
 
-          {/* Interactive Controls */}
-          <div className="hidden md:flex items-center gap-3 sm:gap-4 shrink-0 ml-auto">
+          {/* Interactive Controls & Profile Section */}
+          <div className="flex items-center gap-2 sm:gap-2.5 shrink-0 ml-auto">
             {authUser && (
               <>
-                {/* Sleek Wallet Balance Display with clear icon spacing */}
+                {/* Sleek Standalone Wallet Balance Button */}
                 <Link
                   href="/dashboard/wallet"
-                  className="flex items-center gap-2.5 px-3.5 py-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 hover:border-emerald-500/50 transition-all duration-200 shadow-xs group"
+                  className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 hover:border-emerald-500/50 transition-all duration-200 shadow-xs group shrink-0"
                   title="Wallet Balance"
                 >
                   <div className="flex items-center justify-center w-5 h-5 rounded-lg bg-emerald-500/20 text-emerald-400 group-hover:scale-105 transition-transform">
                     <Wallet className="w-3.5 h-3.5 text-emerald-400" />
                   </div>
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Wallet:</span>
+                  <div className="flex items-center gap-1">
+                    <span className="hidden xl:inline text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Wallet:</span>
                     <span className="text-xs font-black text-emerald-400 font-mono tracking-tight">
                       {formatWalletDisplay(walletBalance)}
                     </span>
                   </div>
                 </Link>
 
-                <Link href="/dashboard/notifications">
+                <Link href="/dashboard/notifications" className="hidden sm:flex shrink-0">
                   <Button
                     variant="ghost"
                     size="icon"
@@ -238,39 +240,12 @@ export function Header() {
               </>
             )}
 
-            {/* Region Switcher */}
-            <div className="hidden sm:flex items-center bg-secondary/40 border border-border/40 rounded-xl p-0.5 text-xs font-bold select-none">
-              <button
-                onClick={() => handleRegionChange("india")}
-                className={cn(
-                  "px-2 py-1 rounded-lg text-[10px] uppercase transition-all flex items-center gap-1",
-                  selectedRegion === "india"
-                    ? "bg-card text-foreground shadow-xs border border-border/40 font-black"
-                    : "text-muted-foreground hover:text-foreground"
-                )}
-                title="India Region (INR ₹)"
-              >
-                🇮🇳 IN
-              </button>
-              <button
-                onClick={() => handleRegionChange("international")}
-                className={cn(
-                  "px-2 py-1 rounded-lg text-[10px] uppercase transition-all flex items-center gap-1",
-                  selectedRegion === "international"
-                    ? "bg-card text-foreground shadow-xs border border-border/40 font-black"
-                    : "text-muted-foreground hover:text-foreground"
-                )}
-                title="International Region (USD $)"
-              >
-                🌐 INT
-              </button>
-            </div>
-
+            {/* Theme Toggle */}
             <Button
               variant="ghost"
               size="icon"
               onClick={toggleMode}
-              className="text-muted-foreground hover:text-foreground"
+              className="text-muted-foreground hover:text-foreground shrink-0"
               aria-label="Toggle Theme"
             >
               <Sun className="w-4.5 h-4.5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
@@ -278,11 +253,11 @@ export function Header() {
             </Button>
 
             {authUser ? (
-              // Authenticated: User dropdown menu
+              // Authenticated: User dropdown menu with integrated Wallet badge
               <div ref={userMenuRef} className="relative">
                 <button
                   onClick={() => setUserMenuOpen(!userMenuOpen)}
-                  className="flex items-center gap-2.5 px-3 py-1.5 rounded-xl border border-border/40 bg-card/30 hover:bg-card/60 hover:border-primary/30 transition-all duration-200"
+                  className="flex items-center gap-2.5 px-3 py-1.5 rounded-xl border border-border/40 bg-card/40 hover:bg-card hover:border-primary/30 transition-all duration-200 shadow-xs"
                 >
                   {profile?.avatar_url ? (
                     <img src={profile.avatar_url} alt="" className="w-7 h-7 rounded-lg object-cover" />
@@ -293,12 +268,12 @@ export function Header() {
                       </span>
                     </div>
                   )}
-                  <div className="flex flex-col items-start">
+                  <div className="hidden sm:flex flex-col items-start text-left">
                     <span className="text-xs font-bold text-foreground leading-tight">
                       {profile?.full_name?.split(" ")[0] || profile?.username || "Account"}
                     </span>
-                    <span className="text-[10px] text-muted-foreground leading-tight">
-                      {profile?.username ? `@${profile.username}` : "Set up profile"}
+                    <span className="text-[10px] font-black text-emerald-400 font-mono leading-tight">
+                      {formatWalletDisplay(walletBalance)}
                     </span>
                   </div>
                   <ChevronDown className={`w-3.5 h-3.5 text-muted-foreground transition-transform duration-200 ${userMenuOpen ? "rotate-180" : ""}`} />
@@ -311,13 +286,28 @@ export function Header() {
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: -8, scale: 0.95 }}
                       transition={{ duration: 0.15 }}
-                      className="absolute right-0 top-full mt-2 w-52 bg-card/95 backdrop-blur-xl border border-border/50 rounded-xl shadow-2xl overflow-hidden z-50"
+                      className="absolute right-0 top-full mt-2 w-56 bg-card/95 backdrop-blur-xl border border-border/50 rounded-xl shadow-2xl overflow-hidden z-50 text-left"
                     >
-                      <div className="px-4 py-3 border-b border-border/30">
-                        <p className="text-xs font-black">{profile?.full_name || "Welcome!"}</p>
-                        <p className="text-[10px] text-muted-foreground">{profile?.username ? `@${profile.username}` : "Complete your profile"}</p>
+                      <div className="px-4 py-3 border-b border-border/30 bg-muted/20">
+                        <div className="flex items-center justify-between gap-2 mb-1">
+                          <p className="text-xs font-black text-foreground truncate">{profile?.full_name || "Welcome!"}</p>
+                          <span className="text-[10px] font-mono font-black text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20 shrink-0">
+                            {formatWalletDisplay(walletBalance)}
+                          </span>
+                        </div>
+                        <p className="text-[10px] text-muted-foreground truncate">{profile?.username ? `@${profile.username}` : "Complete your profile"}</p>
                       </div>
+
                       <div className="py-1">
+                        <Link
+                          href="/dashboard/wallet"
+                          onClick={() => setUserMenuOpen(false)}
+                          className="flex items-center gap-2.5 px-4 py-2.5 text-xs font-bold text-emerald-400 hover:bg-emerald-500/10 transition-colors border-b border-border/20"
+                        >
+                          <Wallet className="w-3.5 h-3.5 text-emerald-400" />
+                          My Wallet & Balance
+                        </Link>
+
                         {profile?.username ? (
                           <Link
                             href={`/profile/${profile.username}`}
@@ -365,32 +355,19 @@ export function Header() {
               <Link href="/auth/login">
                 <Button
                   variant="outline"
-                  className="px-5 border-primary/30 text-foreground hover:border-primary hover:bg-primary/5 rounded-xl font-bold text-xs"
+                  className="px-4 border-primary/30 text-foreground hover:border-primary hover:bg-primary/5 rounded-xl font-bold text-xs"
                 >
                   Sign In
                 </Button>
               </Link>
             )}
-          </div>
 
-          {/* Mobile Display Controls */}
-          <div className="flex lg:hidden items-center gap-2 shrink-0">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={toggleMode}
-              className="text-muted-foreground"
-              aria-label="Toggle Theme"
-            >
-              <Sun className="w-4.5 h-4.5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-              <Moon className="absolute w-4.5 h-4.5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-            </Button>
-
+            {/* Mobile Menu Button */}
             <Button
               variant="ghost"
               size="icon"
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="text-muted-foreground"
+              className="flex lg:hidden text-muted-foreground shrink-0"
               aria-label="Menu"
             >
               {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}

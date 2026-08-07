@@ -8,6 +8,7 @@ import { UsernameField } from "@/components/auth/UsernameField";
 import { PhoneInput } from "@/components/auth/PhoneInput";
 import { createClient } from "@/utils/supabase/client";
 import { cn } from "@/lib/utils";
+import { regionService } from "@/services/regionService";
 import { EXAM_CATEGORY_LABELS, ACADEMIC_LEVEL_LABELS, ExamCategory, AcademicLevel, GenderType } from "@/types/auth";
 
 const STEPS = ["Personal Info", "Education & Contact", "Exam Profile"];
@@ -27,6 +28,7 @@ export default function CompleteProfilePage() {
   const [username, setUsername] = React.useState("");
   const [dob, setDob] = React.useState("");
   const [gender, setGender] = React.useState<GenderType | "">("");
+  const [country, setCountry] = React.useState<string>("India");
 
   // Step 2 — Education & Contact
   const [phone, setPhone] = React.useState("");
@@ -360,6 +362,43 @@ export default function CompleteProfilePage() {
                     {g === "male" ? "Male" : g === "female" ? "Female" : g === "non_binary" ? "Non-Binary" : "Prefer not to say"}
                   </button>
                 ))}
+              </div>
+            </div>
+
+            {/* Country / Region of Residence */}
+            <div className="space-y-1.5">
+              <label className="text-xs font-bold text-foreground">Country / Region of Residence *</label>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCountry("India");
+                    regionService.setRegion("india");
+                  }}
+                  className={cn(
+                    "py-2.5 rounded-xl border-2 text-xs font-bold transition-all flex items-center justify-center gap-1.5",
+                    country === "India"
+                      ? "bg-primary/10 border-primary text-primary"
+                      : "border-border/40 text-muted-foreground hover:border-border"
+                  )}
+                >
+                  <span>🇮🇳</span> India (INR ₹)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCountry("International");
+                    regionService.setRegion("international");
+                  }}
+                  className={cn(
+                    "py-2.5 rounded-xl border-2 text-xs font-bold transition-all flex items-center justify-center gap-1.5",
+                    country === "International"
+                      ? "bg-primary/10 border-primary text-primary"
+                      : "border-border/40 text-muted-foreground hover:border-border"
+                  )}
+                >
+                  <span>🌐</span> International (USD $)
+                </button>
               </div>
             </div>
 
