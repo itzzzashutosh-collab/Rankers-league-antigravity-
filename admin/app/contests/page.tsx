@@ -16,35 +16,45 @@ export default function ContestsAdminPage() {
 
   // Launch Form State
   const [newTitle, setNewTitle] = React.useState("");
+  const [newDescription, setNewDescription] = React.useState("");
   const [newExam, setNewExam] = React.useState("JEE_MAIN");
-  const [newSeats, setNewSeats] = React.useState(2500);
+  const [newTier, setNewTier] = React.useState("Tier 2 (2,500 - 9,999 Seats)");
   const [newFee, setNewFee] = React.useState(49);
+  const [newSubjects, setNewSubjects] = React.useState("Physics, Chemistry, Mathematics");
+  const [newSeats, setNewSeats] = React.useState(2500);
+  const [newSchedule, setNewSchedule] = React.useState("");
+  const [newMargin, setNewMargin] = React.useState(30);
 
   React.useEffect(() => {
     setContests(adminService.getContests());
   }, []);
 
   const matrixResult = adminService.calculatePrizeMatrix(calcSeats, calcFee, calcMargin);
+  const launchCalc = adminService.calculatePrizeMatrix(newSeats, newFee, newMargin);
 
   const handleLaunchContest = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newTitle) return;
 
-    const calc = adminService.calculatePrizeMatrix(newSeats, newFee, 30);
     const newContestItem: ContestAdminItem = {
       id: `c_${Date.now()}`,
       title: newTitle,
+      description: newDescription,
       examCategory: newExam,
+      tier: newTier,
+      subjects: newSubjects.split(",").map((s) => s.trim()).filter(Boolean),
       entryFee: newFee,
       maxSeats: newSeats,
       filledSeats: Math.round(newSeats * 0.75), // Initial fill demonstration
-      prizePool: calc.prizePool,
-      scheduledStart: new Date(Date.now() + 24 * 3600 * 1000).toISOString(),
+      prizePool: launchCalc.prizePool,
+      marginPercent: newMargin,
+      scheduledStart: newSchedule || new Date(Date.now() + 24 * 3600 * 1000).toISOString(),
       status: "guaranteed_live",
     };
 
     setContests([newContestItem, ...contests]);
     setNewTitle("");
+    setNewDescription("");
     setShowLaunchModal(false);
   };
 
@@ -267,51 +277,92 @@ export default function ContestsAdminPage() {
       {/* Launch New Contest Modal */}
       {showLaunchModal && (
         <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-card border border-border/50 rounded-2xl p-6 w-full max-w-md space-y-5 shadow-2xl">
-            <h2 className="text-lg font-black font-heading flex items-center gap-2">
-              <Trophy className="w-5 h-5 text-primary" />
-              <span>Launch New Championship League</span>
-            </h2>
+          <div className="bg-card border border-border/50 rounded-2xl p-6 w-full max-w-2xl space-y-5 shadow-2xl overflow-y-auto max-h-[92vh]">
+            <div className="flex items-center justify-between">
+              <h2 className="text-lg font-black font-heading flex items-center gap-2">
+                <Trophy className="w-5 h-5 text-primary" />
+                <span>Launch New Championship League Wizard</span>
+              </h2>
+              <button
+                onClick={() => setShowLaunchModal(false)}
+                className="text-xs font-bold text-muted-foreground hover:text-foreground"
+              >
+                ✕ Close
+              </button>
+            </div>
 
             <form onSubmit={handleLaunchContest} className="space-y-4">
+              {/* Row 1: Title & Exam Category */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-foreground">Contest Title *</label>
+                  <input
+                    type="text"
+                    value={newTitle}
+                    onChange={(e) => setNewTitle(e.target.value)}
+                    placeholder="e.g. JEE Main Speed & Accuracy Grand Sprint"
+                    required
+                    className="w-full bg-background border border-border/50 rounded-xl px-3.5 py-2 text-xs font-medium outline-none focus:border-primary"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-foreground">Exam Name / Target *</label>
+                  <select
+                    value={newExam}
+                    onChange={(e) => setNewExam(e.target.value)}
+                    className="w-full bg-background border border-border/50 rounded-xl px-3.5 py-2 text-xs font-bold font-mono outline-none focus:border-primary cursor-pointer"
+                  >
+                    <option value="JEE_MAIN">JEE Main League</option>
+                    <option value="JEE_ADVANCED">JEE Advanced Elite</option>
+                    <option value="NEET_UG">NEET UG Medical League</option>
+                    <option value="NEET_PG">NEET PG Specialist</option>
+                    <option value="UPSC_CSE">UPSC CSE Prelims Arena</option>
+                    <option value="CUET_UG">CUET UG Standard</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Row 2: Description */}
               <div className="space-y-1">
-                <label className="text-xs font-bold text-foreground">Contest Title *</label>
-                <input
-                  type="text"
-                  value={newTitle}
-                  onChange={(e) => setNewTitle(e.target.value)}
-                  placeholder="e.g. JEE Main Speed & Accuracy Grand Sprint"
-                  required
-                  className="w-full bg-background border border-border/50 rounded-xl px-4 py-2.5 text-xs font-medium outline-none focus:border-primary"
+                <label className="text-xs font-bold text-foreground">Contest Description & Rules</label>
+                <textarea
+                  value={newDescription}
+                  onChange={(e) => setNewDescription(e.target.value)}
+                  placeholder="Comprehensive live national mock contest calibrating speed, accuracy, and negative marking penalty..."
+                  rows={2}
+                  className="w-full bg-background border border-border/50 rounded-xl px-3.5 py-2 text-xs font-medium outline-none focus:border-primary"
                 />
               </div>
 
-              <div className="space-y-1">
-                <label className="text-xs font-bold text-foreground">Exam Target *</label>
-                <select
-                  value={newExam}
-                  onChange={(e) => setNewExam(e.target.value)}
-                  className="w-full bg-background border border-border/50 rounded-xl px-4 py-2.5 text-xs font-bold font-mono outline-none focus:border-primary cursor-pointer"
-                >
-                  <option value="JEE_MAIN">JEE Main</option>
-                  <option value="JEE_ADVANCED">JEE Advanced</option>
-                  <option value="NEET_UG">NEET UG</option>
-                  <option value="NEET_PG">NEET PG</option>
-                  <option value="UPSC_CSE">UPSC CSE</option>
-                  <option value="CUET_UG">CUET UG</option>
-                </select>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
+              {/* Row 3: Contest Tier (4 Levels) & Subjects */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-foreground">Seat Capacity</label>
+                  <label className="text-xs font-bold text-foreground">Contest Tier Level *</label>
+                  <select
+                    value={newTier}
+                    onChange={(e) => setNewTier(e.target.value)}
+                    className="w-full bg-background border border-border/50 rounded-xl px-3.5 py-2 text-xs font-bold font-mono outline-none focus:border-primary cursor-pointer"
+                  >
+                    <option value="Tier 1 (500 - 2,499 Seats)">Tier 1 (500 – 2,499 Seats)</option>
+                    <option value="Tier 2 (2,500 - 9,999 Seats)">Tier 2 (2,500 – 9,999 Seats)</option>
+                    <option value="Tier 3 (10,000+ Seats)">Tier 3 (10,000+ Mega Seats)</option>
+                    <option value="Micro Tier (100 - 499 Seats)">Micro Tier (100 – 499 Sprint Seats)</option>
+                  </select>
+                </div>
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-foreground">Configured Subjects</label>
                   <input
-                    type="number"
-                    value={newSeats}
-                    onChange={(e) => setNewSeats(Number(e.target.value))}
-                    className="w-full bg-background border border-border/50 rounded-xl px-3 py-2 text-xs font-mono font-bold"
+                    type="text"
+                    value={newSubjects}
+                    onChange={(e) => setNewSubjects(e.target.value)}
+                    placeholder="Physics, Chemistry, Mathematics"
+                    className="w-full bg-background border border-border/50 rounded-xl px-3.5 py-2 text-xs font-medium outline-none focus:border-primary"
                   />
                 </div>
+              </div>
+
+              {/* Row 4: Registration Fee, Total Seats, Profit Margin & Schedule Date */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 <div className="space-y-1">
                   <label className="text-xs font-bold text-foreground">Entry Fee (₹)</label>
                   <input
@@ -321,13 +372,49 @@ export default function ContestsAdminPage() {
                     className="w-full bg-background border border-border/50 rounded-xl px-3 py-2 text-xs font-mono font-bold"
                   />
                 </div>
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-foreground">Total Seats</label>
+                  <input
+                    type="number"
+                    value={newSeats}
+                    onChange={(e) => setNewSeats(Number(e.target.value))}
+                    className="w-full bg-background border border-border/50 rounded-xl px-3 py-2 text-xs font-mono font-bold"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-foreground">Profit Margin (%)</label>
+                  <input
+                    type="number"
+                    value={newMargin}
+                    onChange={(e) => setNewMargin(Number(e.target.value))}
+                    className="w-full bg-background border border-border/50 rounded-xl px-3 py-2 text-xs font-mono font-bold"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-foreground">Schedule Date & Time</label>
+                  <input
+                    type="datetime-local"
+                    value={newSchedule}
+                    onChange={(e) => setNewSchedule(e.target.value)}
+                    className="w-full bg-background border border-border/50 rounded-xl px-2.5 py-2 text-[11px] font-mono"
+                  />
+                </div>
               </div>
 
-              <div className="bg-primary/10 border border-primary/20 rounded-xl p-3 text-xs flex justify-between font-mono font-bold">
-                <span className="text-muted-foreground">Calculated Prize Pool:</span>
-                <span className="text-emerald-400">Up To ₹{adminService.calculatePrizeMatrix(newSeats, newFee, 30).prizePool.toLocaleString()}</span>
+              {/* Live Preview Box */}
+              <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-4 space-y-2 text-xs font-mono">
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground font-bold">100% Collection: ₹{launchCalc.totalCollection.toLocaleString()}</span>
+                  <span className="text-emerald-400 font-bold">Margin ({newMargin}%): ₹{launchCalc.platformProfit.toLocaleString()}</span>
+                  <span className="text-violet-400 font-black text-sm">Up To Prize Pool: ₹{launchCalc.prizePool.toLocaleString()}</span>
+                </div>
+                <div className="text-[11px] text-muted-foreground pt-1 border-t border-emerald-500/20 flex justify-between">
+                  <span>🔴 70% Threshold Guaranteed Min: ₹{launchCalc.prizePoolAt70.toLocaleString()}</span>
+                  <span>({launchCalc.seatsAt70} Min Seats)</span>
+                </div>
               </div>
 
+              {/* Form Actions */}
               <div className="flex gap-3 pt-2">
                 <button
                   type="button"
@@ -340,7 +427,7 @@ export default function ContestsAdminPage() {
                   type="submit"
                   className="flex-1 py-2.5 rounded-xl bg-primary text-primary-foreground font-bold text-xs hover:bg-primary/90 shadow-md shadow-primary/25"
                 >
-                  🚀 Publish Championship
+                  🚀 Publish Championship League
                 </button>
               </div>
             </form>

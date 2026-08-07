@@ -26,11 +26,15 @@ export interface ExamCategoryConfig {
 export interface ContestAdminItem {
   id: string;
   title: string;
+  description?: string;
   examCategory: string;
+  tier?: string;
+  subjects?: string[];
   entryFee: number;
   maxSeats: number;
   filledSeats: number;
   prizePool: number;
+  marginPercent?: number;
   scheduledStart: string;
   status: "scheduled" | "guaranteed_live" | "completed" | "cancelled";
 }
