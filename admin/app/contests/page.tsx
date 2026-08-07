@@ -7,17 +7,46 @@ import { adminService, ContestAdminItem } from "@/services/adminService";
 export default function ContestsAdminPage() {
   const [contests, setContests] = React.useState<ContestAdminItem[]>([]);
   const [showMatrixModal, setShowMatrixModal] = React.useState(false);
+  const [showLaunchModal, setShowLaunchModal] = React.useState(false);
 
   // Matrix Calculator Inputs
   const [calcSeats, setCalcSeats] = React.useState(2500);
   const [calcFee, setCalcFee] = React.useState(49);
   const [calcMargin, setCalcMargin] = React.useState(30);
 
+  // Launch Form State
+  const [newTitle, setNewTitle] = React.useState("");
+  const [newExam, setNewExam] = React.useState("JEE_MAIN");
+  const [newSeats, setNewSeats] = React.useState(2500);
+  const [newFee, setNewFee] = React.useState(49);
+
   React.useEffect(() => {
     setContests(adminService.getContests());
   }, []);
 
   const matrixResult = adminService.calculatePrizeMatrix(calcSeats, calcFee, calcMargin);
+
+  const handleLaunchContest = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newTitle) return;
+
+    const calc = adminService.calculatePrizeMatrix(newSeats, newFee, 30);
+    const newContestItem: ContestAdminItem = {
+      id: `c_${Date.now()}`,
+      title: newTitle,
+      examCategory: newExam,
+      entryFee: newFee,
+      maxSeats: newSeats,
+      filledSeats: Math.round(newSeats * 0.75), // Initial fill demonstration
+      prizePool: calc.prizePool,
+      scheduledStart: new Date(Date.now() + 24 * 3600 * 1000).toISOString(),
+      status: "guaranteed_live",
+    };
+
+    setContests([newContestItem, ...contests]);
+    setNewTitle("");
+    setShowLaunchModal(false);
+  };
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
@@ -41,7 +70,10 @@ export default function ContestsAdminPage() {
             <Calculator className="w-4 h-4" />
             <span>Prize Matrix Calculator</span>
           </button>
-          <button className="flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs bg-primary text-primary-foreground hover:bg-primary/90 transition-all shadow-lg shadow-primary/25 shrink-0">
+          <button
+            onClick={() => setShowLaunchModal(true)}
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs bg-primary text-primary-foreground hover:bg-primary/90 transition-all shadow-lg shadow-primary/25 shrink-0"
+          >
             <Plus className="w-4 h-4" />
             <span>Launch Contest</span>
           </button>
@@ -212,6 +244,90 @@ export default function ContestsAdminPage() {
                 </tbody>
               </table>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Launch New Contest Modal */}
+      {showLaunchModal && (
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-card border border-border/50 rounded-2xl p-6 w-full max-w-md space-y-5 shadow-2xl">
+            <h2 className="text-lg font-black font-heading flex items-center gap-2">
+              <Trophy className="w-5 h-5 text-primary" />
+              <span>Launch New Championship League</span>
+            </h2>
+
+            <form onSubmit={handleLaunchContest} className="space-y-4">
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-foreground">Contest Title *</label>
+                <input
+                  type="text"
+                  value={newTitle}
+                  onChange={(e) => setNewTitle(e.target.value)}
+                  placeholder="e.g. JEE Main Speed & Accuracy Grand Sprint"
+                  required
+                  className="w-full bg-background border border-border/50 rounded-xl px-4 py-2.5 text-xs font-medium outline-none focus:border-primary"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-foreground">Exam Target *</label>
+                <select
+                  value={newExam}
+                  onChange={(e) => setNewExam(e.target.value)}
+                  className="w-full bg-background border border-border/50 rounded-xl px-4 py-2.5 text-xs font-bold font-mono outline-none focus:border-primary cursor-pointer"
+                >
+                  <option value="JEE_MAIN">JEE Main</option>
+                  <option value="JEE_ADVANCED">JEE Advanced</option>
+                  <option value="NEET_UG">NEET UG</option>
+                  <option value="NEET_PG">NEET PG</option>
+                  <option value="UPSC_CSE">UPSC CSE</option>
+                  <option value="CUET_UG">CUET UG</option>
+                </select>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-foreground">Seat Capacity</label>
+                  <input
+                    type="number"
+                    value={newSeats}
+                    onChange={(e) => setNewSeats(Number(e.target.value))}
+                    className="w-full bg-background border border-border/50 rounded-xl px-3 py-2 text-xs font-mono font-bold"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-foreground">Entry Fee (₹)</label>
+                  <input
+                    type="number"
+                    value={newFee}
+                    onChange={(e) => setNewFee(Number(e.target.value))}
+                    className="w-full bg-background border border-border/50 rounded-xl px-3 py-2 text-xs font-mono font-bold"
+                  />
+                </div>
+              </div>
+
+              <div className="bg-primary/10 border border-primary/20 rounded-xl p-3 text-xs flex justify-between font-mono font-bold">
+                <span className="text-muted-foreground">Calculated Prize Pool:</span>
+                <span className="text-emerald-400">Up To ₹{adminService.calculatePrizeMatrix(newSeats, newFee, 30).prizePool.toLocaleString()}</span>
+              </div>
+
+              <div className="flex gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowLaunchModal(false)}
+                  className="flex-1 py-2.5 rounded-xl border border-border/50 text-xs font-bold text-muted-foreground hover:bg-muted/20"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 py-2.5 rounded-xl bg-primary text-primary-foreground font-bold text-xs hover:bg-primary/90 shadow-md shadow-primary/25"
+                >
+                  🚀 Publish Championship
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}

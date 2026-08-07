@@ -16,6 +16,20 @@ interface QuestionItem {
 }
 
 export default function QuestionBankPage() {
+  const [showAddModal, setShowAddModal] = React.useState(false);
+
+  // New Question Form State
+  const [exam, setExam] = React.useState("JEE_MAIN");
+  const [subject, setSubject] = React.useState("Physics");
+  const [topic, setTopic] = React.useState("");
+  const [qText, setQText] = React.useState("");
+  const [opt0, setOpt0] = React.useState("");
+  const [opt1, setOpt1] = React.useState("");
+  const [opt2, setOpt2] = React.useState("");
+  const [opt3, setOpt3] = React.useState("");
+  const [correct, setCorrect] = React.useState(0);
+  const [difficulty, setDifficulty] = React.useState<"Easy" | "Medium" | "Hard">("Medium");
+
   const [questions, setQuestions] = React.useState<QuestionItem[]>([
     {
       id: "q1",
@@ -52,6 +66,31 @@ export default function QuestionBankPage() {
     },
   ]);
 
+  const handleAddQuestion = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!qText || !opt0 || !opt1) return;
+
+    const newQ: QuestionItem = {
+      id: `q_${Date.now()}`,
+      exam,
+      subject,
+      topic: topic || "General Concept",
+      questionText: qText,
+      options: [opt0, opt1, opt2 || "Option C", opt3 || "Option D"],
+      correctIndex: correct,
+      marking: "+4 / -1",
+      difficulty,
+    };
+
+    setQuestions([newQ, ...questions]);
+    setQText("");
+    setOpt0("");
+    setOpt1("");
+    setOpt2("");
+    setOpt3("");
+    setShowAddModal(false);
+  };
+
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
       {/* Top Header */}
@@ -66,7 +105,10 @@ export default function QuestionBankPage() {
           </p>
         </div>
 
-        <button className="flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs bg-primary text-primary-foreground hover:bg-primary/90 transition-all shadow-lg shadow-primary/25 shrink-0">
+        <button
+          onClick={() => setShowAddModal(true)}
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs bg-primary text-primary-foreground hover:bg-primary/90 transition-all shadow-lg shadow-primary/25 shrink-0"
+        >
           <Plus className="w-4 h-4" />
           <span>Add Question</span>
         </button>
@@ -185,6 +227,109 @@ export default function QuestionBankPage() {
           ))}
         </div>
       </div>
+
+      {/* Add New Question Modal */}
+      {showAddModal && (
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-card border border-border/50 rounded-2xl p-6 w-full max-w-lg space-y-5 shadow-2xl overflow-y-auto max-h-[90vh]">
+            <h2 className="text-lg font-black font-heading flex items-center gap-2">
+              <HelpCircle className="w-5 h-5 text-primary" />
+              <span>Add MCQ to Question Bank</span>
+            </h2>
+
+            <form onSubmit={handleAddQuestion} className="space-y-4">
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-foreground">Exam Category</label>
+                  <select
+                    value={exam}
+                    onChange={(e) => setExam(e.target.value)}
+                    className="w-full bg-background border border-border/50 rounded-xl px-3 py-2 text-xs font-mono font-bold"
+                  >
+                    <option value="JEE_MAIN">JEE Main</option>
+                    <option value="JEE_ADVANCED">JEE Advanced</option>
+                    <option value="NEET_UG">NEET UG</option>
+                    <option value="UPSC_CSE">UPSC CSE</option>
+                  </select>
+                </div>
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-foreground">Subject</label>
+                  <input
+                    type="text"
+                    value={subject}
+                    onChange={(e) => setSubject(e.target.value)}
+                    placeholder="e.g. Physics"
+                    required
+                    className="w-full bg-background border border-border/50 rounded-xl px-3 py-2 text-xs font-medium"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-foreground">Topic / Chapter Name</label>
+                <input
+                  type="text"
+                  value={topic}
+                  onChange={(e) => setTopic(e.target.value)}
+                  placeholder="e.g. Thermodynamics & Heat Transfer"
+                  className="w-full bg-background border border-border/50 rounded-xl px-3 py-2 text-xs font-medium"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-foreground">Question Text *</label>
+                <textarea
+                  value={qText}
+                  onChange={(e) => setQText(e.target.value)}
+                  placeholder="Enter problem statement..."
+                  required
+                  rows={3}
+                  className="w-full bg-background border border-border/50 rounded-xl px-3 py-2 text-xs font-medium"
+                />
+              </div>
+
+              {/* Options */}
+              <div className="space-y-2">
+                <label className="text-xs font-bold text-foreground">Options (Mark Correct Option)</label>
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <input type="radio" name="correct" checked={correct === 0} onChange={() => setCorrect(0)} />
+                    <input type="text" value={opt0} onChange={(e) => setOpt0(e.target.value)} placeholder="Option A" required className="flex-1 bg-background border border-border/50 rounded-lg px-3 py-1.5 text-xs" />
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <input type="radio" name="correct" checked={correct === 1} onChange={() => setCorrect(1)} />
+                    <input type="text" value={opt1} onChange={(e) => setOpt1(e.target.value)} placeholder="Option B" required className="flex-1 bg-background border border-border/50 rounded-lg px-3 py-1.5 text-xs" />
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <input type="radio" name="correct" checked={correct === 2} onChange={() => setCorrect(2)} />
+                    <input type="text" value={opt2} onChange={(e) => setOpt2(e.target.value)} placeholder="Option C" className="flex-1 bg-background border border-border/50 rounded-lg px-3 py-1.5 text-xs" />
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <input type="radio" name="correct" checked={correct === 3} onChange={() => setCorrect(3)} />
+                    <input type="text" value={opt3} onChange={(e) => setOpt3(e.target.value)} placeholder="Option D" className="flex-1 bg-background border border-border/50 rounded-lg px-3 py-1.5 text-xs" />
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowAddModal(false)}
+                  className="flex-1 py-2.5 rounded-xl border border-border/50 text-xs font-bold text-muted-foreground hover:bg-muted/20"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 py-2.5 rounded-xl bg-primary text-primary-foreground font-bold text-xs hover:bg-primary/90 shadow-md shadow-primary/25"
+                >
+                  Save Question
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

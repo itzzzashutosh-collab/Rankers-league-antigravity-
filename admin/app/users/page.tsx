@@ -18,7 +18,8 @@ interface AspirantAdminItem {
 
 export default function AspirantsAdminPage() {
   const [search, setSearch] = React.useState("");
-  const [aspirants] = React.useState<AspirantAdminItem[]>([
+  const [selectedAspirant, setSelectedAspirant] = React.useState<AspirantAdminItem | null>(null);
+  const [aspirants, setAspirants] = React.useState<AspirantAdminItem[]>([
     {
       id: "u1",
       fullName: "Aarav Sharma",
@@ -56,6 +57,14 @@ export default function AspirantsAdminPage() {
       status: "active",
     },
   ]);
+
+  const toggleStatus = (id: string) => {
+    setAspirants(
+      aspirants.map((a) =>
+        a.id === id ? { ...a, status: a.status === "active" ? "suspended" : "active" } : a
+      )
+    );
+  };
 
   const filtered = aspirants.filter(
     (a) =>
@@ -144,9 +153,24 @@ export default function AspirantsAdminPage() {
                     {u.contestsJoined} Leagues
                   </td>
                   <td className="py-4 px-3">
-                    <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20">
-                      <CheckCircle2 className="w-3 h-3" /> Active
-                    </span>
+                    <button
+                      onClick={() => toggleStatus(u.id)}
+                      className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-md border transition-all cursor-pointer ${
+                        u.status === "active"
+                          ? "text-emerald-400 bg-emerald-500/10 border-emerald-500/20 hover:bg-emerald-500/20"
+                          : "text-rose-400 bg-rose-500/10 border-rose-500/20 hover:bg-rose-500/20"
+                      }`}
+                    >
+                      <CheckCircle2 className="w-3 h-3" /> {u.status === "active" ? "Active" : "Suspended"}
+                    </button>
+                  </td>
+                  <td className="py-4 px-3">
+                    <button
+                      onClick={() => setSelectedAspirant(u)}
+                      className="text-xs font-bold text-primary hover:underline"
+                    >
+                      View Profile →
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -154,6 +178,61 @@ export default function AspirantsAdminPage() {
           </table>
         </div>
       </div>
+
+      {/* Aspirant Profile Modal */}
+      {selectedAspirant && (
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-card border border-border/50 rounded-2xl p-6 w-full max-w-md space-y-5 shadow-2xl">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-primary/20 border border-primary/30 flex items-center justify-center font-black text-primary text-base">
+                  {selectedAspirant.fullName[0]}
+                </div>
+                <div>
+                  <h2 className="text-base font-black font-heading text-foreground">{selectedAspirant.fullName}</h2>
+                  <span className="text-xs text-muted-foreground">@{selectedAspirant.username}</span>
+                </div>
+              </div>
+              <button onClick={() => setSelectedAspirant(null)} className="text-xs font-bold text-muted-foreground hover:text-foreground">✕ Close</button>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3 text-xs bg-background/50 border border-border/30 rounded-xl p-4">
+              <div>
+                <span className="block text-[10px] font-bold text-muted-foreground">National Rank</span>
+                <span className="font-mono font-black text-amber-400 text-sm">AIR #{selectedAspirant.nationalRank}</span>
+              </div>
+              <div>
+                <span className="block text-[10px] font-bold text-muted-foreground">Aura Points</span>
+                <span className="font-mono font-black text-violet-400 text-sm">⚡ {selectedAspirant.auraPoints}</span>
+              </div>
+              <div>
+                <span className="block text-[10px] font-bold text-muted-foreground">Wallet Balance</span>
+                <span className="font-mono font-black text-emerald-400 text-sm">₹{selectedAspirant.walletBalance.toLocaleString()}</span>
+              </div>
+              <div>
+                <span className="block text-[10px] font-bold text-muted-foreground">Joined Contests</span>
+                <span className="font-mono font-bold text-foreground text-sm">{selectedAspirant.contestsJoined}</span>
+              </div>
+            </div>
+
+            <div className="pt-2 flex gap-3">
+              <button
+                onClick={() => {
+                  toggleStatus(selectedAspirant.id);
+                  setSelectedAspirant(null);
+                }}
+                className={`flex-1 py-2 rounded-xl font-bold text-xs ${
+                  selectedAspirant.status === "active"
+                    ? "bg-rose-500/20 text-rose-400 border border-rose-500/30"
+                    : "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
+                }`}
+              >
+                {selectedAspirant.status === "active" ? "Suspend Account" : "Activate Account"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
