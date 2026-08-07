@@ -136,28 +136,52 @@ export const adminService = {
     ];
   },
 
-  // Calculate Prize Matrix based on seats, fee, and margin
+  // Calculate Prize Matrix based on seats, fee, and margin with 1000-500 rounding & 70% threshold
   calculatePrizeMatrix(seats: number, entryFee: number, marginPercent: number = 30) {
     const totalCollection = seats * entryFee;
     const platformProfit = Math.round(totalCollection * (marginPercent / 100));
     const prizePool = totalCollection - platformProfit;
 
-    const rank1 = Math.round(prizePool * 0.25);
-    const rank2_3 = Math.round(prizePool * 0.15);
-    const rank4_10 = Math.round(prizePool * 0.20);
-    const rank11_50 = Math.round(prizePool * 0.25);
-    const rank51_100 = Math.round(prizePool * 0.15);
+    // 70% Seat Fill Threshold Calculation
+    const seatsAt70 = Math.ceil(seats * 0.70);
+    const collectionAt70 = seatsAt70 * entryFee;
+    const platformProfitAt70 = Math.round(collectionAt70 * (marginPercent / 100));
+    const prizePoolAt70 = collectionAt70 - platformProfitAt70;
+
+    // Helper for rounding to clean multiples of 1000 / 500
+    const roundPrize = (val: number) => {
+      if (val >= 10000) return Math.round(val / 1000) * 1000;
+      if (val >= 2000) return Math.round(val / 500) * 500;
+      if (val >= 500) return Math.round(val / 100) * 100;
+      return Math.round(val / 50) * 50;
+    };
+
+    const rawRank1 = Math.round(prizePool * 0.25);
+    const rawRank2_3 = Math.round((prizePool * 0.15) / 2);
+    const rawRank4_10 = Math.round((prizePool * 0.20) / 7);
+    const rawRank11_50 = Math.round((prizePool * 0.25) / 40);
+    const rawRank51_100 = Math.round((prizePool * 0.15) / 50);
+
+    const rank1 = roundPrize(rawRank1);
+    const rank2_3 = roundPrize(rawRank2_3);
+    const rank4_10 = roundPrize(rawRank4_10);
+    const rank11_50 = roundPrize(rawRank11_50);
+    const rank51_100 = roundPrize(rawRank51_100);
 
     return {
       totalCollection,
       platformProfit,
       prizePool,
+      seatsAt70,
+      collectionAt70,
+      platformProfitAt70,
+      prizePoolAt70,
       matrix: [
-        { rank: "Rank 1", prizePerWinner: rank1, winners: 1, totalAllocation: rank1 },
-        { rank: "Rank 2 - 3", prizePerWinner: Math.round(rank2_3 / 2), winners: 2, totalAllocation: rank2_3 },
-        { rank: "Rank 4 - 10", prizePerWinner: Math.round(rank4_10 / 7), winners: 7, totalAllocation: rank4_10 },
-        { rank: "Rank 11 - 50", prizePerWinner: Math.round(rank11_50 / 40), winners: 40, totalAllocation: rank11_50 },
-        { rank: "Rank 51 - 100", prizePerWinner: Math.round(rank51_100 / 50), winners: 50, totalAllocation: rank51_100 },
+        { rank: "Rank 1", prizePerWinner: rank1, winners: 1, totalAllocation: rank1 * 1 },
+        { rank: "Rank 2 - 3", prizePerWinner: rank2_3, winners: 2, totalAllocation: rank2_3 * 2 },
+        { rank: "Rank 4 - 10", prizePerWinner: rank4_10, winners: 7, totalAllocation: rank4_10 * 7 },
+        { rank: "Rank 11 - 50", prizePerWinner: rank11_50, winners: 40, totalAllocation: rank11_50 * 40 },
+        { rank: "Rank 51 - 100", prizePerWinner: rank51_100, winners: 50, totalAllocation: rank51_100 * 50 },
       ],
     };
   },

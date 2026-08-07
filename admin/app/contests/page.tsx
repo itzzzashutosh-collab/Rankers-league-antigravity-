@@ -207,17 +207,33 @@ export default function ContestsAdminPage() {
             {/* Financial Summary Box */}
             <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-4 grid grid-cols-3 gap-2 text-xs">
               <div>
-                <span className="block text-[10px] font-bold text-emerald-400/80">Total Collection</span>
+                <span className="block text-[10px] font-bold text-emerald-400/80">Total Collection (100% Fill)</span>
                 <span className="font-mono font-black text-foreground text-sm">₹{matrixResult.totalCollection.toLocaleString()}</span>
               </div>
               <div>
-                <span className="block text-[10px] font-bold text-emerald-400/80">Platform Revenue</span>
+                <span className="block text-[10px] font-bold text-emerald-400/80">Platform Margin</span>
                 <span className="font-mono font-black text-emerald-400 text-sm">₹{matrixResult.platformProfit.toLocaleString()} ({calcMargin}%)</span>
               </div>
               <div>
                 <span className="block text-[10px] font-bold text-emerald-400/80">Up To Prize Pool</span>
                 <span className="font-mono font-black text-violet-400 text-sm">₹{matrixResult.prizePool.toLocaleString()}</span>
               </div>
+            </div>
+
+            {/* 70% Seat Fill Threshold Guarantee Callout */}
+            <div className="bg-gradient-to-r from-primary/20 via-emerald-500/10 to-transparent border border-primary/30 rounded-xl p-3.5 space-y-1">
+              <div className="flex items-center justify-between text-xs font-bold font-mono">
+                <span className="flex items-center gap-1.5 text-foreground">
+                  <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                  🔴 70% Guaranteed Live Threshold ({matrixResult.seatsAt70} Seats)
+                </span>
+                <span className="text-emerald-400 font-black">
+                  Min Prize Pool: ₹{matrixResult.prizePoolAt70.toLocaleString()}
+                </span>
+              </div>
+              <p className="text-[10px] text-muted-foreground">
+                If {matrixResult.seatsAt70} seats (70%) are filled at start time, contest goes 🔴 Guaranteed Live. If under 70%, 100% entry fee auto-refund triggers.
+              </p>
             </div>
 
             {/* Generated Matrix Table */}
